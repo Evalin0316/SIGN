@@ -1,4 +1,10 @@
 <template>
+<!-- 新增文字modal -->
+  <add-text 
+    :showModal="showText"
+    @get-text="inputText"
+    @hideTextModal="hideModal"
+  ></add-text>
    <div class='container_pdf w-screen h-screen relative overflow-x-hidden'>
     <div class="downloadBtn cursor-pointer">完成</div>
     <!-- <SelectSign v-if="isSelectSign" @closeWarning="closeWarning" @selectedSign="selectedSign"  /> -->
@@ -23,12 +29,14 @@ import { onMounted, ref, reactive } from 'vue';
 import bus from '../srcipt/bus';
 import jsPDF from "jspdf";
 import SelectSign from '../components/ChoiceSign.vue';
+import AddText from '../components/AddText.vue';
 var canvas = null
 export default {
   name: 'pdfShow',
   components: {
     // WarningAlert,
-    SelectSign
+    SelectSign,
+    AddText
   },
   setup (props, ctx) {
     const signUrl = ref('')
@@ -39,6 +47,8 @@ export default {
     const pageNumPending = ref(null)
     const pageRendering = ref(false)
     const Base64Prefix = 'data:application/pdf;base64,'
+    const showText = ref(false)
+    const inputText = ref('')
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js'
     canvas = new fabric.Canvas('canvas')
     bus.on('fileUpload', (v) => {
@@ -171,35 +181,14 @@ export default {
       // 加入文字
       const textBtn = document.querySelector('.textBtn')
       textBtn.addEventListener('click', () => {
-
-          // Swal.fire({
-          //   input: 'textarea',
-          //   inputAttributes: {
-          //     autocapitalize: 'off'
-          //   },
-          //   focusConfirm: false,
-          //   showCancelButton: true,
-          //   confirmButtonText: '確定',
-          //   cancelButtonText: '取消',
-          //   customClass: {
-          //     popup: 'customClass-popup rounded-3xl py-6 w-auto px-5',
-          //     title: 'customClass-title font-bold text-black pt-6 px-0',
-          //     input: 'customClass-input',
-          //     inputLabel: '',
-          //     actions: 'btns',
-          //     confirmButton: 'btn btn-confirm',
-          //     cancelButton: 'btn btn-cancel',
-          //   }
-          // }).then((result) => {
-          //     // const canvas = new fabric.Canvas('canvas')
-          //     var text = new fabric.Text(result.value, (image) => {
-          //       image.top = 10
-          //       image.left = 10
-          //       image.scaleX = 0.5
-          //       image.scaleY = 0.5
-          //     })
-          //     canvas.add(text)
-          // })
+          showText.value = true;
+          var text2 = new fabric.Text(inputText.value,(image) =>{
+              image.top = 10;
+              image.left = 10;
+              image.scaleX = 0.5;
+              image.scaleY = 0.5;
+          })
+            canvas.add(text2);
       })
       // 前一頁
       const prePage = () => {
@@ -266,6 +255,10 @@ export default {
         width.value -= 10
       }
     }
+
+    const hideModal = () =>{
+        showText.value = false;
+    }
     return {
       pdfInit,
       closeWarning,
@@ -278,7 +271,10 @@ export default {
       pageCount,
       width,
       pageRendering,
-      pageNumPending
+      pageNumPending,
+      showText,
+      inputText,
+      hideModal
     }
   }
 }

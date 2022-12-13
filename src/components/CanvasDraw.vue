@@ -231,19 +231,18 @@ export default {
       x: 0,
       y: 0,
       image: "",
-      eraser: false,
+      eraser: false, //將畫筆更改為擦布
       disabled: false,
       fillShape: false,
       line: 5,
       color: "#000000",
-      strokeType: "dash",
-      lineCap: "square",
-      lineJoin: "miter",
+      strokeType: "dash",  // 筆畫類型
+      lineCap: "square",   //繪製線的端點形狀
+      lineJoin: "round",   // 兩條線交界的形狀
       backgroundColor: "transparent", 
       backgroundImage: null,
       watermark: null,
       additionalImages: [],
-
       isFile: false,
     };
   },
