@@ -2,8 +2,8 @@
 <!-- 新增文字modal -->
   <add-text 
     :showModal="showText"
-    @get-text="inputText"
     @hideTextModal="hideModal"
+    @saveText="inputText"
   ></add-text>
    <div class='container_pdf w-screen h-screen relative overflow-x-hidden'>
     <div class="downloadBtn cursor-pointer">完成</div>
@@ -48,7 +48,7 @@ export default {
     const pageRendering = ref(false)
     const Base64Prefix = 'data:application/pdf;base64,'
     const showText = ref(false)
-    const inputText = ref('')
+    const getText = ref('')
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js'
     canvas = new fabric.Canvas('canvas')
     bus.on('fileUpload', (v) => {
@@ -58,6 +58,17 @@ export default {
       if (localStorage.getItem('vue-canvas')) {
         signUrl.value = localStorage.getItem('vue-canvas')
       }
+    })
+    // 新增文字
+    bus.on('saveText', (v) => {
+        console.log('text',v);
+          var addText = new fabric.Text(v, (image) => {
+          image.top = 10
+          image.left = 10
+          image.scaleX = 0.5
+          image.scaleY = 0.5
+        })
+        canvas.add(addText);
     })
     onMounted(() => {
       if (localStorage.getItem('vue-canvas')) {
@@ -182,14 +193,8 @@ export default {
       const textBtn = document.querySelector('.textBtn')
       textBtn.addEventListener('click', () => {
           showText.value = true;
-          var text2 = new fabric.Text(inputText.value,(image) =>{
-              image.top = 10;
-              image.left = 10;
-              image.scaleX = 0.5;
-              image.scaleY = 0.5;
-          })
-            canvas.add(text2);
       })
+
       // 前一頁
       const prePage = () => {
         if (pageNum.value <= 1) {
@@ -273,8 +278,8 @@ export default {
       pageRendering,
       pageNumPending,
       showText,
-      inputText,
-      hideModal
+      hideModal,
+      getText
     }
   }
 }

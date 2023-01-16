@@ -3,11 +3,12 @@
     <div>
        <textarea v-model="text" class="textInput" />
     </div>
-    <div class="confirmBtn" @click="addText()">新增文字</div>
+    <div class="confirmBtn" @click="addText(val)">新增文字</div>
 </div>
 </template>
 
 <script>
+import bus from '../srcipt/bus';
 export default{
     data(){
         return{
@@ -21,8 +22,11 @@ export default{
         }
     },
     methods:{
-        addText(){
-            this.$emit('getText',this.text);
+        addText(val){
+            val = this.text;
+            console.log(val);
+            // this.$emit("saveText",val);
+            bus.emit("saveText", val);
             this.$emit('hideTextModal');
         }
     }
