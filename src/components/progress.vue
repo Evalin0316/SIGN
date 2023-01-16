@@ -18,7 +18,7 @@
     </ul>
   </div>
 </template>
-<script></script>
+
 <script>
 import { ref, reactive, onMounted, computed, toRefs } from "vue";
 import finish from "../assets/img/finish.svg";
@@ -28,7 +28,7 @@ export default {
   props: {
     arrStatus: {
       type: Array,
-      default: [1, 2, 2],
+      default: [1,2,2],
     },
   },
   setup(props) {
@@ -51,74 +51,8 @@ export default {
         },
       ];
     });
-    return {progressData};
-},
+    return {props,progressData};
+}, 
 
 };
 </script>
-
-<style lang="scss" scoped>
-$main_color: #be8e55;
-.Upload_progress {
-  margin: 60px 0;
-  fill: $main_color;
-  .progress_content__item {
-    @apply relative flex flex-col justify-center items-center whitespace-nowrap border rounded-full;
-    width: 60px;
-    height: 60px;
-    border-color: $main_color;
-    &:nth-last-child(1) {
-      &::before {
-        display: none;
-      }
-    }
-    &::before {
-      @apply absolute;
-      top: 29px;
-      left: 59px;
-      display: block;
-      content: "";
-      height: 2px;
-      width: 96px;
-      background-color: $main_color;
-    }
-    &--alreadyDo {
-      @apply border;
-      opacity: 1;
-      &::before {
-        opacity: 1;
-      }
-    }
-    &--nowDo {
-      @apply border-dashed;
-      &::before {
-        opacity: 0.5;
-      }
-    }
-    &--willDo {
-      @apply border-dashed;
-      opacity: 0.5;
-      &::before {
-        opacity: 0.5;
-      }
-    }
-    > img {
-      width: 32px;
-      height: 32px;
-    }
-    .progress_content__item__text {
-      @apply absolute bottom-0;
-      top: 70px;
-    }
-  }
-  .progress_content {
-    @apply flex flex-nowrap items-center justify-between;
-    color: $main_color;
-    &__item {
-      margin: 0 47.5px;
-      &__line {
-      }
-    }
-  }
-}
-</style>

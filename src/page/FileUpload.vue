@@ -3,7 +3,6 @@
     <Header @nextStep = "nextStep" @prevPage="prevPage"></Header>
     <div class="container_sign">
       <div class="flex justify-center pt-10 pb-10">
-        <!-- <img src="../assets/images/step1.png"/> -->
         <ProgressLine :arrStatus="arrStatus" />
       </div>
       <div :class="nextPage == '' ? '' : 'hidden'" class="flex justify-center">
@@ -27,7 +26,6 @@
                 accept="application/pdf"
                 @change="uploadFile()"
               />
-              <!-- <img src="../assets/images/Option.png"/> -->
             </label>
             <label v-if="status == 1" class="mb-2 reupload mt-1">
               <input
@@ -53,10 +51,8 @@
           </div>
         </div>
       </div>
-      <!-- <div @click="nextStep()" :class="nextPage == ''">下一步</div> -->
       <div :class="nextPage == '' ? 'hidden' : ''">
         <FileReview />
-        <!-- <pdfview /> -->
       </div>
     </div>
   </div>
@@ -82,8 +78,7 @@ export default {
       filename: "",
       status: "",
       nextPage: "",
-      arrStatus: [1, 2, 2],
-      // 控制進度條 控制步驟，動態控制 progressData item.status , 0 已經做， 1正在做 ，2還沒做 ,
+      arrStatus: [1, 2, 2], // 預設狀態為步驟一, 0 已經做， 1正在做 ，2還沒做 
       step: 1, // 1 未上傳，2 已上傳,
       pageCount: 1,
       fileExist: false
@@ -201,13 +196,14 @@ export default {
     nextStep() {
       if(window.localStorage.getItem('pdfData') && this.fileExist){
         this.nextPage = 1;
+        this.arrStatus = [0,1,2];
       } else {
         alert('請先上傳檔案')
       }
-      // this.$router.push({ name: "FileReview" }) 
     },
     prevPage(){
       console.log('上一頁')
+      this.arrStatus = [1,2,2];
       this.nextPage = "";
     },
     dragleave(e) {

@@ -5,7 +5,7 @@
     @hideTextModal="hideModal"
     @saveText="inputText"
   ></add-text>
-   <div class='container_pdf w-screen h-screen relative overflow-x-hidden'>
+  <div class='container_pdf w-screen h-screen relative overflow-x-hidden'>
     <div class="downloadBtn cursor-pointer">完成</div>
     <!-- <SelectSign v-if="isSelectSign" @closeWarning="closeWarning" @selectedSign="selectedSign"  /> -->
     <div class="styledCreate__WrapperRight-sc-1i4fuzv-10 cKAFxH">
@@ -177,7 +177,7 @@ export default {
       // 加入日期
       const dateBtn = document.querySelector('.dateBtn')
       let day = new Date();
-      const today = day.getFullYear() + '/' + day.getMonth() + '/' + day.getDate();
+      const today = day.getFullYear() + '/' + (day.getMonth() +1) + '/' + day.getDate();
 
       dateBtn.addEventListener('click', () => {
         var text = new fabric.Text(today, (image) => {
