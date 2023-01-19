@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header @nextStep = "nextStep" @prevPage="prevPage"></Header>
+    <Header @nextStep="nextStep" @prevPage="prevPage"></Header>
     <div class="container_sign">
       <div class="flex justify-center pt-10 pb-10">
         <ProgressLine :arrStatus="arrStatus" />
@@ -52,8 +52,9 @@
         </div>
       </div>
       <div :class="nextPage == '' ? 'hidden' : ''">
-        <FileReview />
+        <FileReview/>
       </div>
+        <SaveConfirm :showConfirmModal="showConfirmModal"/>
     </div>
   </div>
 </template>
@@ -65,13 +66,15 @@ import ProgressLine from "../components/progress.vue";
 import pdfview from '../components/pdfview.vue';
 import jsPDF from "jspdf";
 import Header from '../components/Header.vue';
+import SaveConfirm from '../components/SaveConfirm.vue'
 var canvas = null
 export default {
   components: {
     FileReview,
     ProgressLine,
     pdfview,
-    Header
+    Header,
+    SaveConfirm
   },
   data() {
     return {
@@ -81,7 +84,8 @@ export default {
       arrStatus: [1, 2, 2], // 預設狀態為步驟一, 0 已經做， 1正在做 ，2還沒做 
       step: 1, // 1 未上傳，2 已上傳,
       pageCount: 1,
-      fileExist: false
+      fileExist: false,
+      showConfirmModal:false
     };
   },
   methods: {
@@ -195,10 +199,13 @@ export default {
     },
     nextStep() {
       if(window.localStorage.getItem('pdfData') && this.fileExist){
-        this.nextPage = 1;
-        this.arrStatus = [0,1,2];
-      } else {
+        this.nextPage = 1; 
+        this.arrStatus = [0,1,2]; //步驟二
+      } else{
         alert('請先上傳檔案')
+      }
+      if(this.nextPage == 1){
+        this.showConfirmModal = true;
       }
     },
     prevPage(){
