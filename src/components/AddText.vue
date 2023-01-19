@@ -24,8 +24,6 @@ export default{
     methods:{
         addText(val){
             val = this.text;
-            console.log(val);
-            // this.$emit("saveText",val);
             bus.emit("saveText", val);
             this.$emit('hideTextModal');
         }

@@ -2,8 +2,8 @@
 <div class="confirm_container" v-if="showConfirmModal">
     <div class="confirm_title">確定要送出嗎?</div>
     <div class="flex flex-col">
-        <div class="confirmBtn">確定</div>
-        <div class="confirmBtn">再檢查一下~</div>
+        <div class="confirmBtn" @click="allowSave()">確定</div>
+        <div class="confirmBtn" @click="notAllowSave()">再檢查一下~</div>
     </div>
 </div>
 </template>
@@ -19,16 +19,15 @@ export default{
     props:{
         showConfirmModal:{
         type: Boolean,
-        default: true
+        default: false
         }
     },
     methods:{
-        addText(val){
-            val = this.text;
-            console.log(val);
-            // this.$emit("saveText",val);
-            bus.emit("saveText", val);
-            this.$emit('hideTextModal');
+        allowSave(){
+            bus.emit("saveDocument");
+        },
+        notAllowSave(){
+            this.$emit('hideConfirmModal');
         }
     }
 }

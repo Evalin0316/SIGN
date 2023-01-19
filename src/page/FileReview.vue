@@ -70,6 +70,18 @@ export default {
         })
         canvas.add(addText);
     })
+
+    bus.on('saveDocument',()=>{
+      const pdf = new jsPDF();
+      const image = canvas.toDataURL("image/png")
+        // 設定背景在 PDF 中的位置及大小
+        const width = pdf.internal.pageSize.width;
+        const height = pdf.internal.pageSize.height
+        pdf.addImage(image, "png", 0, 0, width, height)
+        // 將檔案取名並下載
+        pdf.save("download.pdf")
+    })
+
     onMounted(() => {
       if (localStorage.getItem('vue-canvas')) {
         signUrl.value = localStorage.getItem('vue-canvas')

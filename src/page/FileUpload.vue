@@ -54,7 +54,10 @@
       <div :class="nextPage == '' ? 'hidden' : ''">
         <FileReview/>
       </div>
-        <SaveConfirm :showConfirmModal="showConfirmModal"/>
+        <SaveConfirm 
+        :showConfirmModal="showConfirmModal"
+        @hideConfirmModal="hideConfirmModal"
+        />
     </div>
   </div>
 </template>
@@ -85,7 +88,7 @@ export default {
       step: 1, // 1 未上傳，2 已上傳,
       pageCount: 1,
       fileExist: false,
-      showConfirmModal:false
+      showConfirmModal:false,
     };
   },
   methods: {
@@ -198,20 +201,21 @@ export default {
       }
     },
     nextStep() {
-      if(window.localStorage.getItem('pdfData') && this.fileExist){
+      console.log(this.nextPage);
+      if(window.localStorage.getItem('pdfData') && this.fileExist && this.nextPage == ''){
         this.nextPage = 1; 
         this.arrStatus = [0,1,2]; //步驟二
+      } else if(window.localStorage.getItem('pdfData') && this.fileExist && this.nextPage == 1){
+        this.showConfirmModal = true;
       } else{
         alert('請先上傳檔案')
-      }
-      if(this.nextPage == 1){
-        this.showConfirmModal = true;
       }
     },
     prevPage(){
       console.log('上一頁')
       this.arrStatus = [1,2,2];
       this.nextPage = "";
+      this.showConfirmModal = false;
     },
     dragleave(e) {
       console.log("拖出");
@@ -253,8 +257,11 @@ export default {
     //     );
     //   }
     },
+    hideConfirmModal(){
+      this.showConfirmModal = false;
+    },
   },
-  create() {
+  created() {
     this.status = "";
   },
 };
