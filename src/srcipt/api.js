@@ -1,5 +1,5 @@
 import axios from "axios";
-const url = 'http://localhost:8080';
+const url = 'https://withered-hill-8882.fly.dev';
 
 /* 圖片 */
 
