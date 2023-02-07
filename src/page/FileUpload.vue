@@ -70,6 +70,7 @@ import pdfview from '../components/pdfview.vue';
 import jsPDF from "jspdf";
 import Header from '../components/Header.vue';
 import SaveConfirm from '../components/SaveConfirm.vue'
+import {uploadFile} from '../srcipt/api'
 var canvas = null
 export default {
   components: {
@@ -92,28 +93,49 @@ export default {
     };
   },
   methods: {
-    uploadFile(data) {
-        this.status = this.$refs["upload-file"].files.length||data.length;
-        console.log(this.status);
-        var filedata;
-        if (this.status == 1) {
-            if(data){
-                this.filename = data[0].name;
-                filedata = data[0]
-            } else {
-                this.filename = this.$refs["upload-file"].files[0].name;
-                filedata = this.$refs["upload-file"].files[0]
-                bus.emit("fileUpload", this.$refs["upload-file"].files[0]);
-            }
-        console.log(this.filename);
+  async uploadFile(data) {
+      //   this.status = this.$refs["upload-file"].files.length||data.length;
+      //   console.log(this.status);
+      //   var filedata;
+      //   if (this.status == 1) {
+      //       if(data){
+      //           this.filename = data[0].name;
+      //           filedata = data[0]
+      //       } else {
+      //           this.filename = this.$refs["upload-file"].files[0].name;
+      //           filedata = this.$refs["upload-file"].files[0]
+      //           bus.emit("fileUpload", this.$refs["upload-file"].files[0]);
+      //       }
+      //   console.log(this.filename);
        
-        this.pdfInit(filedata)
-        this.fileExist = true;
-        this.step = 2;
-      } else {
-        this.step = 1;
-        this.fileExist = true;
+      //   this.pdfInit(filedata)
+      //   this.fileExist = true;
+      //   this.step = 2;
+      // } else {
+      //   this.step = 1;
+      //   this.fileExist = true;
+      // }
+
+      const { 0: file } = this.$refs['upload-file'].files;
+      const fromData = new FormData();
+      fromData.append('file', file);
+      if(!this.$refs['upload-file'].value){
+        alert('沒有選擇檔案');
+      }else{
+      console.log('fromData',fromData);
+
+      await uploadFile(fromData)
+        .then((res) => {
+          if (res.data.success) {
+           alert(res);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
       }
+  
     },
     pdfInit(file){
       const Base64Prefix = 'data:application/pdf;base64,'
