@@ -82,15 +82,18 @@ export default {
   props: {
   },
   setup (props, ctx) {
+    console.log('ctx',ctx);
     const signArr = ref('')
     const isSelectMode = ref(true)
     const isSignSelf = ref(true)
     const signStatus = ref(null)
+    const getStroke = ref('')
 
     onMounted(() => {
       init()
+      // 取得簽名檔
       signStatus.value = localStorage.getItem('vue-canvas')
-      console.log(signStatus.value)
+      console.log('取得簽名',signStatus.value)
 
     })
     onUnmounted(() => {
@@ -107,14 +110,11 @@ export default {
     }
 
     const selectedSign = (url) => {
-      ctx.emit('selectedSign', url)
+      getStroke.value = url;
+      ctx.emit('getStroke', getStroke);
       closeWarning()
     }
-
-    const getStroke = (getStroke) => {
-      ctx.emit('selectedSign', getStroke)
-    }
-
+    
     const backToChoose = (backToChoose) => {
       closeWarning()
       console.log(backToChoose)
@@ -138,7 +138,8 @@ export default {
       getStroke,
       backToChoose,
       signStatus,
-      getSign
+      getSign,
+      getStroke
     }
   }
 }

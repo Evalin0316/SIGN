@@ -52,7 +52,7 @@
         </div>
       </div>
       <div :class="nextPage == '' ? 'hidden' : ''">
-        <FileReview/>
+        <FileReview :fileName="filename"/>
       </div>
         <SaveConfirm 
         :showConfirmModal="showConfirmModal"
@@ -93,48 +93,48 @@ export default {
     };
   },
   methods: {
-  async uploadFile(data) {
-      //   this.status = this.$refs["upload-file"].files.length||data.length;
-      //   console.log(this.status);
-      //   var filedata;
-      //   if (this.status == 1) {
-      //       if(data){
-      //           this.filename = data[0].name;
-      //           filedata = data[0]
-      //       } else {
-      //           this.filename = this.$refs["upload-file"].files[0].name;
-      //           filedata = this.$refs["upload-file"].files[0]
-      //           bus.emit("fileUpload", this.$refs["upload-file"].files[0]);
-      //       }
-      //   console.log(this.filename);
+  uploadFile(data) {
+        this.status = this.$refs["upload-file"].files.length|| data.length; // 手動上傳 || 拖拉 
+        var filedata;
+        if (this.status == 1) {
+            if(data){ // 拖拉檔案
+                this.filename = data[0].name; 
+                filedata = data[0]
+            } else { // 手動上傳檔案
+                this.filename = this.$refs["upload-file"].files[0].name;
+                filedata = this.$refs["upload-file"].files[0]
+                bus.emit("fileUpload", this.$refs["upload-file"].files[0]);
+            }
+        console.log(this.filename);
        
-      //   this.pdfInit(filedata)
-      //   this.fileExist = true;
-      //   this.step = 2;
-      // } else {
-      //   this.step = 1;
-      //   this.fileExist = true;
-      // }
-
-      const { 0: file } = this.$refs['upload-file'].files;
-      const fromData = new FormData();
-      fromData.append('file', file);
-      if(!this.$refs['upload-file'].value){
-        alert('沒有選擇檔案');
-      }else{
-      console.log('fromData',fromData);
-
-      await uploadFile(fromData)
-        .then((res) => {
-          if (res.data.success) {
-           alert(res);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-
+        this.pdfInit(filedata)
+        this.fileExist = true;
+        this.step = 2;
+      } else {
+        this.step = 1;
+        this.fileExist = true;
       }
+
+      console.log(this.$refs['upload-file'].files);
+      // const { 0: file } = this.$refs['upload-file'].files;
+      // const fromData = new FormData();
+      // fromData.append('file', file);
+      // if(!this.$refs['upload-file'].value){
+      //   alert('沒有選擇檔案');
+      // }else{
+      // console.log('fromData',fromData);
+
+      // uploadFile(fromData)
+      //   .then((res) => {
+      //     if (res.data.success) {
+      //      alert(res);
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     alert(err.message)
+      //   });
+
+      // }
   
     },
     pdfInit(file){

@@ -134,6 +134,7 @@
       </div>
     </div>
 
+    <!-- 上傳簽名檔 -->
     <div class="output" v-show="!isSignSelf">
       <div
         v-if="isFile"
@@ -202,6 +203,7 @@
 <script>
 import VueDrawingCanvas from "vue-drawing-canvas";
 import bus from "../srcipt/bus";
+// import {uploadImage} from "../srcipt/api"
 export default {
   name: "CanvasModule",
   components: {
@@ -329,6 +331,17 @@ export default {
         this.$emit("sign",true)
 
       bus.emit("reloadSign");
+
+
+      // uploadImage(this.image)
+      // .then((res)=>{
+      //   if(res.data.success){
+      //     alert(res)
+      //   }
+      // })
+      // .catch((err)=>{
+      //   alert(err.message);
+      // })
     },
     removeSavedStrokes() {
       window.localStorage.removeItem("vue-drawing-canvas");

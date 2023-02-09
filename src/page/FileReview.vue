@@ -6,7 +6,7 @@
     @saveText="inputText"
   ></add-text>
   <div class='container_pdf w-screen h-screen relative overflow-x-hidden'>
-    <div class="downloadBtn cursor-pointer">完成</div>
+    <!-- <div class="downloadBtn cursor-pointer">完成</div> -->
     <!-- <SelectSign v-if="isSelectSign" @closeWarning="closeWarning" @selectedSign="selectedSign"  /> -->
     <div class="styledCreate__WrapperRight-sc-1i4fuzv-10 cKAFxH">
       <div id="viewer" tabindex="10" scale="1" class="styled__Wrapper-sc-cpx59f-1 gKmbon overflow-x-hidden">
@@ -19,6 +19,7 @@
         </div>
       </div>
     </div>
+    <input type="file" class="form-control hidden pdf_upload" ref="upload-file"/>
   </div>
 </template>
 
@@ -30,6 +31,7 @@ import bus from '../srcipt/bus';
 import jsPDF from "jspdf";
 import SelectSign from '../components/ChoiceSign.vue';
 import AddText from '../components/AddText.vue';
+import {uploadFile} from '../srcipt/api';
 var canvas = null
 export default {
   name: 'pdfShow',
@@ -71,6 +73,7 @@ export default {
         canvas.add(addText);
     })
 
+    // 完成簽署
     bus.on('saveDocument',()=>{
       const pdf = new jsPDF();
       const image = canvas.toDataURL("image/png")
@@ -79,7 +82,24 @@ export default {
         const height = pdf.internal.pageSize.height
         pdf.addImage(image, "png", 0, 0, width, height)
         // 將檔案取名並下載
-        pdf.save("download.pdf")
+        pdf.save("download.pdf");
+
+      const blobPDF = new Blob([pdf.output('blob')],{type: 'application/pdf'})
+      blobPDF.name = 'test.pdf';
+      console.log(blobPDF);
+      const fromData = new FormData();
+      fromData.append('file',blobPDF);
+      console.log('fromData',fromData);
+
+      uploadFile(fromData)
+        .then((res) => {
+          if (res.data.success) {
+           alert(res);
+          }
+        })
+        .catch((err) => {
+          alert(err.message)
+        });
     })
 
     onMounted(() => {
@@ -90,6 +110,7 @@ export default {
     const pdfInit = (file) => {
       const Base64Prefix = 'data:application/pdf;base64,'
       pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js'
+      // 使用原生 FileReader 轉檔
       const readBlob = (blob) => {
         return new Promise((resolve, reject) => {
           const reader = new FileReader()
@@ -99,17 +120,24 @@ export default {
         })
       }
       const printPDF = async(pdfData, index) => {
+        // 將檔案處理成 base64
         pdfData = await readBlob(pdfData)
         localStorage.setItem("pdfData", JSON.stringify(pdfData))
+
+        // 將base64 中的前綴刪除，並進行解碼
         const data = atob(pdfData.substring(Base64Prefix.length))
+
+        // 利用解碼的檔案，載入PDF檔及第一頁
         const pdfDoc = await pdfjsLib.getDocument({ data }).promise
         const pdfPage = await pdfDoc.getPage(index ?? 1)
         pageCount.value = pdfDoc.numPages
         // const viewport = pdfPage.getViewport({ scale: window.devicePixelRatio })
+
+        // 設定尺寸及產生canvas
         const viewport = pdfPage.getViewport({ scale: 1 })
         const canvas = document.createElement('canvas')
         const context = canvas.getContext('2d')
-        // 控制顯示PDF的寬高
+        // 設定PDF 所要顯示的寬高及渲染
         canvas.height = viewport.height
         canvas.width = viewport.width
         const renderContext = {
@@ -117,26 +145,31 @@ export default {
           viewport
         }
         const renderTask = pdfPage.render(renderContext)
-        // 回傳做好的canvas
+        // 回傳做好的PAF canvas
         return renderTask.promise.then(() => canvas)
       }
       const pdfToImage = async(pdfData) => {
+
+        // 設定 PDF 轉為圖片時的比例
         const scale = 1
         return new fabric.Image(pdfData, {
           scaleX: scale,
           scaleY: scale
         })
       }
+      // 此處 canvas 套用 fabric.js
       canvas = new fabric.Canvas('canvas')
       const Init = async (index) => {
         canvas.requestRenderAll()
         const pdfData = await printPDF(file, index)
         const pdfImage = await pdfToImage(pdfData)
-        // 調整canvas大小
+        // 透過比例設定canvas 尺寸
         // canvas.setWidth(pdfImage.width / window.devicePixelRatio)
         // canvas.setHeight(pdfImage.height / window.devicePixelRatio)
         canvas.setWidth(pdfImage.width)
         canvas.setHeight(pdfImage.height)
+
+        // 將 PDF 畫面設定為背景
         canvas.setBackgroundImage(pdfImage, canvas.renderAll.bind(canvas))
       }
       Init(1)
@@ -233,10 +266,10 @@ export default {
       const pdf = new jsPDF()
       const download = () => {
         // 將 canvas 存為圖片
-        const image = canvas.toDataURL("image/png")
+        const image = canvas.toDataURL("image/png");
         // 設定背景在 PDF 中的位置及大小
         const width = pdf.internal.pageSize.width;
-        const height = pdf.internal.pageSize.height
+        const height = pdf.internal.pageSize.height;
         pdf.addImage(image, "png", 0, 0, width, height)
         // 將檔案取名並下載
         pdf.save("download.pdf")
@@ -245,10 +278,10 @@ export default {
         await download()
       }
 
-      document.querySelector('.downloadBtn').addEventListener('click', () => {
-        console.log('1')
-        finish()
-      })
+      // document.querySelector('.downloadBtn').addEventListener('click', () => {
+      //   console.log('1')
+      //   finish()
+      // })
     }
     const closeWarning = (closeWarning) => {
       isSelectSign.value = closeWarning

@@ -4,7 +4,7 @@
         <img src="../assets/images/icon_arrows_left_n.svg" alt="previcon">
         Previous
        </a>
-    <SelectSign v-if="isSelectSign" @closeWarning="closeWarning" @selectedSign="selectedSign"  />
+      <SelectSign v-if="isSelectSign" @closeWarning="closeWarning" @selectedSign="selectedSign"  />
         <div class="flex justify-between">
             <a class="signBtn flex flex-col items-center w-20 py-4 cursor-pointer" @click="isSelectSign = true">
             <img src="../assets/images/Tab_sign.png" @click="signModal"/>
@@ -44,14 +44,14 @@ export default {
       ctx.emit('prevPage')
     }
 
-  
+  // 圖片放在PDF上
     const selectedSign = (selectedSign) => {
       fabric.Image.fromURL(selectedSign, (image) => {
         image.top = 100
-        image.left = 100
+        image.left = 500
         image.scaleX = 0.5
         image.scaleY = 0.5
-        canvas.add(image)
+        canvas.add(image);
       })
     }
     return {

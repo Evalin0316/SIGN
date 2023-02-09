@@ -1,11 +1,11 @@
 import axios from "axios";
-const url = 'https://withered-hill-8882.fly.dev';
+const url = 'https://auto-signature-app.fly.dev';
 
 /* 圖片 */
 
 // 上傳圖片
-export const uploadImage = () =>{
-    return axios.post(`${url}/image/`);
+export const uploadImage = (data) =>{
+    return axios.post(`${url}/image/`,data,);
 }
 
 // 取圖片
