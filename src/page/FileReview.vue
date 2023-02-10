@@ -40,6 +40,12 @@ export default {
     SelectSign,
     AddText
   },
+  props: {
+    fileName:{
+        type:String,
+        default:() => ''
+    },
+   },
   setup (props, ctx) {
     const signUrl = ref('')
     const isSelectSign = ref(false)
@@ -51,6 +57,7 @@ export default {
     const Base64Prefix = 'data:application/pdf;base64,'
     const showText = ref(false)
     const getText = ref('')
+    console.log(props.fileName);
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js'
     canvas = new fabric.Canvas('canvas')
     bus.on('fileUpload', (v) => {
@@ -85,10 +92,9 @@ export default {
         pdf.save("download.pdf");
 
       const blobPDF = new Blob([pdf.output('blob')],{type: 'application/pdf'})
-      blobPDF.name = 'test.pdf';
       console.log(blobPDF);
       const fromData = new FormData();
-      fromData.append('file',blobPDF);
+      fromData.append('file',blobPDF,props.fileName);
       console.log('fromData',fromData);
 
       uploadFile(fromData)
@@ -106,6 +112,7 @@ export default {
       if (localStorage.getItem('vue-canvas')) {
         signUrl.value = localStorage.getItem('vue-canvas')
       }
+      console.log(props.fileName)
     })
     const pdfInit = (file) => {
       const Base64Prefix = 'data:application/pdf;base64,'
