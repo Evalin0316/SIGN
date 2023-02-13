@@ -210,9 +210,12 @@ export default {
       }
       // 加入簽名
       const sign = document.querySelector('.signBtn')
-      if (localStorage.getItem('vue-canvas')) {
-        signUrl.value = localStorage.getItem('vue-canvas')
-      }
+      // if (localStorage.getItem('vue-canvas')) {
+      //   signUrl.value = localStorage.getItem('vue-canvas')
+      // }
+       bus.on('addImage',(v) =>{
+          signUrl.value = v;
+      })
       sign.addEventListener('click', () => {
         if (!signUrl.value) return
         fabric.Image.fromURL(signUrl.value, (image) => {

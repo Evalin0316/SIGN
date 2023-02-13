@@ -74,6 +74,7 @@
 <script>
 import { onMounted, onUnmounted, ref } from 'vue'
 import CanvasDraw from './CanvasDraw.vue'
+import bus from '../srcipt/bus';
 export default {
   name: 'selectSign',
   components: {
@@ -93,7 +94,7 @@ export default {
       init()
       // 取得簽名檔
       signStatus.value = localStorage.getItem('vue-canvas')
-      console.log('取得簽名',signStatus.value)
+      // console.log('取得簽名',signStatus.value)
 
     })
     onUnmounted(() => {
@@ -111,7 +112,8 @@ export default {
 
     const selectedSign = (url) => {
       getStroke.value = url;
-      ctx.emit('getStroke', getStroke);
+      // ctx.emit('getStroke', getStroke);
+      bus.emit('addImage',getStroke.value);
       closeWarning()
     }
     
@@ -139,7 +141,6 @@ export default {
       backToChoose,
       signStatus,
       getSign,
-      getStroke
     }
   }
 }
