@@ -104,8 +104,8 @@ export default {
                 this.filename = this.$refs["upload-file"].files[0].name;
                 filedata = this.$refs["upload-file"].files[0]
                 bus.emit("fileUpload", this.$refs["upload-file"].files[0]);
+                bus.emit('fileName', this.$refs["upload-file"].files[0].name);
             }
-        console.log(this.filename);
        
         this.pdfInit(filedata)
         this.fileExist = true;
@@ -114,8 +114,6 @@ export default {
         this.step = 1;
         this.fileExist = true;
       }
-
-      console.log(this.$refs['upload-file'].files);
       // const { 0: file } = this.$refs['upload-file'].files;
       // const fromData = new FormData();
       // fromData.append('file', file);
