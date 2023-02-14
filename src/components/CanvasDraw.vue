@@ -203,7 +203,7 @@
 <script>
 import VueDrawingCanvas from "vue-drawing-canvas";
 import bus from "../srcipt/bus";
-// import {uploadImage} from "../srcipt/api"
+import {uploadImage} from "../srcipt/api"
 export default {
   name: "CanvasModule",
   components: {
@@ -311,12 +311,17 @@ export default {
       this.x = coordinates.x;
       this.y = coordinates.y;
     },
-    getStrokes() {
+    getStrokes() { // 儲存簽名檔
       localStorage.setItem(
         "vue-drawing-canvas",
         JSON.stringify(this.$refs.VueCanvasDrawing.getAllStrokes())
       );
       localStorage.setItem("vue-canvas", this.image);
+      const getimage = this.dataURItoBlob(this.image);
+      console.log('getimage',getimage);
+      const fromData = new FormData();
+      fromData.append('file',getimage,'image'+ Math.round(Math.random()*1000));
+      console.log('fromData',fromData);
 
       let signArr;
       if (localStorage.getItem("vue-canvas-array")) {
@@ -333,15 +338,15 @@ export default {
       bus.emit("reloadSign");
 
 
-      // uploadImage(this.image)
-      // .then((res)=>{
-      //   if(res.data.success){
-      //     alert(res)
-      //   }
-      // })
-      // .catch((err)=>{
-      //   alert(err.message);
-      // })
+      uploadImage(fromData)
+      .then((res)=>{
+        if(res.data.success){
+          alert(res)
+        }
+      })
+      .catch((err)=>{
+        alert(err.message);
+      })
     },
     removeSavedStrokes() {
       window.localStorage.removeItem("vue-drawing-canvas");
@@ -351,6 +356,25 @@ export default {
     getColor(color) {
       this.color = color;
     },
+    dataURItoBlob(dataURI) {
+    // convert base64/URLEncoded data component to raw binary data held in a string
+    var byteString;
+    if (dataURI.split(',')[0].indexOf('base64') >= 0)
+        byteString = atob(dataURI.split(',')[1]);
+    else
+        byteString = unescape(dataURI.split(',')[1]);
+
+    // separate out the mime component
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+    // write the bytes of the string to a typed array
+    var ia = new Uint8Array(byteString.length);
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+
+    return new Blob([ia], {type:mimeString});
+  }
   },
 };
 </script>

@@ -34,41 +34,40 @@ export default{
 }
 </script>
 
-<style lang="scss" scoped>
-.confirm_container{
-    background:#FFFFFF;
-    width:70%;
-    height: 200px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    position: absolute;
-    left: 33%;
-    top: 30%;
-    z-index: 999;
-    border-radius: 20px;
-    .confirm_title{
-        color: #8C5D19;
-    }
-    .confirm_wrapper{
-            width: 60%;
-            .confirmBtn{
-                height:30px;
-                color: #FFFFFF;
-                margin-top:8px;
-                background: #EFE3D4;
-                padding:4px;
-                border-radius: 10px;
-                cursor:pointer;
-                color:#BE8E55;
-                border-radius: 4px;      
-                height: 34px;
-                padding:5px 20px;
-                max-width: 300px;
-                min-width: 70px;
-            }
-        }
-}
+// <style lang="scss" scoped>
+// .confirm_container{
+//     background:#FFFFFF;
+//     width:45%;
+//     height: 200px;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     flex-direction: column;
+//     position: absolute;
+//     left: 33%;
+//     top: 30%;
+//     z-index: 999;
+//     border-radius: 20px;
+//     .confirm_title{
+//         color: #8C5D19;
+//     }
+//     .confirm_wrapper{
+//             .confirmBtn{
+//                 height:30px;
+//                 color: #FFFFFF;
+//                 margin-top:8px;
+//                 background: #EFE3D4;
+//                 padding:4px;
+//                 border-radius: 10px;
+//                 cursor:pointer;
+//                 color:#BE8E55;
+//                 border-radius: 4px;      
+//                 height: 34px;
+//                 padding:5px 20px;
+//                 max-width: 300px;
+//                 min-width: 70px;
+//             }
+//         }
+// }
 
-</style>
+// </style>
