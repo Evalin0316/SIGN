@@ -75,6 +75,7 @@
 import { onMounted, onUnmounted, ref } from 'vue'
 import CanvasDraw from './CanvasDraw.vue'
 import bus from '../srcipt/bus';
+import { getImage } from '../srcipt/api';
 export default {
   name: 'selectSign',
   components: {
@@ -105,6 +106,17 @@ export default {
       if (localStorage.getItem('vue-canvas-array')) {
         signArr.value = JSON.parse(localStorage.getItem('vue-canvas-array'))
       }
+      // 取得所有簽名檔
+      getImage().then((res)=>{
+        if(res.data.success){
+          console.log(res.data);
+          // res.data.forEach((e)=>{
+          //   signArr.value.push(e.imageUrl);
+          // })
+        }
+      }).catch((err)=>{
+          alert(err.message);
+      })
     }
 
     const closeWarning = () => {
@@ -114,7 +126,7 @@ export default {
     bus.on('addCanvas',(v)=>{
       getCanvas.value = v;
     })
-    
+
     const selectedSign = (url) => {
       getStroke.value = url;
       // bus.emit('addImage',getStroke.value);

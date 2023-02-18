@@ -318,11 +318,11 @@ export default {
         JSON.stringify(this.$refs.VueCanvasDrawing.getAllStrokes())
       );
       localStorage.setItem("vue-canvas", this.image);
-
       // 轉成blob格式
-      const getimage = this.dataURItoBlob(this.image);
+      const image = canvas.toDataURL(this.image, 0.5);
+      const getimage = this.dataURItoBlob(image);
       const fromData = new FormData();
-      fromData.append('file',getimage,'image'+ Math.round(Math.random()*1000));
+      fromData.append('image',getimage,'image'+ Math.round(Math.random()*1000));
       console.log('fromData',fromData);
 
       let signArr;
@@ -338,7 +338,6 @@ export default {
         this.$emit("sign",true)
 
       bus.emit("reloadSign");
-
 
       uploadImage(fromData)
       .then((res)=>{

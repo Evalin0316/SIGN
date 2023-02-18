@@ -71,7 +71,7 @@ import pdfview from '../components/pdfview.vue';
 import jsPDF from "jspdf";
 import Header from '../components/Header.vue';
 import SaveConfirm from '../components/SaveConfirm.vue'
-import { onMounted, ref, reactive, onUpdated } from 'vue';
+import { onMounted, ref, reactive, onUpdated, watchEffect } from 'vue';
 var canvas = null
 export default {
   name:'fileUpload',
@@ -98,10 +98,10 @@ export default {
         var filedata;
         if (status.value == 1) {
             if(data){ // 拖拉檔案
-                filename.value = data[0].name; 
+                filename.value = data[0].name;
                 filedata = data[0];
                 bus.emit('fileUplaod',data[0]);
-                bus.emit('fileName',data[0].name);
+                bus.emit('fileName',filename.value);
             } else { // 手動上傳檔案
                 filename.value = fileElement.value.files[0].name;
                 filedata = fileElement.value.files[0];
@@ -110,8 +110,9 @@ export default {
                     alert("不可超過2mb");
                     return;
                   }
+                console.log(filename.value);
                 bus.emit("fileUpload", fileElement.value.files[0]);
-                bus.emit('fileName', fileElement.value.files[0].name);
+                bus.emit('fileName', filename.value);
             }
         pdfInit(filedata);
         fileExist.value = true;

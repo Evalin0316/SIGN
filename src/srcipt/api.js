@@ -8,7 +8,7 @@ export const uploadImage = (data) =>{
     return axios.post(`${url}/image/`,data,);
 }
 
-// 取圖片
+// 取得所有圖片(簽名檔)
 export const getImage = () =>{
     return axios.get(`${url}/image/`);
 }
