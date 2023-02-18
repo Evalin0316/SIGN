@@ -89,6 +89,7 @@ export default {
     const isSignSelf = ref(true)
     const signStatus = ref(null)
     const getStroke = ref('')
+    const getCanvas = ref('')
 
     onMounted(() => {
       init()
@@ -110,10 +111,20 @@ export default {
       ctx.emit('closeWarning')
     }
 
+    bus.on('addCanvas',(v)=>{
+      getCanvas.value = v;
+    })
+    
     const selectedSign = (url) => {
       getStroke.value = url;
-      // ctx.emit('getStroke', getStroke);
-      bus.emit('addImage',getStroke.value);
+      // bus.emit('addImage',getStroke.value);
+      fabric.Image.fromURL(getStroke.value, (image) => {
+          image.top = 100
+          image.left = 100
+          image.scaleX = 0.5
+          image.scaleY = 0.5
+          getCanvas.value.add(image)
+        })
       closeWarning()
     }
     
@@ -141,6 +152,7 @@ export default {
       backToChoose,
       signStatus,
       getSign,
+      getCanvas
     }
   }
 }

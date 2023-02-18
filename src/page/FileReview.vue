@@ -163,7 +163,9 @@ export default {
       }
       // 此處 canvas 套用 fabric.js
       canvas = new fabric.Canvas('canvas')
+      console.log(canvas);
       const Init = async (index) => {
+        console.log(index);
         canvas.requestRenderAll()
         const pdfData = await printPDF(file, index)
         const pdfImage = await pdfToImage(pdfData)
@@ -213,18 +215,19 @@ export default {
       // if (localStorage.getItem('vue-canvas')) {
       //   signUrl.value = localStorage.getItem('vue-canvas')
       // }
-       bus.on('addImage',(v) =>{
-          signUrl.value = v;
-      })
+      //  bus.on('addImage',(v) =>{
+      //     signUrl.value = v;
+      // })
       sign.addEventListener('click', () => {
-        if (!signUrl.value) return
-        fabric.Image.fromURL(signUrl.value, (image) => {
-          image.top = 100
-          image.left = 100
-          image.scaleX = 0.5
-          image.scaleY = 0.5
-          canvas.add(image)
-        })
+      bus.emit('addCanvas',canvas);
+        // if (!signUrl.value) return
+        // fabric.Image.fromURL(signUrl.value, (image) => {
+        //   image.top = 100
+        //   image.left = 100
+        //   image.scaleX = 0.5
+        //   image.scaleY = 0.5
+        //   canvas.add(image)
+        // })
       })
       // 加入日期
       const dateBtn = document.querySelector('.dateBtn')
@@ -232,6 +235,7 @@ export default {
       const today = day.getFullYear() + '/' + (day.getMonth() +1) + '/' + day.getDate();
 
       dateBtn.addEventListener('click', () => {
+        console.log('1')
         var text = new fabric.Text(today, (image) => {
           image.top = 10
           image.left = 10
@@ -239,36 +243,14 @@ export default {
           image.scaleY = 0.5
         })
         canvas.add(text)
-
       })
       // 加入文字
       const textBtn = document.querySelector('.textBtn')
       textBtn.addEventListener('click', () => {
+          console.log('1');
           showText.value = true;
       })
-
-      // 前一頁
-      const prePage = () => {
-        if (pageNum.value <= 1) {
-          return
-        }
-        pageNum.value--
-        // queueRenderPage(pageNum)
-        Init(pageNum.value)
-      }
-      // document.querySelector('.prePage-btn-top').addEventListener('click', prePage)
-      // document.querySelector('.prePage-btn').addEventListener('click', prePage)
-      // 下一頁
-      const nextPage = () => {
-        if (pageNum.value >= pageCount.value) {
-          return
-        }
-        pageNum.value++
-        // queueRenderPage(pageNum)
-        Init(pageNum.value)
-      }
-      // document.querySelector('.nextPage-btn-top').addEventListener('click', nextPage)
-      // document.querySelector('.nextPage-btn').addEventListener('click', nextPage)
+      
       // 下載
       const pdf = new jsPDF()
       const download = () => {

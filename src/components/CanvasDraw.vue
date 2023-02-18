@@ -288,6 +288,7 @@ export default {
     },
     async setImage(event) {
       let URL = window.URL;
+      console.log(event.target.files[0]);
       this.backgroundImage = URL.createObjectURL(event.target.files[0]);
       await this.$refs.VueCanvasDrawing.redraw();
     },
@@ -317,8 +318,9 @@ export default {
         JSON.stringify(this.$refs.VueCanvasDrawing.getAllStrokes())
       );
       localStorage.setItem("vue-canvas", this.image);
+
+      // 轉成blob格式
       const getimage = this.dataURItoBlob(this.image);
-      console.log('getimage',getimage);
       const fromData = new FormData();
       fromData.append('file',getimage,'image'+ Math.round(Math.random()*1000));
       console.log('fromData',fromData);

@@ -107,19 +107,6 @@ function ondrop (e){
     // fileList = fileList.concat.dataTransfer.files[0];
     // console.log(formData, fileList, e.dataTransfer.files[0]);
     console.log(formData)
-
-  axios.post('http://localhost:8080/uploadFile', formData({
-          headers: {
-              'Content-Type': 'multipart/form-data'
-          }
-      })
-    ).then(res => {
-        if (res.data !== null && res.data.length > 1) {
-            console.log(res.data)
-        }
-    }).catch(err=>{
-        console.log(err);
-    })
 }
 
 </script>
