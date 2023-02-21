@@ -9,9 +9,10 @@
           <div class="font-bold text-lg mb-8 whitespace-nowrap text-center proj-text-primary">選擇簽名</div>
           <div class="selected-modal overflow-auto flex items-center justify-center flex-wrap">
             <div class="mb-2 flex justify-center" v-for="(item, idx) in signArr" :key="idx">
-              <div class="h-auto bg-white w-4/5 rounded-3xl py-2" @click="selectedSign(item)">
-                <img :src="item" class='sign mx-auto object-contain w-36 h-20' alt="" referrerpolicy="no-referrer"/>
+              <div class="h-auto bg-white w-4/5 rounded-3xl py-2" @click="selectedSign(item.url)">
+                <img :src="item.url" class='sign mx-auto object-contain w-36 h-20' alt="" referrerpolicy="no-referrer"/>
               </div>
+               <span @click="deleteImageBtn(item.id,item.hash)"><img class="mr-4 mt-2" src="../assets/images/icon_Close_Square_n.png" /></span>
             </div>
           </div>
           <a class="proj-text-primary block mt-4 font-bold text-lg whitespace-nowrap" @click="isSelectMode = false">+ 新增簽名</a>
@@ -75,7 +76,7 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import CanvasDraw from './CanvasDraw.vue'
 import bus from '../srcipt/bus';
-import { getImage } from '../srcipt/api';
+import { getImage , deleteImage } from '../srcipt/api';
 export default {
   name: 'selectSign',
   components: {
@@ -103,6 +104,8 @@ export default {
     })
 
     const init = () => {
+
+      // 沒接api方法(舊)
       // if (localStorage.getItem('vue-canvas-array')) {
       //   signArr.value = JSON.parse(localStorage.getItem('vue-canvas-array'))
       // }
@@ -110,15 +113,30 @@ export default {
       // 取得所有簽名檔
       getImage().then((res)=>{
         if(res.data.status == true){
-          res.data.data.forEach((e)=>{
-            getBase64FromUrl(e.imageUrl);
-            // signArr.value.push(getUrl.value);
+          const allData = res.data.data;
+          allData.forEach((e)=>{
+            getBase64FromUrl(e.imageUrl,e._id,e.imageDeleteHash);
+            // signArr.value.push({'id':e._id,'url':''});
           })
         }
       }).catch((err)=>{
           alert(err.message);
       })
     }
+
+    const deleteImageBtn = (id,data) =>{
+        let sendData = {'hash':data}
+        deleteImage(id,sendData).then((res)=>{
+          if(res.data.status == true){
+            alert('刪除成功');
+            // 重新拿圖片
+            getImage();
+          }
+        }).catch((err)=>{
+            alert(err.message);
+        })
+    }
+
 
     const closeWarning = () => {
       ctx.emit('closeWarning')
@@ -154,7 +172,7 @@ export default {
       isSelectMode.value = true;
     }
 
-  const getBase64FromUrl = (imgUrl) => {
+    const getBase64FromUrl = (imgUrl,id,hash) => {
     const image = new Image();
     image.crossOrigin='anonymous';
     image.onload = () => {
@@ -166,12 +184,13 @@ export default {
     const dataUrl = canvas.toDataURL();
     getUrl.value = dataUrl;
     // 取得所有 sign 
-    signArr.value.push(getUrl.value);
+    // signArr.value.push(getUrl.value);
+    signArr.value.push({'id':id,'url':getUrl.value,'hash':hash});
     console.log(signArr.value);
     // callback && callback(dataUrl)
     }
     image.src = imgUrl;
-  }
+    }
 
     return {
       // url,
@@ -187,7 +206,8 @@ export default {
       getSign,
       getCanvas,
       getUrl,
-      getBase64FromUrl
+      getBase64FromUrl,
+      deleteImageBtn
     }
   }
 }

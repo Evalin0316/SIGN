@@ -17,5 +17,5 @@
   - vue-router
   - tailwind
 
-# 後端協作
+# 後端
   Author: https://github.com/yokarilight

@@ -318,11 +318,12 @@ export default {
         this.$emit("sign",true)
 
       bus.emit("reloadSign");
-
+      
+      // 上傳檔案
       uploadImage(fromData)
       .then((res)=>{
-        if(res.data.success){
-          alert(res)
+        if(res.data.status == true){
+          alert(res.data.data)
         }
       })
       .catch((err)=>{

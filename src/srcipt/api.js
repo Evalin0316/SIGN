@@ -14,12 +14,13 @@ export const getImage = () =>{
 }
 
 // 刪除圖片
-export const deleteImage = (id) =>{
-    return axios.delete(`${url}/image/${id}`);
+export const deleteImage = (id,data) =>{
+    return axios.delete(`${url}/image/${id}`,data,);
 }
 
 
 /* 檔案 */
+
 
 // 上傳檔案
 export const uploadFile = (data) =>{
