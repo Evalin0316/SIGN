@@ -266,25 +266,6 @@ export default {
           fill: false,
         },
       ];
-      // if ("vue-drawing-canvas" in window.localStorage) {
-      //   this.initialImage = JSON.parse(
-      //     window.localStorage.getItem("vue-drawing-canvas")
-      //   )
-      // } else {
-      //     this.initialImage = [
-      //     {
-      //       type: "dash",
-      //       from: {
-      //         x: 262,
-      //         y: 154,
-      //       },
-      //       coordinates: [],
-      //       color: "#000000",
-      //       width: 5,
-      //       fill: false,
-      //     },
-      //   ]
-      // }
     },
     async setImage(event) {
       let URL = window.URL;
@@ -318,9 +299,8 @@ export default {
         JSON.stringify(this.$refs.VueCanvasDrawing.getAllStrokes())
       );
       localStorage.setItem("vue-canvas", this.image);
-      // 轉成blob格式
-      const image = canvas.toDataURL(this.image, 0.5);
-      const getimage = this.dataURItoBlob(image);
+      // dataURL轉成blob格式
+      const getimage = this.dataURItoBlob(this.image);
       const fromData = new FormData();
       fromData.append('image',getimage,'image'+ Math.round(Math.random()*1000));
       console.log('fromData',fromData);
@@ -358,6 +338,7 @@ export default {
       this.color = color;
     },
     dataURItoBlob(dataURI) {
+    console.log(dataURI);
     // convert base64/URLEncoded data component to raw binary data held in a string
     var byteString;
     if (dataURI.split(',')[0].indexOf('base64') >= 0)
@@ -373,8 +354,7 @@ export default {
     for (var i = 0; i < byteString.length; i++) {
         ia[i] = byteString.charCodeAt(i);
     }
-
-    return new Blob([ia], {type:mimeString});
+    return new Blob([ia], {type:'image/png'});
   }
   },
 };

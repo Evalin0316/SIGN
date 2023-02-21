@@ -10,7 +10,7 @@
           <div class="selected-modal overflow-auto flex items-center justify-center flex-wrap">
             <div class="mb-2 flex justify-center" v-for="(item, idx) in signArr" :key="idx">
               <div class="h-auto bg-white w-4/5 rounded-3xl py-2" @click="selectedSign(item)">
-                <img :src="item" class='sign mx-auto object-contain w-36 h-20' />
+                <img :src="item" class='sign mx-auto object-contain w-36 h-20' alt="" referrerpolicy="no-referrer"/>
               </div>
             </div>
           </div>
@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import CanvasDraw from './CanvasDraw.vue'
 import bus from '../srcipt/bus';
 import { getImage } from '../srcipt/api';
@@ -85,34 +85,35 @@ export default {
   },
   setup (props, ctx) {
     console.log('ctx',ctx);
-    const signArr = ref('')
+    const signArr = ref([])
     const isSelectMode = ref(true)
     const isSignSelf = ref(true)
     const signStatus = ref(null)
     const getStroke = ref('')
     const getCanvas = ref('')
+    const getUrl = ref('')
 
     onMounted(() => {
-      init()
+     init()
       // 取得簽名檔
       signStatus.value = localStorage.getItem('vue-canvas')
       // console.log('取得簽名',signStatus.value)
-
     })
     onUnmounted(() => {
     })
 
     const init = () => {
-      if (localStorage.getItem('vue-canvas-array')) {
-        signArr.value = JSON.parse(localStorage.getItem('vue-canvas-array'))
-      }
+      // if (localStorage.getItem('vue-canvas-array')) {
+      //   signArr.value = JSON.parse(localStorage.getItem('vue-canvas-array'))
+      // }
+
       // 取得所有簽名檔
       getImage().then((res)=>{
-        if(res.data.success){
-          console.log(res.data);
-          // res.data.forEach((e)=>{
-          //   signArr.value.push(e.imageUrl);
-          // })
+        if(res.data.status == true){
+          res.data.data.forEach((e)=>{
+            getBase64FromUrl(e.imageUrl);
+            // signArr.value.push(getUrl.value);
+          })
         }
       }).catch((err)=>{
           alert(err.message);
@@ -128,6 +129,7 @@ export default {
     })
 
     const selectedSign = (url) => {
+      console.log('url',url)
       getStroke.value = url;
       // bus.emit('addImage',getStroke.value);
       fabric.Image.fromURL(getStroke.value, (image) => {
@@ -152,6 +154,25 @@ export default {
       isSelectMode.value = true;
     }
 
+  const getBase64FromUrl = (imgUrl) => {
+    const image = new Image();
+    image.crossOrigin='anonymous';
+    image.onload = () => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.height = image.naturalHeight;
+    canvas.width = image.naturalWidth;
+    ctx.drawImage(image, 0, 0);
+    const dataUrl = canvas.toDataURL();
+    getUrl.value = dataUrl;
+    // 取得所有 sign 
+    signArr.value.push(getUrl.value);
+    console.log(signArr.value);
+    // callback && callback(dataUrl)
+    }
+    image.src = imgUrl;
+  }
+
     return {
       // url,
       signArr,
@@ -164,7 +185,9 @@ export default {
       backToChoose,
       signStatus,
       getSign,
-      getCanvas
+      getCanvas,
+      getUrl,
+      getBase64FromUrl
     }
   }
 }
