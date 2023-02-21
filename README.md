@@ -16,3 +16,6 @@
   - vue3 + vite
   - vue-router
   - tailwind
+
+# 後端協作
+  Author: https://github.com/yokarilight
