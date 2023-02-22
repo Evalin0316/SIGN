@@ -12,7 +12,7 @@
               <div class="h-auto bg-white w-4/5 rounded-3xl py-2" @click="selectedSign(item.url)">
                 <img :src="item.url" class='sign mx-auto object-contain w-36 h-20' alt="" referrerpolicy="no-referrer"/>
               </div>
-               <span @click="deleteImageBtn(item.id,item.hash)"><img class="mr-4 mt-2" src="../assets/images/icon_Close_Square_n.png" /></span>
+               <span @click="deleteImageBtn(item.id,item.hash,item.imageUrl)"><img class="mr-4 mt-2" src="../assets/images/icon_Close_Square_n.png" /></span>
             </div>
           </div>
           <a class="proj-text-primary block mt-4 font-bold text-lg whitespace-nowrap" @click="isSelectMode = false">+ 新增簽名</a>
@@ -124,8 +124,8 @@ export default {
       })
     }
 
-    const deleteImageBtn = (id,data) =>{
-        let sendData = {'hash':data}
+    const deleteImageBtn = (id,data,url) =>{
+        let sendData = {'hash':data,'imageUrl':url};
         deleteImage(id,sendData).then((res)=>{
           if(res.data.status == true){
             alert('刪除成功');
@@ -185,8 +185,7 @@ export default {
     getUrl.value = dataUrl;
     // 取得所有 sign 
     // signArr.value.push(getUrl.value);
-    signArr.value.push({'id':id,'url':getUrl.value,'hash':hash});
-    console.log(signArr.value);
+    signArr.value.push({'id':id,'url':getUrl.value,'hash':String(hash),'imageUrl':String(imgUrl)});
     // callback && callback(dataUrl)
     }
     image.src = imgUrl;

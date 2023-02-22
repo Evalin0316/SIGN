@@ -14,8 +14,8 @@ export const getImage = () =>{
 }
 
 // 刪除圖片
-export const deleteImage = (id,data) =>{
-    return axios.delete(`${url}/image/${id}`,data,);
+export const deleteImage = (id,data) => {
+    return axios.delete(`${url}/image/${id}`,{data},);
 }
 
 
