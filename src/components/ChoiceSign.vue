@@ -1,9 +1,9 @@
 <template>
   <div class="draw_modal w-full left-0 top-0 fixed">
-    <div class="card-inner absolute text-xl pop-container-choose w-full z-50" v-if="isSelectMode && signStatus != null">
+    <div class="card-inner absolute text-xl pop-container-choose w-full z-50" v-if="signArr.length > 0">
       <div class="relative mt-3" @click="closeWarning">
-        <img class="absolute right-0 top-0 mr-4 mt-3" src="../assets/images/icon_Close_Square_n.png" />
-    </div>
+        <img class="absolute right-0 top-0 mr-4 mt-3 close_square" src="../assets/images/icon_Close_Square_n.png" />
+      </div>
       <div class="bg rounded-3xl overflow-hidden shadow-lg w-full">
         <div class="px-4 py-6 flex flex-col justify-center w-full">
           <div class="font-bold text-lg mb-8 whitespace-nowrap text-center proj-text-primary">選擇簽名</div>
@@ -17,17 +17,38 @@
           </div>
           <a class="proj-text-primary block mt-4 font-bold text-lg whitespace-nowrap" @click="isSelectMode = false">+ 新增簽名</a>
         </div>
-
       </div>
     </div>
-    <div class="card-inner absolute text-xl w-full z-50 pop-container" v-if="!isSelectMode">
-      <div class="bg rounded-3xl overflow-hidden shadow-lg w-full">
-        <div class="relative mt-3" @click="closeWarning">
-        <img class="absolute right-0 top-0 mr-4" src="../assets/images/icon_Close_Square_n.png" />
-    </div>
+      <div class="card-inner absolute text-xl pop-container-choose w-full z-50" v-if="signArr.length <= 0">
+            <div class="relative mt-3" @click="closeWarning">
+              <img class="absolute right-0 top-0 mr-4 mt-3 close_square" src="../assets/images/icon_Close_Square_n.png" />
+            </div>
+          <div class="bg rounded-3xl overflow-hidden shadow-lg w-full">
+            <div class="px-4 py-6 flex flex-col justify-center w-full">
+              <div class="font-bold text-lg mb-8 whitespace-nowrap text-center">目前還沒有簽名喔~</div>
+              <div class="text-sm">請創建新的簽名檔，可上傳圖片或線上簽名</div>
+              <label class="flex justify-center mt-4" @click="isSelectMode = false">
+                <img src="../assets/images/add_sign.png"/>
+              </label>
+              <label class="flex justify-center mt-4 uploadImage">
+                <!-- <img src="../assets/images/uploadSign.png"/> -->
+                 <input
+                class="form-control hidden"
+                ref="fileElement"
+                type="file"
+                accept="image/*"
+                @change="uploadImageBtn(data)"
+                />
+              </label>
+              </div>
+            </div>
+        </div>
+      <div class="card-inner absolute text-xl w-full z-50 pop-container" v-if="!isSelectMode">
+        <div class="bg rounded-3xl overflow-hidden shadow-lg w-full">
+          <div class="relative mt-3" @click="closeWarning">
+              <img class="absolute right-0 top-0 mr-4" src="../assets/images/icon_Close_Square_n.png" />
+          </div>
         <div class="index_Sign flex flex-col items-center w-full py-4 px-2">
-       
-
           <!-- <div class="container-pop mx-auto mb-5 text-base md:text-lg">
             <div class="inner-container">
               <div class="toggle" @click="isSignSelf = false">
@@ -50,25 +71,9 @@
           <CanvasDraw :isSignSelf="isSignSelf" v-on:closeWarning="closeWarning" v-on:getStroke="getStroke" v-on:backToChoose="backToChoose" 
           @sign="getSign"
           />
-
         </div>
       </div>
-    </div>
-
-    <div class="card-inner absolute text-xl pop-container-choose w-full z-50" v-if="signStatus == null && isSelectMode">
-      <div class="bg rounded-3xl overflow-hidden shadow-lg w-full">
-        <div class="px-4 py-6 flex flex-col justify-center w-full">
-          <div class="font-bold text-lg mb-8 whitespace-nowrap text-center">目前還沒有簽名喔~</div>
-          <div class="text-sm">請創建新的簽名檔，可上傳圖片或線上簽名</div>
-          <a class="flex justify-center mt-4" @click="isSelectMode = false">
-          <img src="../assets/images/add_sign.png"/>
-          </a>
-          <a class="flex justify-center mt-4">
-          <img src="../assets/images/uploadSign.png"/>
-          </a>
-        </div>
       </div>
-  </div>
   </div>
 </template>
 
@@ -76,7 +81,7 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import CanvasDraw from './CanvasDraw.vue'
 import bus from '../srcipt/bus';
-import { getImage , deleteImage } from '../srcipt/api';
+import { getImage , deleteImage , uploadImage } from '../srcipt/api';
 export default {
   name: 'selectSign',
   components: {
@@ -93,6 +98,7 @@ export default {
     const getStroke = ref('')
     const getCanvas = ref('')
     const getUrl = ref('')
+    const fileElement = ref('')
 
     onMounted(() => {
      init()
@@ -128,9 +134,8 @@ export default {
         let sendData = {'hash':data,'imageUrl':url};
         deleteImage(id,sendData).then((res)=>{
           if(res.data.status == true){
-            alert('刪除成功');
-            // 重新拿圖片
-            getImage();
+            alert(res.data.data);
+            init();
           }
         }).catch((err)=>{
             alert(err.message);
@@ -191,6 +196,20 @@ export default {
     image.src = imgUrl;
     }
 
+    const uploadImageBtn = () => {
+      let fromData = new FormData();
+      fromData.append('image',fileElement.value.files[0]);
+      if(fileElement.value.files[0].size > 0){
+        uploadImage(fromData).then((res) =>{
+            if(res.data.status == true){
+              alert(res.data.data)
+            }
+        }).catch((err)=>{
+          alert(err.message)
+      })
+    }
+  }
+
     return {
       // url,
       signArr,
@@ -206,7 +225,9 @@ export default {
       getCanvas,
       getUrl,
       getBase64FromUrl,
-      deleteImageBtn
+      deleteImageBtn,
+      uploadImageBtn,
+      fileElement
     }
   }
 }
@@ -291,5 +312,13 @@ export default {
   @media (max-width: 768px) {
     max-width: 343px;
   }
+}
+
+.uploadImage{
+  background-image: url("../assets/images/uploadSign.png");
+  height: 40px;
+  width: 100%;
+  background-repeat: no-repeat;
+  cursor: pointer;
 }
 </style>
