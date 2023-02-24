@@ -15,11 +15,22 @@
                <span @click="deleteImageBtn(item.id,item.hash,item.imageUrl)"><img class="mr-4 mt-2" src="../assets/images/icon_Close_Square_n.png" /></span>
             </div>
           </div>
-          <a class="proj-text-primary block mt-4 font-bold text-lg whitespace-nowrap" @click="isSelectMode = false">+ 新增簽名</a>
+          <label class="proj-text-primary block mt-4 font-bold text-lg whitespace-nowrap" @click="isSelectMode = false">
+            <img src="../assets/images/add_sign.png"/>
+          </label>
+          <label class="flex justify-center mt-4 uploadImage">
+            <input
+                class="form-control hidden"
+                ref="fileElement"
+                type="file"
+                accept="image/*"
+                @change="uploadImageBtn()"
+              />
+          </label>
         </div>
       </div>
     </div>
-      <div class="card-inner absolute text-xl pop-container-choose w-full z-50" v-if="signArr.length <= 0">
+    <div class="card-inner absolute text-xl pop-container-choose w-full z-50" v-if="signArr.length <= 0">
             <div class="relative mt-3" @click="closeWarning">
               <img class="absolute right-0 top-0 mr-4 mt-3 close_square" src="../assets/images/icon_Close_Square_n.png" />
             </div>
@@ -37,12 +48,12 @@
                 ref="fileElement"
                 type="file"
                 accept="image/*"
-                @change="uploadImageBtn(data)"
+                @change="uploadImageBtn()"
                 />
               </label>
               </div>
             </div>
-        </div>
+      </div>
       <div class="card-inner absolute text-xl w-full z-50 pop-container" v-if="!isSelectMode">
         <div class="bg rounded-3xl overflow-hidden shadow-lg w-full">
           <div class="relative mt-3" @click="closeWarning">
@@ -130,9 +141,11 @@ export default {
       })
     }
 
-    const deleteImageBtn = (id,data,url) =>{
-        let sendData = {'hash':data,'imageUrl':url};
-        deleteImage(id,sendData).then((res)=>{
+    const deleteImageBtn = (id,hash,url) =>{
+        // let sendData = {'hash':data,'imageUrl':url};
+        let getUrl = url.split('/');
+        let imageName = getUrl[3];
+        deleteImage(id,hash,imageName).then((res)=>{
           if(res.data.status == true){
             alert(res.data.data);
             init();

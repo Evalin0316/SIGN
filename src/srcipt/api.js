@@ -1,5 +1,5 @@
 import axios from "axios";
-const url = 'https://auto-signature-app.fly.dev';
+const url = 'https://auto-signature-app-v1.fly.dev';
 
 /* 圖片 */
 
@@ -14,8 +14,12 @@ export const getImage = () =>{
 }
 
 // 刪除圖片
-export const deleteImage = (id,data) => {
-    return axios.delete(`${url}/image/${id}`,{data},);
+// export const deleteImage = (id,data) => {
+//     return axios.delete(`${url}/image/${id}`,{data},);
+// }
+
+export const deleteImage = (id,hash,imageurl) => {
+    return axios.delete(`${url}/image/${id}/hash/${hash}/image-str/${imageurl}`);
 }
 
 
@@ -23,7 +27,7 @@ export const deleteImage = (id,data) => {
 
 
 // 上傳檔案
-export const uploadFile = (data) =>{
+export const uploadFile = (data) => {
     return axios.post(`${url}/file/`,data,);
 }
 

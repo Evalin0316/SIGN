@@ -287,6 +287,7 @@ export default {
 
     onMounted(()=>{
       status.value = '';
+      bus.emit('pageLoading',false);
     })
 
     return{

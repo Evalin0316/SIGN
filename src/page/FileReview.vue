@@ -78,6 +78,8 @@ export default {
       getFileName.value = v;
     })
 
+    bus.emit('pageLoading',)
+
     // 完成簽署
     bus.on('saveDocument',()=>{
       const pdf = new jsPDF();
@@ -110,6 +112,7 @@ export default {
       if (localStorage.getItem('vue-canvas')) {
         signUrl.value = localStorage.getItem('vue-canvas')
       }
+      bus.emit('pageLoading',false);
     })
     const pdfInit = (file) => {
       const Base64Prefix = 'data:application/pdf;base64,'

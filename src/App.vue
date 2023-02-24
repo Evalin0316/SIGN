@@ -3,12 +3,14 @@
     <!-- <Header/> -->
    <!-- <router-view /> -->
    <FileUpload/>
+    <!-- <PageLoading/> -->
   </div>
 </template>
 
 <script>
 // import Header from './components/Header.vue';
 import FileUpload from './page/FileUpload.vue'
+import PageLoading from './components/PageLoading.vue'
 
 export default {
   components:{
@@ -17,7 +19,8 @@ export default {
     // SignPage,
     // FileReview,
     // Header,
-    FileUpload
+    FileUpload,
+    PageLoading
   }
 }
 </script>
