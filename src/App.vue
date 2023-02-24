@@ -3,7 +3,7 @@
     <!-- <Header/> -->
    <!-- <router-view /> -->
    <FileUpload/>
-    <!-- <PageLoading/> -->
+    <PageLoading/>
   </div>
 </template>
 

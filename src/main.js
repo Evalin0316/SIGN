@@ -7,6 +7,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 // import { faGooglePlus } from '@fortawesome/free-brands-svg-icons'
 import { faSignature } from '@fortawesome/free-solid-svg-icons';
+import PageLoading from './components/PageLoading.vue';
 
 
 library.add(faSignature)
@@ -15,5 +16,7 @@ const emitter = mitt();
 app.config.globalProperties.$emitter = emitter;
 
 app.use(router)
+    .provide('emitter',emitter)
    .component('font-awesome-icon', FontAwesomeIcon)
+   .component('PageLoding', PageLoading)
    .mount('#app');

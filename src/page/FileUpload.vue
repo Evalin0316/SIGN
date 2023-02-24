@@ -71,7 +71,7 @@ import pdfview from '../components/pdfview.vue';
 import jsPDF from "jspdf";
 import Header from '../components/Header.vue';
 import SaveConfirm from '../components/SaveConfirm.vue'
-import { onMounted, ref, reactive, onUpdated, watchEffect } from 'vue';
+import { onMounted, ref, reactive, onUpdated, watchEffect ,inject, onBeforeMount } from 'vue';
 var canvas = null
 export default {
   name:'fileUpload',
@@ -82,6 +82,7 @@ export default {
     Header,
     SaveConfirm
   },
+  emits:['page-loading'],
   setup(){
     const filename = ref('');
     const status = ref('');
@@ -92,6 +93,7 @@ export default {
     const fileExist = ref(false)
     const showConfirmModal = ref(false)
     const fileElement = ref(null)
+    const emitter = inject('emitter')
 
     const uploadFile = (data) => {
         status.value = fileElement.value.files.length || data.length; // 手動上傳 || 拖拉 
@@ -287,7 +289,7 @@ export default {
 
     onMounted(()=>{
       status.value = '';
-      bus.emit('pageLoading',false);
+      emitter.emit('page-loading',false);
     })
 
     return{

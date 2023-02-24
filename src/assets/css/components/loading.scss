@@ -23,7 +23,10 @@
         margin-top: .25rem;
     }
     .sign{
-        animation: Sign .45s cubic-bezier(0, 0, 0.2, 1) alternate infinite  ;
+        animation: Sign .45s cubic-bezier(0, 0, 0.5, 1) alternate infinite; // cubic-bezier x1 y1 x2 y2
+        svg{
+            font-size: 35px;
+        }
     }
 
 }
@@ -37,12 +40,16 @@
     }
   }
   
-  @keyframes Sign{
-    from{
-      transform: translateY(100) scale(2, .8)
-    }
-    to{
-      transform: translateY(-50%) scale(1, 1)
-      }
+//   @keyframes Sign{
+//     from{
+//       transform: translateY(100) scale(2, .8)
+//     }
+//     to{
+//       transform: translateY(-50%) scale(1, 1)
+//       }
+//   }
+
+  .d-none{
+        display: none;
   }
    
