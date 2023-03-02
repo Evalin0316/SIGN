@@ -1,15 +1,15 @@
 import axios from "axios";
-const url = 'https://auto-signature-app-v1.fly.dev';
+const url = 'https://auto-signature-app-v3.fly.dev';
 
 /* 圖片 */
 
 // 上傳圖片
-export const uploadImage = (data) =>{
+export const uploadImage = (data) => {
     return axios.post(`${url}/image/`,data,);
 }
 
 // 取得所有圖片(簽名檔)
-export const getImage = () =>{
+export const getImage = () => {
     return axios.get(`${url}/image/`);
 }
 
@@ -32,17 +32,17 @@ export const uploadFile = (data) => {
 }
 
 // 取得檔案
-export const getFile = () =>{
-    return axios.get(`${url}/file/`);
+export const getFile = (from,count) => {
+    return axios.get(`${url}/file/from/${from}/count/${count}`);
 }
 
 // 下載檔案
-export const downloadFile = () =>{
+export const downloadFile = () => {
     return axios.get(`${url}/file/`);
 }
 
 //刪除檔案
-export const deleteFile = (id) =>{
+export const deleteFile = (id) => {
     return axios.delete(`${url}/file/${id}`)
 }
 
