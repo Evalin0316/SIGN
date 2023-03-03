@@ -26,6 +26,7 @@ export default{
         allowSave(){
             bus.emit("saveDocument");
             this.$emit('hideConfirmModal');
+            bus.emit('nowPage','fileUpload');
         },
         notAllowSave(){
             this.$emit('hideConfirmModal');

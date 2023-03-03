@@ -1,8 +1,8 @@
 <template>
-<div class="container_outter">
-    <Header @nextStep="nextStep" @prevPage="prevPage"></Header>
+<div class="container_outter" v-if="nowPage == 'homePage'">
+    <Header></Header>
     <div class="container_home p-3">
-    <div>
+    <div class="flex justify-between">
         <div class="search_file flex flex-row">
             <form>
             <div class="search_input m-4 relative">
@@ -22,7 +22,9 @@
                 <label>共筆</label>
             </div>
         </div>
-        <div class="filter_type"></div>
+        <div class="upload_file m-4">
+            <img src="../assets/images/to_upload.svg" @click="goFileUpload()"/>
+        </div>
     </div>
     <ul class="flex">
         <li class="w-1/4 p-4" v-for="(item,index) in files" :key="index">
@@ -35,8 +37,9 @@
 
 <script>
 import { getFile } from '../srcipt/api';
-import { inject, onMounted, ref } from 'vue';
+import { inject, onMounted, onUnmounted, ref } from 'vue';
 import Header from '../components/Header.vue';
+import bus from "../srcipt/bus";
 
 export default {
     name:'homePage',
@@ -46,22 +49,35 @@ export default {
     },
     setup() {
         const files = ref('');
-        const emitter = inject('emitter')
+        const nowPage = ref('homePage');
+        // const emitter = inject('emitter')
+        bus.on('nowPage',(v)=> {
+            nowPage.value = v
+        })
+        bus.emit('status','homePage')
+
         getFile(0,10).then((res)=>{
             if(res.data.status == true){
-                console.log(res);
                 files.value = res.data.data;
             }
         }).catch((err)=>{
             alert(err.message)
         })
 
+        const goFileUpload = () => {
+            bus.emit('nowPage','fileUpload')
+            // bus.emit('status','fileUpload')
+        }
+
         onMounted(()=>{
-            emitter.emit('page-loading',false);
+            bus.emit('page-loading',false);
+            bus.emit('status','homePage')
         })
 
         return{
-            files
+            files,
+            goFileUpload,
+            nowPage
         }
     },
 }

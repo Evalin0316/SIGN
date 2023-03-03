@@ -2,10 +2,10 @@
   <div>
     <!-- <Header/> -->
    <!-- <router-view /> -->
-   <HomePage/>
-   <!-- <FileUpload/> -->
-    <PageLoading/>
-  </div>
+    <HomePage/>
+    <FileUpload/>
+      <PageLoading/>
+    </div>
 </template>
 
 <script>
@@ -24,7 +24,8 @@ export default {
     FileUpload,
     PageLoading,
     HomePage
-  }
+  },
+  setup(){}
 }
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="nowPage == 'fileUpload'">
     <Header @nextStep="nextStep" @prevPage="prevPage"></Header>
     <div class="container_sign">
       <div class="flex justify-center pt-10 pb-10">
@@ -71,7 +71,7 @@ import pdfview from '../components/pdfview.vue';
 import jsPDF from "jspdf";
 import Header from '../components/Header.vue';
 import SaveConfirm from '../components/SaveConfirm.vue'
-import { onMounted, ref, reactive, onUpdated, watchEffect ,inject, onBeforeMount } from 'vue';
+import { onMounted, ref, reactive, onUpdated, watchEffect ,inject, onBeforeMount,onUnmounted } from 'vue';
 var canvas = null
 export default {
   name:'fileUpload',
@@ -93,7 +93,14 @@ export default {
     const fileExist = ref(false)
     const showConfirmModal = ref(false)
     const fileElement = ref(null)
-    const emitter = inject('emitter')
+    const nowPage = ref('');
+    // const emitter = inject('emitter')
+    bus.on('nowPage',(v)=> {
+        console.log(v);
+        nowPage.value = v
+    })
+
+    bus.emit('status','fileUpload');
 
     const uploadFile = (data) => {
         status.value = fileElement.value.files.length || data.length; // 手動上傳 || 拖拉 
@@ -289,8 +296,13 @@ export default {
 
     onMounted(()=>{
       status.value = '';
-      emitter.emit('page-loading',false);
+      bus.emit('page-loading',false);
+      bus.emit('status','fileUpload');
     })
+
+    // onUnmounted(()=>{
+    //   bus.emit('status','')
+    // })
 
     return{
       uploadFile,
@@ -309,7 +321,8 @@ export default {
       fileExist,
       showConfirmModal,
       fileElement,
-      hideConfirmModal
+      hideConfirmModal,
+      nowPage
     }
   }
 //   data() {

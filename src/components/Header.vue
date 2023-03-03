@@ -1,10 +1,11 @@
 <template>
-    <div class="container_tab flex justify-between items-center px-1">
+    <div>
+      <div class="container_tab flex justify-between items-center px-1" v-if="headerStatus == 'fileUpload'">
       <a @click="prevPage" class="btn prevBtn flex items-center w-20 py-4 ml-4 cursor-pointer">
         <img src="../assets/images/icon_arrows_left_n.svg" alt="previcon">
         Previous
        </a>
-      <SelectSign v-if="isSelectSign" @closeWarning="closeWarning" @selectedSign="selectedSign"  />
+        <SelectSign v-if="isSelectSign" @closeWarning="closeWarning" @selectedSign="selectedSign"  />
         <div class="flex justify-between">
             <a class="signBtn flex flex-col items-center w-20 py-4 cursor-pointer" @click="isSelectSign = true">
             <img src="../assets/images/Tab_sign.png" @click="signModal"/>
@@ -19,21 +20,38 @@
         <div @click="nextStep" class="btn nextBtn flex  items-center w-20 py-4 cursor-not-allowed">
             Next<img src="../assets/images/icon_arrows_right_n.svg" alt="nexticon">
         </div>
+      </div>
+      <div class="flex items-center justify-center" v-if="headerStatus == 'homePage'">
+        <div class="flex justify-between w-56">
+            <a class="signBtn flex items-center w-30 py-4 cursor-pointer tab-brown text-[#BE8E55]">
+              <img src="../assets/images/icon_document_own_n.svg"/>
+                待簽署
+            </a>
+            <a class="dateBtn flex items-center w-30 py-4 cursor-pointer text-[#BE8E55]">
+                <img src="../assets/images/icon_document_setting_n.svg"/>
+                管理簽名
+            </a>
+        </div>
+      </div>
     </div>
 </template>
 
 <script>
 import SelectSign from '../components/ChoiceSign.vue';
-import { onMounted, ref, reactive } from 'vue';
+import { onMounted, ref, reactive,inject, onUpdated,onBeforeMount } from 'vue';
+import bus from "../srcipt/bus";
 var canvas = null;
 export default {
     components: {
     // WarningAlert,
     SelectSign
   },
+  // emits:['status'],
   setup (props, ctx ) {
     const isSelectSign = ref(false)
     const signUrl = ref('')
+    const headerStatus = ref('')
+    // const emitter = inject('emitter')
     const closeWarning = (closeWarning) => {
       isSelectSign.value = closeWarning
     }
@@ -43,6 +61,11 @@ export default {
     const prevPage = function(){
       ctx.emit('prevPage')
     }
+
+    bus.on('status', (v) => {
+      console.log('header',v)
+      headerStatus.value = v
+    })
 
   // 圖片放在PDF上
     const selectedSign = (selectedSign) => {
@@ -54,13 +77,15 @@ export default {
         canvas.add(image);
       })
     }
+
     return {
         isSelectSign,
         closeWarning,
         selectedSign,
         signUrl,
         nextStep,
-        prevPage
+        prevPage,
+        headerStatus
     }
   } 
 }

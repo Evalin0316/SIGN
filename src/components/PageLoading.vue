@@ -9,7 +9,7 @@
 
 <script>
 import { onMounted, ref } from 'vue';
-// import bus from "../srcipt/bus";
+import bus from "../srcipt/bus";
 import { inject } from 'vue'
 
 export default{
@@ -17,8 +17,8 @@ export default{
     setup(){
         const isLoading = ref(true);
         const loading = ref(null);
-        const emitter = inject('emitter'); // Inject `emitter`
-               emitter.on('page-loading',(val)=>{
+        // const emitter = inject('emitter'); // Inject `emitter`
+               bus.on('page-loading',(val)=>{
                 console.log(val);
                 const body = document.querySelector('body');
                 console.log(loading.value);

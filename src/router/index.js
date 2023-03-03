@@ -3,24 +3,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
   {
     path: '/',
-    name: 'app',
-    component: () => import('../App.vue')
+    name: 'homePage',
+    component: () => import('../page/HomePage.vue')
   },
-  {
-    path: '/fileUpload',
-    name: 'FileUpload',
-    component: () => import('../page/FileUpload.vue')
-  },
-  {
-    path: '/FileReview',
-    name: 'FileReview',
-    component: () => import('../page/FileReview.vue')
-  },
-  {
-    path: '/pdfview',
-    name: 'pdfview',
-    component: () => import('../components/pdfview.vue')
-  },
+  // {
+  //   path: '/fileUpload',
+  //   name: 'FileUpload',
+  //   component: () => import('../page/FileUpload.vue')
+  // },
 ]
 
 const router = createRouter({

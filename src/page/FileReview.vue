@@ -78,7 +78,7 @@ export default {
       getFileName.value = v;
     })
 
-    bus.emit('pageLoading',false);
+    
 
     // 完成簽署
     bus.on('saveDocument',()=>{
@@ -89,7 +89,7 @@ export default {
         const height = pdf.internal.pageSize.height
         pdf.addImage(image, "png", 0, 0, width, height)
         // 將檔案取名並下載
-        pdf.save("download.pdf");
+        // pdf.save("download.pdf");
 
       const blobPDF = new Blob([pdf.output('blob')],{type: 'application/pdf'})
       const fromData = new FormData();
