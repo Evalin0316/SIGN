@@ -19,7 +19,7 @@
                 <label class="m-3"><input type="checkbox"/>未完成</label>
                 <label class="m-3"><input type="checkbox"/>已完成</label>
                 <label class="m-3"><input type="checkbox"/>已取消</label>
-                <label>共筆</label>
+                <label class="m-3">共{{flieLength}}筆</label>
             </div>
         </div>
         <div class="upload_file m-4">
@@ -27,8 +27,9 @@
         </div>
     </div>
     <ul class="flex">
-        <li class="w-1/4 p-4" v-for="(item,index) in files" :key="index">
-            <img src="../assets/images/Frame_finish.png"/>
+        <li class="w-1/4 p-4 relative" v-for="(item,index) in files" :key="index">
+            <div class="absolute -bottom-14 z-[99] text-[5px] w-32 text-ellipsis overflow-hidden whitespace-nowrap flex justify-center">{{item.fileName}}</div>
+            <div class="absolute"><img src="../assets/images/Frame_finish.png"/></div>
         </li>
     </ul>
     </div>
@@ -52,6 +53,7 @@ export default {
         const files = ref('');
         const nowPage = ref('homePage');
         const router = useRouter();
+        const flieLength = ref('');
         // const emitter = inject('emitter')
         bus.on('nowPage',(v)=> {
             nowPage.value = v
@@ -61,6 +63,7 @@ export default {
         getFile(0,10).then((res)=>{
             if(res.data.status == true){
                 files.value = res.data.data;
+                flieLength.value = res.data.data.length;
             }
         }).catch((err)=>{
             alert(err.message)
@@ -79,7 +82,8 @@ export default {
         return{
             files,
             goFileUpload,
-            nowPage
+            nowPage,
+            flieLength
         }
     },
 }

@@ -23,11 +23,11 @@
       </div>
       <div class="flex items-center justify-center" v-if="headerStatus == 'homePage'">
         <div class="flex justify-between w-56">
-            <a class="signBtn flex items-center w-30 py-4 cursor-pointer tab-brown text-[#BE8E55]">
+            <a class="signBtn flex items-center w-30 py-4 cursor-pointer tab-brown text-[#BE8E55] font-bold">
               <img src="../assets/images/icon_document_own_n.svg"/>
                 待簽署
             </a>
-            <a class="dateBtn flex items-center w-30 py-4 cursor-pointer text-[#BE8E55]">
+            <a class="dateBtn flex items-center w-30 py-4 cursor-pointer text-[#BE8E55] font-bold">
                 <img src="../assets/images/icon_document_setting_n.svg"/>
                 管理簽名
             </a>

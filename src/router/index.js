@@ -12,6 +12,11 @@ const routes = [
     name: 'fileUpload',
     component: () => import('../page/FileUpload.vue')
   },
+  {
+    path: '/:pathMatch(.*)*',
+    name: '404',
+    component: () => import('../page/ErrorPage.vue')
+  }
 ]
 
 export default createRouter({ history,routes })
