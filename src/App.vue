@@ -1,10 +1,10 @@
 <template>
   <div>
     <!-- <Header/> -->
-   <!-- <router-view /> -->
-    <HomePage/>
-    <FileUpload/>
-      <PageLoading/>
+   <router-view></router-view>
+    <!-- <HomePage/>
+    <FileUpload/> -->
+      <!-- <PageLoading/> -->
     </div>
 </template>
 

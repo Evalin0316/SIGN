@@ -16,7 +16,7 @@ const emitter = mitt();
 app.config.globalProperties.$emitter = emitter;
 
 app.use(router)
-    .provide('emitter',emitter)
+   .provide('emitter',emitter)
    .component('font-awesome-icon', FontAwesomeIcon)
    .component('PageLoding', PageLoading)
    .mount('#app');

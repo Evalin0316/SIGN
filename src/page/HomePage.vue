@@ -1,5 +1,5 @@
 <template>
-<div class="container_outter" v-if="nowPage == 'homePage'">
+<div class="container_outter">
     <Header></Header>
     <div class="container_home p-3">
     <div class="flex justify-between">
@@ -40,6 +40,7 @@ import { getFile } from '../srcipt/api';
 import { inject, onMounted, onUnmounted, ref } from 'vue';
 import Header from '../components/Header.vue';
 import bus from "../srcipt/bus";
+import { useRouter } from 'vue-router';
 
 export default {
     name:'homePage',
@@ -50,6 +51,7 @@ export default {
     setup() {
         const files = ref('');
         const nowPage = ref('homePage');
+        const router = useRouter();
         // const emitter = inject('emitter')
         bus.on('nowPage',(v)=> {
             nowPage.value = v
@@ -65,8 +67,8 @@ export default {
         })
 
         const goFileUpload = () => {
-            bus.emit('nowPage','fileUpload')
-            // bus.emit('status','fileUpload')
+            bus.emit('status','fileUpload')
+            router.push(`/week2-F2E/fileUpload`)
         }
 
         onMounted(()=>{

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="nowPage == 'fileUpload'">
+  <div>
     <Header @nextStep="nextStep" @prevPage="prevPage"></Header>
     <div class="container_sign">
       <div class="flex justify-center pt-10 pb-10">
@@ -93,13 +93,7 @@ export default {
     const fileExist = ref(false)
     const showConfirmModal = ref(false)
     const fileElement = ref(null)
-    const nowPage = ref('');
     // const emitter = inject('emitter')
-    bus.on('nowPage',(v)=> {
-        console.log(v);
-        nowPage.value = v
-    })
-
     bus.emit('status','fileUpload');
 
     const uploadFile = (data) => {
@@ -300,10 +294,6 @@ export default {
       bus.emit('status','fileUpload');
     })
 
-    // onUnmounted(()=>{
-    //   bus.emit('status','')
-    // })
-
     return{
       uploadFile,
       pdfInit,
@@ -322,7 +312,6 @@ export default {
       showConfirmModal,
       fileElement,
       hideConfirmModal,
-      nowPage
     }
   }
 //   data() {
