@@ -4,7 +4,7 @@
    <router-view></router-view>
     <!-- <HomePage/>
     <FileUpload/> -->
-      <!-- <PageLoading/> -->
+      <PageLoading/>
     </div>
 </template>
 

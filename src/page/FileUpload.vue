@@ -94,7 +94,7 @@ export default {
     const showConfirmModal = ref(false)
     const fileElement = ref(null)
     // const emitter = inject('emitter')
-    bus.emit('status','fileUpload');
+   
 
     const uploadFile = (data) => {
         status.value = fileElement.value.files.length || data.length; // 手動上傳 || 拖拉 
@@ -291,7 +291,7 @@ export default {
     onMounted(()=>{
       status.value = '';
       bus.emit('page-loading',false);
-      bus.emit('status','fileUpload');
+      bus.emit('headerStatus','fileUpload');
     })
 
     return{

@@ -1,10 +1,36 @@
 <template>
     <div>
+      <!-- 首頁狀態 -->
+      <div class="flex items-center justify-center" v-if="headerStatus == 'homePage'">
+        <div class="flex justify-between w-56">
+            <a class="signBtn flex items-center w-30 py-4 cursor-pointer tab-brown text-[#BE8E55] font-bold">
+              <img src="../assets/images/icon_document_own_n.svg"/>
+                待簽署
+            </a>
+            <a class="dateBtn flex items-center w-30 py-4 cursor-pointer text-[#BE8E55] font-bold">
+                <img src="../assets/images/icon_document_setting_n.svg"/>
+                管理簽名
+            </a>
+        </div>
+      </div>
+
+      <!-- 上傳檔案 -->
+      <!-- <div class="flex justify-between" v-if="headerStatus == 'fileUpload'">
+       <div class="btn prevBtn flex items-center w-20 py-4 ml-4 cursor-pointer my-4">
+        <img src="../assets/images/icon_arrows_left_n.svg" alt="previcon">
+        <router-link to="/week2-F2E/">
+        Cancel</router-link></div>
+        <div @click="nextStep" class="btn nextBtn flex  items-center w-20 py-4 mr-4 cursor-not-allowed my-4">
+        Next<img src="../assets/images/icon_arrows_right_n.svg" alt="nexticon">
+        </div>
+      </div> -->
+
+      <!-- 簽署狀態 -->
       <div class="container_tab flex justify-between items-center px-1" v-if="headerStatus == 'fileUpload'">
       <a @click="prevPage" class="btn prevBtn flex items-center w-20 py-4 ml-4 cursor-pointer">
         <img src="../assets/images/icon_arrows_left_n.svg" alt="previcon">
         Previous
-       </a>
+      </a>
         <SelectSign v-if="isSelectSign" @closeWarning="closeWarning" @selectedSign="selectedSign"  />
         <div class="flex justify-between">
             <a class="signBtn flex flex-col items-center w-20 py-4 cursor-pointer" @click="isSelectSign = true">
@@ -19,18 +45,6 @@
         </div>
         <div @click="nextStep" class="btn nextBtn flex  items-center w-20 py-4 cursor-not-allowed">
             Next<img src="../assets/images/icon_arrows_right_n.svg" alt="nexticon">
-        </div>
-      </div>
-      <div class="flex items-center justify-center" v-if="headerStatus == 'homePage'">
-        <div class="flex justify-between w-56">
-            <a class="signBtn flex items-center w-30 py-4 cursor-pointer tab-brown text-[#BE8E55] font-bold">
-              <img src="../assets/images/icon_document_own_n.svg"/>
-                待簽署
-            </a>
-            <a class="dateBtn flex items-center w-30 py-4 cursor-pointer text-[#BE8E55] font-bold">
-                <img src="../assets/images/icon_document_setting_n.svg"/>
-                管理簽名
-            </a>
         </div>
       </div>
     </div>
@@ -62,8 +76,12 @@ export default {
       ctx.emit('prevPage')
     }
 
-    bus.on('status', (v) => {
-      console.log('header',v)
+    // const cancelBtn = function(){
+    //   ctx.emit('cancelBtn')
+    // }
+
+    bus.on('headerStatus', (v) => {
+      console.log('header',v);
       headerStatus.value = v
     })
 
@@ -85,7 +103,8 @@ export default {
         signUrl,
         nextStep,
         prevPage,
-        headerStatus
+        headerStatus,
+        // cancelBtn
     }
   } 
 }

@@ -6,19 +6,19 @@
         <div class="search_file flex flex-row">
             <form>
             <div class="search_input m-4 relative">
-                <div class="absolute pointer-events-none right-3.5 bottom-1.5 mr-5 border-r-4 border-l-yellow-600"><img src="../assets/images/icon_Close_n.png"/></div>
-                <div class="absolute pointer-events-none right-3.5 bottom-1.5"><img src="../assets/images/icon_search_n.png"/></div>
-                <input type="text" class="bg-white m-3 h-8 rounded-lg block w-full
-                p-4 pl-10 text-sm text-gray-900 border border-gray-300
+                <div class="absolute pointer-events-none right-3.5 bottom-2.5 mr-5 border-r-4 border-l-yellow-600"><img src="../assets/images/icon_Close_n.png"/></div>
+                <div class="absolute pointer-events-none right-3.5 bottom-2.5"><img src="../assets/images/icon_search_n.png"/></div>
+                <input type="text" class="bg-white m-3 rounded-lg block w-full
+                 text-sm text-gray-900 border border-gray-300 h-12 pl-3
                 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 
                 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                 placeholder="Search here..."/>
             </div>
             </form>
-            <div class="search_type bg-white flex w-3/5 m-4 rounded-lg">
-                <label class="m-3"><input type="checkbox"/>未完成</label>
-                <label class="m-3"><input type="checkbox"/>已完成</label>
-                <label class="m-3"><input type="checkbox"/>已取消</label>
+            <div class="search_type bg-white flex w-9/12 m-4 rounded-lg text-[#BE8E55] h-12">
+                <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox"/>未完成</label>
+                <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox"/>已完成</label>
+                <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox"/>已取消</label>
                 <label class="m-3">共{{flieLength}}筆</label>
             </div>
         </div>
@@ -76,7 +76,7 @@ export default {
 
         onMounted(()=>{
             bus.emit('page-loading',false);
-            bus.emit('status','homePage')
+            bus.emit('headerStatus','homePage')
         })
 
         return{
@@ -88,3 +88,36 @@ export default {
     },
 }
 </script>
+
+
+<style lang="scss" scoped>
+input[type="checkbox"] {
+  appearance: none;
+  background-color: #FFFFFF;
+  margin: 0;
+  width: 1.15em;
+  height: 1.15em;
+  border: 0.15em solid #BE8E55;
+  border-radius: 0.15em;
+  transform: translateY(-0.075em);
+  display: grid;
+  place-content: center;
+}
+
+input[type="checkbox"]::before {
+  content: '';
+  width: 1em;
+  height: 1em;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  transform: scale(0);
+  transform-origin: bottom left;
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em var(--form-control-color);
+  background-color: #BE8E55;
+}
+
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+  background-color: #BE8E55
+}
+</style>
