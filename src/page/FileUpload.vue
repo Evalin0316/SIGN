@@ -231,6 +231,7 @@ export default {
       if(window.localStorage.getItem('pdfData') && fileExist.value && nextPage.value == ''){
         nextPage.value = 1;
         arrStatus.value = [0,1,2]; //步驟二
+        bus.emit('fileReview',true);
       } else if(window.localStorage.getItem('pdfData') && fileExist.value && nextPage.value == 1){
         showConfirmModal.value = true;
       } else{
@@ -246,6 +247,7 @@ export default {
       localStorage.setItem("pdfData", '')
       status.value = 0;
       filename.value = '';
+       bus.emit('fileReview', false);
     }
 
     const dragleave = (e) => {  // 拖出

@@ -26,13 +26,18 @@
       </div> -->
 
       <!-- 簽署狀態 -->
+     
       <div class="container_tab flex justify-between items-center px-1" v-if="headerStatus == 'fileUpload'">
-      <a @click="prevPage" class="btn prevBtn flex items-center w-20 py-4 ml-4 cursor-pointer">
+      <a @click="prevPage" class="btn prevBtn flex items-center w-20 py-4 ml-4 cursor-pointer" :class="fileReview ? '' : 'hidden'">
         <img src="../assets/images/icon_arrows_left_n.svg" alt="previcon">
         Previous
       </a>
+       <div class="btn prevBtn flex items-center w-20 py-4 ml-4 cursor-pointer my-4" :class="fileReview ? 'hidden' : ''">
+        <img src="../assets/images/icon_arrows_left_n.svg" alt="previcon">
+        <router-link to="/week2-F2E/">
+        Cancel</router-link></div>
         <SelectSign v-if="isSelectSign" @closeWarning="closeWarning" @selectedSign="selectedSign"  />
-        <div class="flex justify-between">
+        <div class="flex justify-between" :class="fileReview ? '' : 'hidden'">
             <a class="signBtn flex flex-col items-center w-20 py-4 cursor-pointer" @click="isSelectSign = true">
             <img src="../assets/images/Tab_sign.png" @click="signModal"/>
             </a>
@@ -65,6 +70,7 @@ export default {
     const isSelectSign = ref(false)
     const signUrl = ref('')
     const headerStatus = ref('')
+    const fileReview = ref('')
     // const emitter = inject('emitter')
     const closeWarning = (closeWarning) => {
       isSelectSign.value = closeWarning
@@ -85,6 +91,12 @@ export default {
       headerStatus.value = v
     })
 
+    bus.on('fileReview',(v) =>{
+      console.log('v', v)
+      fileReview.value = v;
+    })
+  
+
   // 圖片放在PDF上
     const selectedSign = (selectedSign) => {
       fabric.Image.fromURL(selectedSign, (image) => {
@@ -104,7 +116,8 @@ export default {
         nextStep,
         prevPage,
         headerStatus,
-        // cancelBtn
+        // cancelBtn,
+        fileReview
     }
   } 
 }
