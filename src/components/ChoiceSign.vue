@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, onUpdated, ref } from 'vue'
 import CanvasDraw from './CanvasDraw.vue'
 import bus from '../srcipt/bus';
 import { getImage , deleteImage , uploadImage } from '../srcipt/api';
@@ -126,15 +126,20 @@ export default {
       // if (localStorage.getItem('vue-canvas-array')) {
       //   signArr.value = JSON.parse(localStorage.getItem('vue-canvas-array'))
       // }
-
       // 取得所有簽名檔
       getImage().then((res)=>{
         if(res.data.status == true){
           const allData = res.data.data;
-          allData.forEach((e)=>{
+          console.log(allData);
+          if(allData.length > 0){
+            signArr.value = [];
+            allData.forEach((e)=>{
             getBase64FromUrl(e.imageUrl,e._id,e.imageDeleteHash);
-            // signArr.value.push({'id':e._id,'url':''});
           })
+          }else{
+            signArr.value = [];
+          }
+        
         }
       }).catch((err)=>{
           alert(err.message);
@@ -154,7 +159,6 @@ export default {
             alert(err.message);
         })
     }
-
 
     const closeWarning = () => {
       ctx.emit('closeWarning')
@@ -202,7 +206,6 @@ export default {
     const dataUrl = canvas.toDataURL();
     getUrl.value = dataUrl;
     // 取得所有 sign 
-    // signArr.value.push(getUrl.value);
     signArr.value.push({'id':id,'url':getUrl.value,'hash':String(hash),'imageUrl':String(imgUrl)});
     // callback && callback(dataUrl)
     }
@@ -213,7 +216,7 @@ export default {
       let fromData = new FormData();
       fromData.append('image',fileElement.value.files[0]);
       if(fileElement.value.files[0].size > 0){
-        uploadImage(fromData).then((res) =>{
+        uploadImage(fromData).then((res) => {
             if(res.data.status == true){
               alert(res.data.data)
             }

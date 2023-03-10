@@ -303,8 +303,6 @@ export default {
       const getimage = this.dataURItoBlob(this.image);
       const fromData = new FormData();
       fromData.append('image',getimage,'image'+ Math.round(Math.random()*1000));
-      console.log('fromData',fromData);
-
       let signArr;
       if (localStorage.getItem("vue-canvas-array")) {
         signArr = JSON.parse(localStorage.getItem("vue-canvas-array"));
@@ -315,7 +313,7 @@ export default {
       localStorage.setItem("vue-canvas-array", JSON.stringify(signArr));
 
       // this.$emit("setStep", 1);
-        this.$emit("sign",true)
+      this.$emit("sign",true)
 
       bus.emit("reloadSign");
       
@@ -329,6 +327,8 @@ export default {
       .catch((err)=>{
         alert(err.message);
       })
+
+      bus.emit('firstStep','first');
     },
     removeSavedStrokes() {
       window.localStorage.removeItem("vue-drawing-canvas");

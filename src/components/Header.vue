@@ -32,10 +32,10 @@
         <img src="../assets/images/icon_arrows_left_n.svg" alt="previcon">
         Previous
       </a>
-       <div class="btn prevBtn flex items-center w-20 py-4 ml-4 cursor-pointer my-4" :class="fileReview ? 'hidden' : ''">
-        <img src="../assets/images/icon_arrows_left_n.svg" alt="previcon">
-        <router-link to="/week2-F2E/">
-        Cancel</router-link></div>
+      <router-link to="/week2-F2E/" class="btn prevBtn flex items-center w-20 py-4 ml-4 cursor-pointer my-4" :class="fileReview ? 'hidden' : ''">
+      <img src="../assets/images/icon_arrows_left_n.svg" alt="previcon">
+        Cancel
+      </router-link>
         <SelectSign v-if="isSelectSign" @closeWarning="closeWarning" @selectedSign="selectedSign"  />
         <div class="flex justify-between" :class="fileReview ? '' : 'hidden'">
             <a class="signBtn flex flex-col items-center w-20 py-4 cursor-pointer" @click="isSelectSign = true">
