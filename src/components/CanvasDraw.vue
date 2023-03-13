@@ -361,7 +361,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .button-container > * {
   margin-top: 15px;
   margin-right: 10px;

@@ -4,4 +4,36 @@
         min-height: calc(95vh - 10px);
         background-color: #EFE3D4;
     }
+    .search_line{
+        @media (max-width: 768px) {
+            display: flex;
+            // flex-wrap: wrap;
+        }
+        .search_file{
+            @media (max-width: 768px) {
+                display: flex;
+                flex-wrap: wrap;
+            }
+            .search_type{
+                @media (max-width: 768px) {
+                   width: 350px;
+                   margin:0 0 0 8px;
+                }
+            }
+            .search_input{
+                @media (max-width:768px) {
+                    width: 300px;
+                    margin: 0 0 0 -5px;
+                }
+            }
+        }
+        .upload_file{
+            img{
+                width:100%;
+                @media (max-width:768px) {
+                   width:70px
+                }
+            }
+        }
+    }
 }

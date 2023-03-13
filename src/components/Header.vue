@@ -76,7 +76,7 @@ export default {
       isSelectSign.value = closeWarning
     }
     const nextStep = function(){
-      ctx.emit('nextStep')
+      ctx.emit('nextStep') // = this.$emits
     }
     const prevPage = function(){
       ctx.emit('prevPage')
@@ -87,12 +87,10 @@ export default {
     // }
 
     bus.on('headerStatus', (v) => {
-      console.log('header',v);
       headerStatus.value = v
     })
 
     bus.on('fileReview',(v) =>{
-      console.log('v', v)
       fileReview.value = v;
     })
   

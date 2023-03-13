@@ -53,7 +53,7 @@
               </label>
               </div>
             </div>
-      </div>
+    </div>
       <div class="card-inner absolute text-xl w-full z-50 pop-container" v-if="!isSelectMode">
         <div class="bg rounded-3xl overflow-hidden shadow-lg w-full">
           <div class="relative mt-3" @click="closeWarning">
@@ -161,6 +161,7 @@ export default {
     }
 
     const closeWarning = () => {
+      console.log('test');
       ctx.emit('closeWarning')
     }
 
@@ -250,91 +251,91 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.draw_modal {
-  z-index: 99;
-  height: 120vh;
-}
-.card-inner {
-  left: 50%;
-  top: 40%;
-  transform: translate(-50%, -50%);
-  color: #8C5D19;
-}
-.bg {
-  background: #EFE3D4;
-}
+// .draw_modal {
+//   z-index: 99;
+//   height: 120vh;
+// }
+// .card-inner {
+//   left: 50%;
+//   top: 40%;
+//   transform: translate(-50%, -50%);
+//   color: #8C5D19;
+// }
+// .bg {
+//   background: #EFE3D4;
+// }
 
-.container-pop {
-	width: 240px;
-	height: 40px;
-	// margin: auto;
-	position: relative;
-	border-radius: 6px;
-	overflow: hidden;
-	user-select: none;
-	cursor: pointer;
-}
+// .container-pop {
+// 	width: 240px;
+// 	height: 40px;
+// 	// margin: auto;
+// 	position: relative;
+// 	border-radius: 6px;
+// 	overflow: hidden;
+// 	user-select: none;
+// 	cursor: pointer;
+// }
 
-.inner-container {
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: inherit;
-	height: inherit;
-	text-transform: uppercase;
-	// font-size: .6em;
-	// letter-spacing: .2em;
-}
+// .inner-container {
+// 	position: absolute;
+// 	left: 0;
+// 	top: 0;
+// 	width: inherit;
+// 	height: inherit;
+// 	text-transform: uppercase;
+// 	// font-size: .6em;
+// 	// letter-spacing: .2em;
+// }
 
-.inner-container:first-child {
-	background: #ffffff;
-	color: #a9a9a9;
-}
+// .inner-container:first-child {
+// 	background: #ffffff;
+// 	color: #a9a9a9;
+// }
 
-.inner-container:nth-child(2) {
-  background: linear-gradient(180deg, #35A483 0%, #077854 100%);
-	color: white;
-	clip-path: inset(0 50% 0 0);
-	transition: .3s cubic-bezier(0,0,0,1);
-}
+// .inner-container:nth-child(2) {
+//   background: linear-gradient(180deg, #35A483 0%, #077854 100%);
+// 	color: white;
+// 	clip-path: inset(0 50% 0 0);
+// 	transition: .3s cubic-bezier(0,0,0,1);
+// }
 
-.toggle {
-	width: 50%;
-	position: absolute;
-	height: inherit;
-	display: flex;
-	box-sizing: border-box;
-}
+// .toggle {
+// 	width: 50%;
+// 	position: absolute;
+// 	height: inherit;
+// 	display: flex;
+// 	box-sizing: border-box;
+// }
 
-.toggle p {
-	margin: auto;
-}
+// .toggle p {
+// 	margin: auto;
+// }
 
-.toggle:nth-child(1) {
-	right: 0;
-}
-.toggle-active {
-  clip-path: inset(0 0% 0% 50%) !important;
-}
+// .toggle:nth-child(1) {
+// 	right: 0;
+// }
+// .toggle-active {
+//   clip-path: inset(0 0% 0% 50%) !important;
+// }
 
-.selected-modal {
-  height: 18rem;
-}
-.pop-container-choose {
-  max-width: 343px;
-}
-.pop-container {
-  max-width: 600px;
-  @media (max-width: 768px) {
-    max-width: 343px;
-  }
-}
+// .selected-modal {
+//   height: 18rem;
+// }
+// .pop-container-choose {
+//   max-width: 343px;
+// }
+// .pop-container {
+//   max-width: 600px;
+//   @media (max-width: 768px) {
+//     max-width: 343px;
+//   }
+// }
 
-.uploadImage{
-  background-image: url("../assets/images/uploadSign.png");
-  height: 40px;
-  width: 100%;
-  background-repeat: no-repeat;
-  cursor: pointer;
-}
+// .uploadImage{
+//   background-image: url("../assets/images/uploadSign.png");
+//   height: 40px;
+//   width: 100%;
+//   background-repeat: no-repeat;
+//   cursor: pointer;
+// }
 </style>

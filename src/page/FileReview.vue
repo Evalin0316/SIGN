@@ -238,7 +238,6 @@ export default {
       const today = day.getFullYear() + '/' + (day.getMonth() +1) + '/' + day.getDate();
 
       dateBtn.addEventListener('click', () => {
-        console.log('1')
         var text = new fabric.Text(today, (image) => {
           image.top = 10
           image.left = 10
@@ -250,7 +249,6 @@ export default {
       // 加入文字
       const textBtn = document.querySelector('.textBtn')
       textBtn.addEventListener('click', () => {
-          console.log('1');
           showText.value = true;
       })
       

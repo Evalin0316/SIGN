@@ -56,3 +56,11 @@ export default {
 
 };
 </script>
+
+<style>
+.progress_content__item{
+    width:60%
+}
+
+
+</style>
