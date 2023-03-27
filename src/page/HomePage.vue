@@ -87,7 +87,6 @@ export default {
         });
 
         const searchClear = function(){
-            console.log('1');
             keyword.value = ''
         }
 
