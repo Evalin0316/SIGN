@@ -1,18 +1,20 @@
 <template>
     <div>
       <!-- 首頁狀態 -->
+      <SelectSign v-if="isSelectSign" @closeWarning="closeWarning" @selectedSign="selectedSign"  :passStatus="passStatus"/>
       <div class="flex items-center justify-center" v-if="headerStatus == 'homePage'">
         <div class="flex justify-between w-56">
             <a class="signBtn flex items-center w-30 py-4 cursor-pointer tab-brown text-[#BE8E55] font-bold">
               <img src="../assets/images/icon_document_own_n.svg"/>
                 待簽署
             </a>
-            <a class="dateBtn flex items-center w-30 py-4 cursor-pointer text-[#BE8E55] font-bold">
+            <a class="dateBtn flex items-center w-30 py-4 cursor-pointer text-[#BE8E55] font-bold" @click="manageSign()">
                 <img src="../assets/images/icon_document_setting_n.svg"/>
                 管理簽名
             </a>
         </div>
       </div>
+      
 
       <!-- 上傳檔案 -->
       <!-- <div class="flex justify-between" v-if="headerStatus == 'fileUpload'">
@@ -36,7 +38,7 @@
       <img src="../assets/images/icon_arrows_left_n.svg" alt="previcon">
         Cancel
       </router-link>
-        <SelectSign v-if="isSelectSign" @closeWarning="closeWarning" @selectedSign="selectedSign"  />
+        <SelectSign v-if="isSelectSign" @closeWarning="closeWarning" @selectedSign="selectedSign" />
         <div class="flex justify-between" :class="fileReview ? '' : 'hidden'">
             <a class="signBtn flex flex-col items-center w-20 py-4 cursor-pointer" @click="isSelectSign = true">
             <img src="../assets/images/Tab_sign.png" @click="signModal"/>
@@ -71,6 +73,7 @@ export default {
     const signUrl = ref('')
     const headerStatus = ref('')
     const fileReview = ref('')
+    const passStatus = ref('home')
     // const emitter = inject('emitter')
     const closeWarning = (closeWarning) => {
       isSelectSign.value = closeWarning
@@ -106,6 +109,12 @@ export default {
       })
     }
 
+    //管理簽名
+    const manageSign = () =>{
+        isSelectSign.value = true;
+        
+    }
+
     return {
         isSelectSign,
         closeWarning,
@@ -115,7 +124,9 @@ export default {
         prevPage,
         headerStatus,
         // cancelBtn,
-        fileReview
+        fileReview,
+        manageSign,
+        passStatus
     }
   } 
 }

@@ -9,7 +9,7 @@
           <div class="font-bold text-lg mb-8 whitespace-nowrap text-center proj-text-primary">選擇簽名</div>
           <div class="selected-modal overflow-auto flex items-center justify-center flex-wrap">
             <div class="mb-2 flex justify-center" v-for="(item, idx) in signArr" :key="idx">
-              <div class="h-auto bg-white w-4/5 rounded-3xl py-2" @click="selectedSign(item.url)">
+              <div class="h-auto bg-white w-4/5 rounded-3xl py-2" @click="selectedSign(item.url)" :class="point_disabled">
                 <img :src="item.url" class='sign mx-auto object-contain w-36 h-20' alt="" referrerpolicy="no-referrer"/>
               </div>
                <span @click="deleteImageBtn(item.id,item.hash,item.imageUrl)"><img class="mr-4 mt-2" src="../assets/images/icon_Close_Square_n.png" /></span>
@@ -53,32 +53,13 @@
               </label>
               </div>
             </div>
-    </div>
+          </div>
       <div class="card-inner absolute text-xl w-full z-50 pop-container" v-if="!isSelectMode">
         <div class="bg rounded-3xl overflow-hidden shadow-lg w-full">
           <div class="relative mt-3" @click="closeWarning">
               <img class="absolute right-0 top-0 mr-4" src="../assets/images/icon_Close_Square_n.png" />
           </div>
         <div class="index_Sign flex flex-col items-center w-full py-4 px-2">
-          <!-- <div class="container-pop mx-auto mb-5 text-base md:text-lg">
-            <div class="inner-container">
-              <div class="toggle" @click="isSignSelf = false">
-                <p>匯入簽名檔</p>
-              </div>
-              <div class="toggle" @click="isSignSelf = true">
-                <p>手寫簽名</p>
-              </div>
-            </div>
-            <div class="inner-container" id='toggle-container' :class="{ 'toggle-active': !isSignSelf }">
-              <div class="toggle" @click="isSignSelf = false">
-                <p>匯入簽名檔</p>
-              </div>
-              <div class="toggle" @click="isSignSelf = true">
-                <p>手寫簽名</p>
-              </div>
-            </div>
-          </div> -->
-
           <CanvasDraw :isSignSelf="isSignSelf" v-on:closeWarning="closeWarning" v-on:getStroke="getStroke" v-on:backToChoose="backToChoose" 
           @sign="getSign"
           />
@@ -98,10 +79,8 @@ export default {
   components: {
     CanvasDraw
   },
-  props: {
-  },
+  props:['passStatus'],
   setup (props, ctx) {
-    console.log('ctx',ctx);
     const signArr = ref([])
     const isSelectMode = ref(true)
     const isSignSelf = ref(true)
@@ -110,7 +89,12 @@ export default {
     const getCanvas = ref('')
     const getUrl = ref('')
     const fileElement = ref('')
-
+    const pageStatus = props.passStatus
+    const point_disabled = ref('');
+    
+    //判斷頁面決定簽名檔是否可以點選
+    point_disabled.value = pageStatus == 'home' ? 'pointer-events-none' : '';
+    
     onMounted(() => {
      init()
       // 取得簽名檔
@@ -130,7 +114,6 @@ export default {
       getImage().then((res)=>{
         if(res.data.status == true){
           const allData = res.data.data;
-          console.log(allData);
           if(allData.length > 0){
             signArr.value = [];
             allData.forEach((e)=>{
@@ -161,7 +144,6 @@ export default {
     }
 
     const closeWarning = () => {
-      console.log('test');
       ctx.emit('closeWarning')
     }
 
@@ -170,7 +152,6 @@ export default {
     })
 
     const selectedSign = (url) => {
-      console.log('url',url)
       getStroke.value = url;
       // bus.emit('addImage',getStroke.value);
       fabric.Image.fromURL(getStroke.value, (image) => {
@@ -185,7 +166,6 @@ export default {
     
     const backToChoose = (backToChoose) => {
       closeWarning()
-      console.log(backToChoose)
       // isSelectMode.value = backToChoose
     }
 
@@ -244,7 +224,9 @@ export default {
       getBase64FromUrl,
       deleteImageBtn,
       uploadImageBtn,
-      fileElement
+      fileElement,
+      pageStatus,
+      point_disabled
     }
   }
 }

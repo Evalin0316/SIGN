@@ -4,19 +4,19 @@
     <div class="container_home p-3">
     <div class="flex justify-between search_line">
         <div class="search_file flex flex-row">
-            <form>
-            <div class="search_input m-4 relative">
-                <div class="absolute pointer-events-none right-3.5 bottom-2.5 mr-5 border-r-4 border-l-yellow-600 cursor-pointer z-[100]" @click="searchClear()">
-                    <img src="../assets/images/icon_Close_n.png"/>
-                </div>
-                <div class="absolute pointer-events-none right-3.5 bottom-2.5 cursor-pointer z-[100]">
-                    <img src="../assets/images/icon_search_n.png"/>
-                </div>
-                    <input type="text" class="bg-white m-3 rounded-lg block w-full
+            <form class="flex item-center">
+            <div class="search_input m-4 relative w-full">
+                <input type="text" class="bg-white m-3 rounded-lg block w-full
                     text-sm text-gray-900 border border-gray-300 h-12 pl-3
                     focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 
                     dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 z-[50]" 
                     placeholder="Search here..." v-model="keyword"/>
+                <div class="absolute right-3.5 bottom-3.5 mr-5 cursor-pointer  mb-2 mr-3" @click="searchClear()">
+                    <img class="mr-4" src="../assets/images/icon_Close_n.png"/>
+                </div>
+                <div class="absolute right-3.5 bottom-3.5 cursor-pointer mb-2 border-l-4">
+                    <img src="../assets/images/icon_search_n.png"/>
+                </div>
             </div>
             </form>
             <div class="search_type bg-white flex w-9/12 m-4 rounded-lg text-[#BE8E55] h-12">
@@ -26,13 +26,13 @@
                 <label class="m-3">共{{flieLength}}筆</label>
             </div>
         </div>
-        <div class="upload_file m-4">
+        <div class="upload_file m-4 z-0">
             <img class="upload_img" src="../assets/images/to_upload.svg" @click="goFileUpload()"/>
         </div>
     </div>
     <ul class="flex">
         <li class="w-1/4 p-4 relative" v-for="(item,index) in filterFile" :key="index">
-            <div class="absolute -bottom-5 z-[99] text-[5px] w-32 text-ellipsis overflow-hidden whitespace-nowrap flex justify-center">{{item.fileName}}</div>
+            <div class="absolute -bottom-5 z-[50] text-[5px] w-32 text-ellipsis overflow-hidden whitespace-nowrap flex justify-center">{{item.fileName}}</div>
             <div class="absolute"><img src="../assets/images/Frame_finish.png"/></div>
         </li>
     </ul>
