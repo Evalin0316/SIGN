@@ -19,7 +19,7 @@
                 </div>
             </div>
             </form>
-            <div class="search_type bg-white flex w-9/12 m-4 rounded-lg text-[#BE8E55] h-12">
+            <div class="search_type bg-white flex w-9/12 ml-4 mt-7 rounded-lg text-[#BE8E55] h-12">
                 <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox"/>未完成</label>
                 <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox"/>已完成</label>
                 <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox"/>已取消</label>
@@ -30,10 +30,17 @@
             <img class="upload_img" src="../assets/images/to_upload.svg" @click="goFileUpload()"/>
         </div>
     </div>
-    <ul class="flex">
-        <li class="w-1/4 p-4 relative" v-for="(item,index) in filterFile" :key="index">
-            <div class="absolute -bottom-5 z-[50] text-[5px] w-32 text-ellipsis overflow-hidden whitespace-nowrap flex justify-center">{{item.fileName}}</div>
-            <div class="absolute"><img src="../assets/images/Frame_finish.png"/></div>
+    <ul class="flex fileEnvelop_outter">
+        <li class="m-2 relative fileEnvelop" v-for="(item,index) in filterFile" :key="index">
+            <div class="fileEnvelop_option absolute right-0 bottom-0 z-[55] h-12" @click="openFileOption()"><img src="../assets/images/icon_more_n.svg"/></div>
+            <!-- <div class="absolute -bottom-5 z-[50] text-[5px] w-32 text-ellipsis overflow-hidden whitespace-nowrap flex justify-center">{{item.fileName}}</div> -->
+            <!-- <div class="absolute w-full"><img src="../assets/images/Frame_finish.png"/></div> -->
+          <div v-if="isOption" class="absolute bottom-0 left-10 bg-white w-1/2">
+            <ul>
+                <li class="text-[#BE8E55] flex"><img src="../assets/images/icon_download_n.svg"/><a>下載檔案</a></li>
+                <li class="text-[#BE8E55] flex"><img src="../assets/images/icon_delete_n.svg"/><a>取消簽署</a></li>
+            </ul>
+        </div>
         </li>
     </ul>
     </div>
@@ -59,6 +66,8 @@ export default {
         const router = useRouter();
         const flieLength = ref('');
         const keyword = ref('')
+        const isOption = ref(false);
+        const count = ref(1);
         // const emitter = inject('emitter')
         bus.on('nowPage',(v)=> {
             nowPage.value = v
@@ -90,6 +99,16 @@ export default {
             keyword.value = ''
         }
 
+        const openFileOption = function(){
+            if(count.value == 1){
+                isOption.value = true
+                count.value--;
+            }else{
+                isOption.value = false
+                count.value++;
+            }
+        }
+
         onMounted(()=>{
             bus.emit('page-loading',false);
             bus.emit('headerStatus','homePage')
@@ -102,7 +121,10 @@ export default {
             flieLength,
             keyword,
             filterFile,
-            searchClear
+            searchClear,
+            isOption,
+            openFileOption,
+            count
         }
     },
 }

@@ -52,8 +52,8 @@
                 />
               </label>
               </div>
-            </div>
           </div>
+    </div>
       <div class="card-inner absolute text-xl w-full z-50 pop-container" v-if="!isSelectMode">
         <div class="bg rounded-3xl overflow-hidden shadow-lg w-full">
           <div class="relative mt-3" @click="closeWarning">

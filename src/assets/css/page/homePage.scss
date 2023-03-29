@@ -3,37 +3,67 @@
         width: 100%;
         min-height: calc(95vh - 10px);
         background-color: #EFE3D4;
-    }
-    .search_line{
-        @media (max-width: 768px) {
-            display: flex;
-            // flex-wrap: wrap;
-        }
-        .search_file{
+        .search_line{
             @media (max-width: 768px) {
                 display: flex;
-                flex-wrap: wrap;
+                // flex-wrap: wrap;
             }
-            .search_type{
+            .search_file{
                 @media (max-width: 768px) {
-                   width: 350px;
-                   margin:0 0 0 8px;
+                    display: flex;
+                    flex-wrap: wrap;
+                }
+                .search_type{
+                    @media (max-width: 768px) {
+                       width: 350px;
+                       margin:0 0 0 8px;
+                    }
+                }
+                .search_input{
+                    @media (max-width:768px) {
+                        width: 300px;
+                        margin: 0 0 0 -5px;
+                    }
                 }
             }
-            .search_input{
-                @media (max-width:768px) {
-                    width: 300px;
-                    margin: 0 0 0 -5px;
+            .upload_file{
+                img{
+                    width:100%;
+                    @media (max-width:768px) {
+                       width:70px
+                    }
                 }
             }
         }
-        .upload_file{
-            img{
+        .fileEnvelop_outter{
+            @media (max-width:768px) {
+              flex-wrap: wrap;
+              justify-content: center;
+              align-items: center;
+            }
+            .fileEnvelop{
+                background-image:url('/src/assets/images/Frame_finish.png');
+                background-repeat: no-repeat;
+                background-size: 100%;
+                height: 200px;
                 width:100%;
+                @media (max-width:1200px) {
+                    height: 120px;
+                }
                 @media (max-width:768px) {
-                   width:70px
+                    height: 180px;
+                    max-width: 200px;
+                }
+                .fileEnvelop_option{
+                    width: calc(100%/3);
+                    img{
+                        @media (max-width:1200px) {
+                            width: 50%;
+                         }
+                    }
                 }
             }
         }
     }
+   
 }
