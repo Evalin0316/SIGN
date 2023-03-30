@@ -42,8 +42,8 @@ export const downloadFile = () => {
 }
 
 //刪除檔案
-export const deleteFile = (id) => {
-    return axios.delete(`${url}/file/${id}`)
+export const deleteFile = (id,filename) => {
+    return axios.delete(`${url}/file/${id}/filename/${filename}`);
 }
 
 

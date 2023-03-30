@@ -1,5 +1,5 @@
 <template>
-<div class="container_outter">
+<div class="container_outter" @click="hideOption">
     <Header></Header>
     <div class="container_home p-3">
     <div class="flex justify-between search_line">
@@ -31,16 +31,17 @@
         </div>
     </div>
     <ul class="flex fileEnvelop_outter">
-        <li class="m-2 relative fileEnvelop" v-for="(item,index) in filterFile" :key="index">
-            <div class="fileEnvelop_option absolute right-0 bottom-0 z-[55] h-12" @click="openFileOption()"><img src="../assets/images/icon_more_n.svg"/></div>
-            <!-- <div class="absolute -bottom-5 z-[50] text-[5px] w-32 text-ellipsis overflow-hidden whitespace-nowrap flex justify-center">{{item.fileName}}</div> -->
-            <!-- <div class="absolute w-full"><img src="../assets/images/Frame_finish.png"/></div> -->
-          <div v-if="isOption" class="absolute bottom-0 left-10 bg-white w-1/2">
-            <ul>
-                <li class="text-[#BE8E55] flex"><img src="../assets/images/icon_download_n.svg"/><a>下載檔案</a></li>
-                <li class="text-[#BE8E55] flex"><img src="../assets/images/icon_delete_n.svg"/><a>取消簽署</a></li>
-            </ul>
-        </div>
+        <li class="m-2 relative fileEnvelop flex justify-center" v-for="(item,index) in filterFile" :key="index">
+            <div class="fileEnvelop_option absolute right-0 bottom-0 z-[55] h-12" @click.stop="openFileOption(index)">
+                <img src="../assets/images/icon_more_n.svg"/>
+            </div>
+            <div class="absolute top-10 z-[50] text-[5px] w-32 flex justify-center pr-5 flex-wrap">{{item.fileName}}</div>
+            <div v-if="getIndex == index" class="absolute bottom-0 left-2 bg-white w-3/5 rounded">
+                <ul>
+                    <li class="text-[#BE8E55] flex cursor-pointer hover:bg-[#EFE3D4] p-1"><img class="mx-2" src="../assets/images/icon_download_n.svg"/><a class="hover:text-[#BE8E55]">下載檔案</a></li>
+                    <li class="text-[#BE8E55] flex cursor-pointer hover:bg-[#EFE3D4] p-1" @click="deleteFileBtn(item._id,item.fileName)"><img class="mx-2" src="../assets/images/icon_delete_n.svg"/><a class="hover:text-[#BE8E55]">取消簽署</a></li>
+                </ul>
+            </div>
         </li>
     </ul>
     </div>
@@ -48,8 +49,8 @@
 </template>
 
 <script>
-import { getFile } from '../srcipt/api';
-import { computed, inject, onMounted, onUnmounted, ref } from 'vue';
+import { getFile ,deleteFile } from '../srcipt/api';
+import { computed, inject, onMounted, onUnmounted, onUpdated, ref } from 'vue';
 import Header from '../components/Header.vue';
 import bus from "../srcipt/bus";
 import { useRouter } from 'vue-router';
@@ -66,8 +67,8 @@ export default {
         const router = useRouter();
         const flieLength = ref('');
         const keyword = ref('')
-        const isOption = ref(false);
-        const count = ref(1);
+        const getfileId = ref('');
+        const getIndex = ref(-1);
         // const emitter = inject('emitter')
         bus.on('nowPage',(v)=> {
             nowPage.value = v
@@ -99,14 +100,25 @@ export default {
             keyword.value = ''
         }
 
-        const openFileOption = function(){
-            if(count.value == 1){
-                isOption.value = true
-                count.value--;
-            }else{
-                isOption.value = false
-                count.value++;
-            }
+        const openFileOption = function(index){
+            getIndex.value = index;
+        }
+
+        const hideOption = function(){
+            getIndex.value = -1
+        }
+
+        const deleteFileBtn = function(id,filename){
+            deleteFile(id,filename)
+            .then((res)=>{
+                if(res.data.status == true){
+                    alert(res.data.data);
+                    const findIndex = files.value.findIndex((x)=>x._id == id ); // 檔案index
+                    files.value.splice(findIndex,1);
+                }
+            }).catch((err)=>{
+                alert(err.message);
+            })
         }
 
         onMounted(()=>{
@@ -122,9 +134,11 @@ export default {
             keyword,
             filterFile,
             searchClear,
-            isOption,
             openFileOption,
-            count
+            getfileId,
+            getIndex,
+            hideOption,
+            deleteFileBtn
         }
     },
 }
