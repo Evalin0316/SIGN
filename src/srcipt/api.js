@@ -37,8 +37,8 @@ export const getFile = (from,count) => {
 }
 
 // 下載檔案
-export const downloadFile = () => {
-    return axios.get(`${url}/file/`);
+export const downloadFile = (filename) => {
+    return axios.get(`${url}/file/${filename}`);
 }
 
 //刪除檔案

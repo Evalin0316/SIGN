@@ -38,7 +38,7 @@
             <div class="absolute top-10 z-[50] text-[5px] w-32 flex justify-center pr-5 flex-wrap">{{item.fileName}}</div>
             <div v-if="getIndex == index" class="absolute bottom-0 left-2 bg-white w-3/5 rounded">
                 <ul>
-                    <li class="text-[#BE8E55] flex cursor-pointer hover:bg-[#EFE3D4] p-1"><img class="mx-2" src="../assets/images/icon_download_n.svg"/><a class="hover:text-[#BE8E55]">下載檔案</a></li>
+                    <li class="text-[#BE8E55] flex cursor-pointer hover:bg-[#EFE3D4] p-1" @click="downloadFile()"><img class="mx-2" src="../assets/images/icon_download_n.svg"/><a class="hover:text-[#BE8E55]">下載檔案</a></li>
                     <li class="text-[#BE8E55] flex cursor-pointer hover:bg-[#EFE3D4] p-1" @click="deleteFileBtn(item._id,item.fileName)"><img class="mx-2" src="../assets/images/icon_delete_n.svg"/><a class="hover:text-[#BE8E55]">取消簽署</a></li>
                 </ul>
             </div>
@@ -96,19 +96,19 @@ export default {
             })
         });
 
-        const searchClear = function(){
+        const searchClear = () => {
             keyword.value = ''
         }
 
-        const openFileOption = function(index){
+        const openFileOption = (index) => {
             getIndex.value = index;
         }
 
-        const hideOption = function(){
+        const hideOption = () => {
             getIndex.value = -1
         }
 
-        const deleteFileBtn = function(id,filename){
+        const deleteFileBtn = (id,filename) => {
             deleteFile(id,filename)
             .then((res)=>{
                 if(res.data.status == true){
@@ -119,6 +119,10 @@ export default {
             }).catch((err)=>{
                 alert(err.message);
             })
+        }
+
+        const downloadFile = () =>{
+            console.log('test');
         }
 
         onMounted(()=>{
@@ -138,7 +142,8 @@ export default {
             getfileId,
             getIndex,
             hideOption,
-            deleteFileBtn
+            deleteFileBtn,
+            downloadFile
         }
     },
 }

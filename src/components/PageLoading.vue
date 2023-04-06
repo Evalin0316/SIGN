@@ -20,7 +20,6 @@ export default{
         // const emitter = inject('emitter'); // Inject `emitter`
                bus.on('page-loading',(val)=>{
                 const body = document.querySelector('body');
-                console.log(loading.value);
                 isLoading.value = val;
                 if(val){
                     loading.value.classList.remove('d-none');

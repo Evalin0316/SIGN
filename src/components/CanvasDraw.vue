@@ -1,6 +1,7 @@
 <template>
   <div class="flex flex-col items-center">
     <div class="source px-2" v-show="isSignSelf">
+      <div class="signTitle">建立簽名</div>
       <div class="bg-white rounded-3xl max-w-xs md:max-w-none overflow-hidden">
         <vue-drawing-canvas
           ref="VueCanvasDrawing"
@@ -362,6 +363,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.signTitle{
+  font-size: 19px;
+  color:#8C5D19;
+  font-weight: 700;
+}
 .button-container > * {
   margin-top: 15px;
   margin-right: 10px;

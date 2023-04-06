@@ -1,6 +1,7 @@
 <template>
   <div class="draw_modal w-full left-0 top-0 fixed">
-    <div class="card-inner absolute text-xl pop-container-choose w-full z-50" v-if="signArr.length > 0">
+    <!-- 已有上傳簽名 -->
+    <div class="card-inner absolute text-xl pop-container-choose w-full z-50" v-if="getSignData.length > 0">
       <div class="relative mt-3" @click="closeWarning">
         <img class="absolute right-0 top-0 mr-4 mt-3 close_square" src="../assets/images/icon_Close_Square_n.png" />
       </div>
@@ -15,10 +16,13 @@
                <span @click="deleteImageBtn(item.id,item.hash,item.imageUrl)"><img class="mr-4 mt-2" src="../assets/images/icon_Close_Square_n.png" /></span>
             </div>
           </div>
-          <label class="proj-text-primary block mt-4 font-bold text-lg whitespace-nowrap" @click="isSelectMode = false">
-            <img src="../assets/images/add_sign.png"/>
+          <label class="flex justify-center proj-text-primary block mt-4 font-bold text-lg whitespace-nowrap" @click="isSelectMode = false">
+            <img src="../assets/images/icon_add_new_sign_n.svg"/>
+            <a class="text-[#8C5D19] font-[700] text-[14px] ml-1">建立簽名</a>
           </label>
-          <label class="flex justify-center mt-4 uploadImage">
+          <label class="flex justify-center mt-4">
+            <img src="../assets/images/icon_add_new_img_n.svg"/>
+            <a class="text-[#8C5D19] font-[700] text-[14px] ml-1">上傳簽名圖檔</a>
             <input
                 class="form-control hidden"
                 ref="fileElement"
@@ -30,7 +34,8 @@
         </div>
       </div>
     </div>
-    <div class="card-inner absolute text-xl pop-container-choose w-full z-50" v-if="signArr.length <= 0">
+    <!-- 無簽名檔 -->
+    <div class="card-inner absolute text-xl pop-container-choose w-full z-50" v-if="getSignData.length <= 0">
             <div class="relative mt-3" @click="closeWarning">
               <img class="absolute right-0 top-0 mr-4 mt-3 close_square" src="../assets/images/icon_Close_Square_n.png" />
             </div>
@@ -38,34 +43,37 @@
             <div class="px-4 py-6 flex flex-col justify-center w-full">
               <div class="font-bold text-lg mb-8 whitespace-nowrap text-center">目前還沒有簽名喔~</div>
               <div class="text-sm">請創建新的簽名檔，可上傳圖片或線上簽名</div>
-              <label class="flex justify-center mt-4" @click="isSelectMode = false">
-                <img src="../assets/images/add_sign.png"/>
-              </label>
-              <label class="flex justify-center mt-4 uploadImage">
-                <!-- <img src="../assets/images/uploadSign.png"/> -->
-                 <input
-                class="form-control hidden"
-                ref="fileElement"
-                type="file"
-                accept="image/*"
-                @change="uploadImageBtn()"
+             <label class="flex justify-center proj-text-primary block mt-4 whitespace-nowrap bg-white rounded" @click="isSelectMode = false">
+                <img src="../assets/images/icon_add_new_sign_n.svg"/>
+                <a class="text-[#8C5D19] font-[700] text-[14px] ml-1">建立簽名</a>
+            </label>
+            <label class="flex justify-center mt-4 bg-white rounded">
+              <img src="../assets/images/icon_add_new_img_n.svg"/>
+              <a class="text-[#8C5D19] font-[700] text-[14px] ml-1">上傳簽名圖檔</a>
+                <input
+                  class="form-control hidden"
+                  ref="fileElement"
+                  type="file"
+                  accept="image/*"
+                  @change="uploadImageBtn()"
                 />
-              </label>
-              </div>
+            </label>
+            </div>
           </div>
     </div>
-      <div class="card-inner absolute text-xl w-full z-50 pop-container" v-if="!isSelectMode">
+    <!-- 簽名組件 -->
+    <div class="card-inner absolute text-xl w-full z-50 pop-container" v-if="!isSelectMode">
         <div class="bg rounded-3xl overflow-hidden shadow-lg w-full">
-          <div class="relative mt-3" @click="closeWarning">
+          <div class="relative mt-3" @click="isSelectMode = true">
               <img class="absolute right-0 top-0 mr-4" src="../assets/images/icon_Close_Square_n.png" />
           </div>
-        <div class="index_Sign flex flex-col items-center w-full py-4 px-2">
-          <CanvasDraw :isSignSelf="isSignSelf" v-on:closeWarning="closeWarning" v-on:getStroke="getStroke" v-on:backToChoose="backToChoose" 
-          @sign="getSign"
-          />
+          <div class="index_Sign flex flex-col items-center w-full py-4 px-2">
+            <CanvasDraw :isSignSelf="isSignSelf" v-on:closeWarning="closeWarning" v-on:getStroke="getStroke" v-on:backToChoose="backToChoose" 
+            @sign="getSign"
+            />
+          </div>
         </div>
-      </div>
-      </div>
+    </div>
   </div>
 </template>
 
@@ -91,6 +99,7 @@ export default {
     const fileElement = ref('')
     const pageStatus = props.passStatus
     const point_disabled = ref('');
+    const getSignData = ref([]);
     
     //判斷頁面決定簽名檔是否可以點選
     point_disabled.value = pageStatus == 'home' ? 'pointer-events-none' : '';
@@ -100,8 +109,6 @@ export default {
       // 取得簽名檔
       signStatus.value = localStorage.getItem('vue-canvas')
       // console.log('取得簽名',signStatus.value)
-    })
-    onUnmounted(() => {
     })
 
     const init = () => {
@@ -169,7 +176,7 @@ export default {
       // isSelectMode.value = backToChoose
     }
 
-    const getSign = () =>{
+    const getSign = () => {
       closeWarning();
       signStatus.value !=null;
       isSelectMode.value = true;
@@ -188,6 +195,8 @@ export default {
     getUrl.value = dataUrl;
     // 取得所有 sign 
     signArr.value.push({'id':id,'url':getUrl.value,'hash':String(hash),'imageUrl':String(imgUrl)});
+    getSignData.value = [...signArr.value];
+
     // callback && callback(dataUrl)
     }
     image.src = imgUrl;
@@ -226,7 +235,8 @@ export default {
       uploadImageBtn,
       fileElement,
       pageStatus,
-      point_disabled
+      point_disabled,
+      getSignData
     }
   }
 }
