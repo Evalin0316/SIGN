@@ -48,7 +48,7 @@
             class="mt-8 upload_inneer2 border rounded-md border-dashed flex justify-center items-center flex-col"
           >
             <p class="text-left file_title">文件命名</p>
-            <input type="text" class="file_name bg-white file_name_input" v-model="filename"/>
+            <input type="text" class="file_name bg-white file_name_input" v-model="signfileName"/>
           </div>
         </div>
       </div>
@@ -84,7 +84,7 @@ export default {
   },
   emits:['page-loading'],
   setup(){
-    const filename = ref('');
+    const filename = ref(''); // 上傳檔案名稱
     const status = ref('');
     const nextPage = ref('');
     const arrStatus = ref([1, 2, 2]);
@@ -93,6 +93,7 @@ export default {
     const fileExist = ref(false)
     const showConfirmModal = ref(false)
     const fileElement = ref(null)
+    const signfileName = ref(''); //文件名稱
     // const emitter = inject('emitter')
    
 
@@ -102,11 +103,14 @@ export default {
         if (status.value == 1) {
             if(data){ // 拖拉檔案
                 filename.value = data[0].name;
+                signfileName.value = data[0].name;
                 filedata = data[0];
                 bus.emit('fileUplaod',data[0]);
                 bus.emit('fileName',filename.value);
+                // bus.emit('signTitle',signfileName.value);
             } else { // 手動上傳檔案
                 filename.value = fileElement.value.files[0].name;
+                signfileName.value = fileElement.value.files[0].name;
                 filedata = fileElement.value.files[0];
                 console.log(filedata.size);
                   if (filedata.size >= 2000000) { // 超過2mb不可上傳
@@ -116,6 +120,7 @@ export default {
                 console.log(filename.value);
                 bus.emit("fileUpload", fileElement.value.files[0]);
                 bus.emit('fileName', filename.value);
+                // bus.emit('signTitle',signfileName.value);
             }
         pdfInit(filedata);
         fileExist.value = true;
@@ -125,6 +130,10 @@ export default {
         fileExist.value = true;
       }
     }
+
+    watchEffect(()=>{
+         bus.emit('signTitle',signfileName.value);
+    })
 
     const pdfInit = (file) =>{
       const Base64Prefix = 'data:application/pdf;base64,'
@@ -314,6 +323,7 @@ export default {
       showConfirmModal,
       fileElement,
       hideConfirmModal,
+      signfileName
     }
   }
 //   data() {

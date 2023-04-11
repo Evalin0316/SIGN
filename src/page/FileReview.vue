@@ -52,6 +52,7 @@ export default {
     const showText = ref(false)
     const getText = ref('')
     const getFileName = ref('');
+    const getsignTitle = ref('');
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js'
     canvas = new fabric.Canvas('canvas')
     bus.on('fileUpload', (v) => {
@@ -78,6 +79,9 @@ export default {
       getFileName.value = v;
     })
 
+    bus.on('signTitle',(v)=>{
+      getsignTitle.value = v;
+    })
     
 
     // 完成簽署
@@ -93,11 +97,10 @@ export default {
 
       const blobPDF = new Blob([pdf.output('blob')],{type: 'application/pdf'})
       const fromData = new FormData();
-      console.log('file',getFileName.value);
       fromData.append('file',blobPDF,getFileName.value);
-      console.log('fromData',fromData);
+      console.log('test',getsignTitle.value);
 
-      uploadFile(fromData)
+      uploadFile(fromData,getsignTitle.value,true)
         .then((res) => {
           if (res.data.success) {
            alert(res);
@@ -168,7 +171,6 @@ export default {
       canvas = new fabric.Canvas('canvas')
       console.log(canvas);
       const Init = async (index) => {
-        console.log(index);
         canvas.requestRenderAll()
         const pdfData = await printPDF(file, index)
         const pdfImage = await pdfToImage(pdfData)
@@ -314,7 +316,8 @@ export default {
       pageNumPending,
       showText,
       hideModal,
-      getText
+      getText,
+      getsignTitle
     }
   }
 }
