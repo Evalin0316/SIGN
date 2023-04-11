@@ -31,17 +31,17 @@
         </div>
     </div>
     <ul class="flex fileEnvelop_outter">
-        <li class="m-2 relative fileEnvelop flex justify-center" v-for="(item,index) in filterFile" :key="index">
-            <div class="fileEnvelop_option absolute right-0 bottom-0 z-[55] h-12" @click.stop="openFileOption(index)">
-                <img src="../assets/images/icon_more_n.svg"/>
-            </div>
-            <div class="absolute top-10 z-[50] text-[5px] w-32 flex justify-center pr-5 flex-wrap">{{item.signTitle}}</div>
-            <div v-if="getIndex == index" class="absolute bottom-0 left-2 bg-white w-3/5 rounded">
-                <ul>
-                    <li class="text-[#BE8E55] flex cursor-pointer hover:bg-[#EFE3D4] p-1"><a class="flex" :href="item.fileLocation" target="blank"><img class="mx-2" src="../assets/images/icon_download_n.svg"/><a class="hover:text-[#BE8E55]">下載檔案</a></a></li>
-                    <li class="text-[#BE8E55] flex cursor-pointer hover:bg-[#EFE3D4] p-1" @click="deleteFileBtn(item._id,item.fileName)"><img class="mx-2" src="../assets/images/icon_delete_n.svg"/><a class="hover:text-[#BE8E55]">取消簽署</a></li>
-                </ul>
-            </div>
+        <li class="m-2 fileEnvelop flex justify-center relative cursor-pointer" v-for="(item,index) in filterFile" :key="index"  @click="getFileDetails(item._id)">
+                <div class="fileEnvelop_option absolute right-0 bottom-0 z-[55] h-12" @click.stop="openFileOption(index)">
+                    <img src="../assets/images/icon_more_n.svg"/>
+                </div>
+                <div class="absolute top-10 z-[50] text-[5px] w-32 flex justify-center pr-5 flex-wrap">{{item.signTitle}}</div>
+                <div v-if="getIndex == index" class="absolute bottom-0 left-2 bg-white w-3/5 rounded">
+                    <ul>
+                        <li class="text-[#BE8E55] flex cursor-pointer hover:bg-[#EFE3D4] p-1"><a class="flex" :href="item.fileLocation" target="blank"><img class="mx-2" src="../assets/images/icon_download_n.svg"/><a class="hover:text-[#BE8E55]">下載檔案</a></a></li>
+                        <li class="text-[#BE8E55] flex cursor-pointer hover:bg-[#EFE3D4] p-1" @click="deleteFileBtn(item._id,item.fileName)"><img class="mx-2" src="../assets/images/icon_delete_n.svg"/><a class="hover:text-[#BE8E55]">取消簽署</a></li>
+                    </ul>
+                </div>
         </li>
     </ul>
     </div>
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { getFile ,deleteFile } from '../srcipt/api';
+import { getFile ,deleteFile ,getFileDetail } from '../srcipt/api';
 import { computed, inject, onMounted, onUnmounted, onUpdated, ref } from 'vue';
 import Header from '../components/Header.vue';
 import bus from "../srcipt/bus";
@@ -108,6 +108,7 @@ export default {
             getIndex.value = -1
         }
 
+        // 刪除檔案
         const deleteFileBtn = (id,filename) => {
             deleteFile(id,filename)
             .then((res)=>{
@@ -121,8 +122,22 @@ export default {
             })
         }
 
-        const downloadFile = () =>{
-            console.log('test');
+        // 檢視/編輯檔案
+        const getFileDetails = (id) =>{
+            getFileDetail(id)
+            .then((res)=>{
+                if(res.data.status == true){
+                    bus.emit('fileName',res.data.data.fileName);
+                    console.log(res)
+                    bus.emit('fileLocation',res.data.data.fileLocation);
+                    if(res.data.data.fileLocation !== undefined){
+                        router.push(`/week2-F2E/fileUpload`);
+                    }
+                   
+                }
+            }).catch((err)=>{
+                alert(err.message);
+            })
         }
 
         onMounted(()=>{
@@ -143,7 +158,7 @@ export default {
             getIndex,
             hideOption,
             deleteFileBtn,
-            downloadFile
+            getFileDetails
         }
     },
 }
