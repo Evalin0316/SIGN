@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header @nextStep="nextStep" @prevPage="prevPage"></Header>
+    <Header @nextStep="nextStep" @prevPage="prevPage" @saveDraft="saveDraft"></Header>
     <div class="container_sign">
       <div class="flex justify-center pt-10 pb-10">
         <ProgressLine :arrStatus="arrStatus" />
@@ -83,7 +83,7 @@ export default {
     SaveConfirm
   },
   emits:['page-loading'],
-  setup(){
+  setup(props, ctx){
     const filename = ref(''); // 上傳檔案名稱
     const status = ref('');
     const nextPage = ref('');
@@ -94,21 +94,14 @@ export default {
     const showConfirmModal = ref(false)
     const fileElement = ref(null)
     const signfileName = ref(''); //文件名稱
+    const getData = ref('')
     // const emitter = inject('emitter')
 
-    
     bus.on('fileName',(v)=>{
-      status.value = 1
-      filename.value = v;
-      signfileName.value = v;
-      console.log('gggg',filename.value);
-    })
-
-    bus.on('fileLocation',(v)=>{
-      status.value = 1
-      console.log('ffff',v);
-    })
-   
+      console.log('v',v)
+      getData.value = v;
+    });
+    console.log('test',getData.value);
 
     const uploadFile = (data) => {
         status.value = fileElement.value.files.length || data.length; // 手動上傳 || 拖拉 
@@ -269,7 +262,7 @@ export default {
       localStorage.setItem("pdfData", '')
       status.value = 0;
       filename.value = '';
-       bus.emit('fileReview', false);
+      bus.emit('fileReview', false);
     }
 
     const dragleave = (e) => {  // 拖出
@@ -311,11 +304,21 @@ export default {
     const hideConfirmModal = () => {
       showConfirmModal.value = false;
     }
+    
+    const saveDraft = () => {
+      bus.emit("saveDocument",'draft');
+    }
 
     onMounted(()=>{
       // status.value = '';
       bus.emit('page-loading',false);
       bus.emit('headerStatus','fileUpload');
+
+      bus.on('fileName',(v)=>{
+      console.log('v',v)
+      getData.value = v;
+    });
+    console.log('test',getData.value);
     })
 
     return{
@@ -337,6 +340,8 @@ export default {
       fileElement,
       hideConfirmModal,
       signfileName,
+      getData,
+      saveDraft
     }
   }
 }

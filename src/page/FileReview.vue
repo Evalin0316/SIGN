@@ -32,6 +32,7 @@ import jsPDF from "jspdf";
 import SelectSign from '../components/ChoiceSign.vue';
 import AddText from '../components/AddText.vue';
 import {uploadFile} from '../srcipt/api';
+import { useRouter } from 'vue-router';
 var canvas = null
 export default {
   name: 'pdfShow',
@@ -53,6 +54,7 @@ export default {
     const getText = ref('')
     const getFileName = ref('');
     const getsignTitle = ref('');
+    const router = useRouter();
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js'
     canvas = new fabric.Canvas('canvas')
     bus.on('fileUpload', (v) => {
@@ -63,6 +65,7 @@ export default {
         signUrl.value = localStorage.getItem('vue-canvas')
       }
     })
+
     // 新增文字
     bus.on('saveText', (v) => {
         console.log('text',v);
@@ -85,7 +88,7 @@ export default {
     
 
     // 完成簽署
-    bus.on('saveDocument',()=>{
+    bus.on('saveDocument',(v)=>{
       const pdf = new jsPDF();
       const image = canvas.toDataURL("image/png")
         // 設定背景在 PDF 中的位置及大小
@@ -100,10 +103,22 @@ export default {
       fromData.append('file',blobPDF,getFileName.value);
       console.log('test',getsignTitle.value);
 
-      uploadFile(fromData,getsignTitle.value,true)
+      let isSigned = false
+      if(v == 'complete'){
+        isSigned = true;
+      }else{
+        isSigned = false;
+      }
+
+      // 上傳檔案
+      uploadFile(fromData,getsignTitle.value,isSigned)
         .then((res) => {
-          if (res.data.success) {
-           alert(res);
+          if (res.data.status == true) {
+            console.log('test')
+           alert(res.data.data);
+           if(isSigned == false){ // 為儲存草稿直接回首頁
+             router.push(`/week2-F2E/`);
+            }
           }
         })
         .catch((err) => {

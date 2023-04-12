@@ -51,9 +51,14 @@
             <img src="../assets/images/Tab_text.png"/>
            </a>
         </div>
+      <div class="flex">
+        <div @click.stop="saveDraft" class="btn nextBtn flex  items-center py-4 px-3 cursor-not-allowed mr-3" :class="fileReview ? '' : 'hidden'">
+          Draft<img src="../assets/images/icon_arrows_right_n.svg" alt="nexticon">
+        </div>
         <div @click="nextStep" class="btn nextBtn flex  items-center w-20 py-4 cursor-not-allowed">
             Next<img src="../assets/images/icon_arrows_right_n.svg" alt="nexticon">
         </div>
+      </div>
       </div>
     </div>
 </template>
@@ -79,11 +84,15 @@ export default {
     const closeWarning = (closeWarning) => {
       isSelectSign.value = closeWarning
     }
-    const nextStep = function(){
+    const nextStep = () => {
       ctx.emit('nextStep') // = this.$emits
     }
-    const prevPage = function(){
+    const prevPage = () => {
       ctx.emit('prevPage')
+    }
+
+    const saveDraft = () => {
+      ctx.emit('saveDraft');
     }
 
     // const cancelBtn = function(){
@@ -127,7 +136,8 @@ export default {
         // cancelBtn,
         fileReview,
         manageSign,
-        passStatus
+        passStatus,
+        saveDraft
     }
   } 
 }
@@ -143,8 +153,9 @@ $main_color: #be8e55;
   color: $main_color;
   font-weight: 500;
   background-color: #EFE3D4;
-  width: 70px;
+  // width: 70px;
   height: 34px;
+  max-height: 50px;
 
 }
 .prevBtn {
