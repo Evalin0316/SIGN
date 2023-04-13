@@ -72,6 +72,7 @@ import jsPDF from "jspdf";
 import Header from '../components/Header.vue';
 import SaveConfirm from '../components/SaveConfirm.vue'
 import { onMounted, ref, reactive, onUpdated, watchEffect ,inject, onBeforeMount,onUnmounted } from 'vue';
+import { getFileDetail } from '../srcipt/api';
 var canvas = null
 export default {
   name:'fileUpload',
@@ -97,11 +98,23 @@ export default {
     const getData = ref('')
     // const emitter = inject('emitter')
 
-    bus.on('fileName',(v)=>{
-      console.log('v',v)
-      getData.value = v;
-    });
-    console.log('test',getData.value);
+    bus.on('fileName_id',(id)=>{
+      getFileDetail(id)
+      .then((res)=>{
+        if(res.data.status == true){
+              filename.value = res.data.data.fileName;
+              signfileName.value = res.data.data.signTitle;
+              console.log('test......',filename.value)
+              if(filename.value !== ''){
+                status.value = 1;
+                step.value = 2;
+              }
+            }
+        }).catch((err)=>{
+            alert(err.message);
+        })
+      })
+
 
     const uploadFile = (data) => {
         status.value = fileElement.value.files.length || data.length; // 手動上傳 || 拖拉 
@@ -138,7 +151,7 @@ export default {
     }
 
     watchEffect(()=>{
-         bus.emit('signTitle',signfileName.value);
+        bus.emit('signTitle',signfileName.value);
     })
 
     const pdfInit = (file) =>{
@@ -314,11 +327,13 @@ export default {
       bus.emit('page-loading',false);
       bus.emit('headerStatus','fileUpload');
 
-      bus.on('fileName',(v)=>{
-      console.log('v',v)
-      getData.value = v;
-    });
-    console.log('test',getData.value);
+      // setTimeout(()=>{
+      //   console.log('mounted',filename.value)
+      //   if(filename.value !== ''){
+      //       status.value = 1;
+      //   }
+      // },1000)
+
     })
 
     return{
@@ -341,7 +356,7 @@ export default {
       hideConfirmModal,
       signfileName,
       getData,
-      saveDraft
+      saveDraft,
     }
   }
 }

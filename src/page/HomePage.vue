@@ -124,19 +124,23 @@ export default {
 
         // 檢視/編輯檔案
         const getFileDetails = (id) =>{
-            getFileDetail(id)
-            .then((res)=>{
-                if(res.data.status == true){
-                    if(res.data.data.fileLocation !== undefined){
-                        router.push(`/week2-F2E/fileUpload`);
-                        bus.emit('fileName',res.data.data.fileName);
-                        bus.emit('fileLocation',res.data.data.fileLocation);
-                    }
-                   
-                }
-            }).catch((err)=>{
-                alert(err.message);
-            })
+            // getFileDetail(id)
+            // .then((res)=>{
+            //     if(res.data.status == true){
+            //         if(res.data.data.fileLocation !== undefined){
+            //             router.push(`/week2-F2E/fileUpload`);
+            //             bus.emit('fileName',res.data.data.fileName);
+            //             bus.emit('fileLocation',res.data.data.fileLocation);
+            //         }
+            //     }
+            // }).catch((err)=>{
+            //     alert(err.message);
+            // })
+            router.push(`/week2-F2E/fileUpload`);
+            setTimeout(()=>{
+                bus.emit('fileName_id',id);
+            },1000)
+            
         }
 
         onMounted(()=>{
@@ -166,32 +170,32 @@ export default {
 
 <style lang="scss" scoped>
 input[type="checkbox"] {
-  appearance: none;
-  background-color: #FFFFFF;
-  margin: 0;
-  width: 1.15em;
-  height: 1.15em;
-  border: 0.15em solid #BE8E55;
-  border-radius: 0.15em;
-  transform: translateY(-0.075em);
-  display: grid;
-  place-content: center;
+    appearance: none;
+    background-color: #FFFFFF;
+    margin: 0;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.15em solid #BE8E55;
+    border-radius: 0.15em;
+    transform: translateY(-0.075em);
+    display: grid;
+    place-content: center;
 }
 
 input[type="checkbox"]::before {
-  content: '';
-  width: 1em;
-  height: 1em;
-  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
-  transform: scale(0);
-  transform-origin: bottom left;
-  transition: 120ms transform ease-in-out;
-  box-shadow: inset 1em 1em var(--form-control-color);
-  background-color: #BE8E55;
+    content: '';
+    width: 1em;
+    height: 1em;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    transform: scale(0);
+    transform-origin: bottom left;
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em var(--form-control-color);
+    background-color: #BE8E55;
 }
 
 input[type="checkbox"]:checked::before {
-  transform: scale(1);
-  background-color: #BE8E55
+    transform: scale(1);
+    background-color: #BE8E55
 }
 </style>
