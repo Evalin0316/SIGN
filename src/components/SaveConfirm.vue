@@ -2,7 +2,8 @@
 <div class="confirm_container" v-if="showConfirmModal">
         <div class="confirm_title">確定要送出嗎?</div>
         <div class="flex flex-col confirm_wrapper">
-            <router-link class="confirmBtn" to='/week2-F2E/' @click="allowSave()">確定</router-link>
+            <!-- <router-link class="confirmBtn" to='/week2-F2E/' @click.stop="allowSave()">確定</router-link> -->
+            <div class="confirmBtn" @click.stop="allowSave()">確定</div>
             <div class="confirmBtn" @click="notAllowSave()">再檢查一下~</div>
         </div>
 </div>

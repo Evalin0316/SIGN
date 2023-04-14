@@ -55,6 +55,7 @@ export default {
     const getFileName = ref('');
     const getsignTitle = ref('');
     const router = useRouter();
+    // const getFile = ref('')
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js'
     canvas = new fabric.Canvas('canvas')
     bus.on('fileUpload', (v) => {
@@ -85,6 +86,11 @@ export default {
     bus.on('signTitle',(v)=>{
       getsignTitle.value = v;
     })
+
+    // bus.on('usedFile',(v)=>{
+    //   getFile.value = v;
+    //   console.log(getFile.value)
+    // })
     
 
     // 完成簽署
@@ -114,11 +120,10 @@ export default {
       uploadFile(fromData,getsignTitle.value,isSigned)
         .then((res) => {
           if (res.data.status == true) {
-            console.log('test')
-           alert(res.data.data);
-           if(isSigned == false){ // 為儲存草稿直接回首頁
-             router.push(`/week2-F2E/`);
-            }
+            alert(res.data.data);
+          //  if(isSigned == false){ // 為儲存草稿直接回首頁
+              router.push(`/week2-F2E/`);
+            // }
           }
         })
         .catch((err) => {
@@ -149,8 +154,13 @@ export default {
         pdfData = await readBlob(pdfData)
         localStorage.setItem("pdfData", JSON.stringify(pdfData))
 
-        // 將base64 中的前綴刪除，並進行解碼
-        const data = atob(pdfData.substring(Base64Prefix.length))
+        let data = '';
+        // if(getFile.value == ''){
+          // 將base64 中的前綴刪除，並進行解碼
+          data = atob(pdfData.substring(Base64Prefix.length))
+        // }else{
+          // data = getFile.value;
+        // }
 
         // 利用解碼的檔案，載入PDF檔及第一頁
         const pdfDoc = await pdfjsLib.getDocument({ data }).promise

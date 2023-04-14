@@ -92,7 +92,7 @@ export default {
         const filterFile = computed(() => {
             const data = [...files.value];
             return data.filter( x => {
-                return x.fileName.toLowerCase().includes(keyword.value.toLowerCase())
+                return x.signTitle.toLowerCase().includes(keyword.value.toLowerCase())
             })
         });
 
@@ -124,22 +124,10 @@ export default {
 
         // 檢視/編輯檔案
         const getFileDetails = (id) =>{
-            // getFileDetail(id)
-            // .then((res)=>{
-            //     if(res.data.status == true){
-            //         if(res.data.data.fileLocation !== undefined){
-            //             router.push(`/week2-F2E/fileUpload`);
-            //             bus.emit('fileName',res.data.data.fileName);
-            //             bus.emit('fileLocation',res.data.data.fileLocation);
-            //         }
-            //     }
-            // }).catch((err)=>{
-            //     alert(err.message);
-            // })
             router.push(`/week2-F2E/fileUpload`);
             setTimeout(()=>{
                 bus.emit('fileName_id',id);
-            },1000)
+            },100)
             
         }
 

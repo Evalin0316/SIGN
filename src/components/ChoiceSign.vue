@@ -13,7 +13,7 @@
               <div class="h-auto bg-white w-4/5 rounded-3xl py-2" @click="selectedSign(item.url)" :class="point_disabled">
                 <img :src="item.url" class='sign mx-auto object-contain w-36 h-20' alt="" referrerpolicy="no-referrer"/>
               </div>
-               <span @click="deleteImageBtn(item.id,item.hash,item.imageUrl)"><img class="mr-4 mt-2" src="../assets/images/icon_Close_Square_n.png" /></span>
+              <span @click="deleteImageBtn(item.id,item.hash,item.imageUrl)"><img class="mr-4 mt-2" src="../assets/images/icon_Close_Square_n.png" /></span>
             </div>
           </div>
           <label class="flex justify-center proj-text-primary block mt-4 font-bold text-lg whitespace-nowrap" @click="isSelectMode = false">
