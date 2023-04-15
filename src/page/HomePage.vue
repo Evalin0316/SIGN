@@ -22,7 +22,7 @@
             <div class="search_type bg-white flex w-9/12 ml-4 mt-7 rounded-lg text-[#BE8E55] h-12">
                 <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox"/>未完成</label>
                 <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox"/>已完成</label>
-                <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox"/>已取消</label>
+                <!-- <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox"/>已取消</label> -->
                 <label class="m-3">共{{flieLength}}筆</label>
             </div>
         </div>
@@ -31,7 +31,8 @@
         </div>
     </div>
     <ul class="flex fileEnvelop_outter">
-        <li class="m-2 fileEnvelop flex justify-center relative cursor-pointer" v-for="(item,index) in filterFile" :key="index"  @click="getFileDetails(item._id)">
+        <li class="m-2 flex justify-center relative cursor-pointer" :class="item.isSigned == true ? 'fileEnvelop_isSigned' : 'fileEnvelop'"
+        v-for="(item,index) in filterFile" :key="index"  @click="getFileDetails(item._id)">
                 <div class="fileEnvelop_option absolute right-0 bottom-0 z-[55] h-12" @click.stop="openFileOption(index)">
                     <img src="../assets/images/icon_more_n.svg"/>
                 </div>
@@ -69,6 +70,8 @@ export default {
         const keyword = ref('')
         const getfileId = ref('');
         const getIndex = ref(-1);
+        const fileStatus = ref(null);
+        const fileStyle = ref('');
         // const emitter = inject('emitter')
         bus.on('nowPage',(v)=> {
             nowPage.value = v
@@ -77,8 +80,9 @@ export default {
 
         getFile(0,10).then((res)=>{
             if(res.data.status == true){
-                files.value = res.data.data;
-                flieLength.value = res.data.data.length;
+                console.log(res.data)
+                files.value = res.data.data.data;
+                flieLength.value = res.data.data.size;
             }
         }).catch((err)=>{
             alert(err.message)
@@ -149,7 +153,7 @@ export default {
             getIndex,
             hideOption,
             deleteFileBtn,
-            getFileDetails
+            getFileDetails,
         }
     },
 }

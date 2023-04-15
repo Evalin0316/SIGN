@@ -2,9 +2,9 @@
     <div>
       <!-- 首頁狀態 -->
       <SelectSign v-if="isSelectSign" @closeWarning="closeWarning" @selectedSign="selectedSign"  :passStatus="passStatus"/>
-      <div class="flex items-center justify-center relative" v-if="headerStatus == 'homePage'">
-          <div class="absolute left-0 ml-5"><img src="../assets/images/sign_logo.svg" /></div>
-          <div class="flex justify-between w-56">
+      <div class="flex items-center justify-center relative h-[66px]" v-if="headerStatus == 'homePage'">
+          <div class="absolute left-0 ml-5 py-3"><img src="../assets/images/sign_logo.svg" /></div>
+          <!-- <div class="flex justify-between w-56">
             <a class="signBtn flex items-center w-30 py-4 cursor-pointer tab-brown text-[#BE8E55] font-bold">
               <img src="../assets/images/icon_document_own_n.svg"/>
                 待簽署
@@ -13,7 +13,7 @@
                 <img src="../assets/images/icon_document_setting_n.svg"/>
                 管理簽名
             </a>
-          </div>
+          </div> -->
       </div>
       
 

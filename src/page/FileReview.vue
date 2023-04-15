@@ -25,13 +25,13 @@
 
 <script>
 /* eslint-disable */
-import { onMounted, ref, reactive } from 'vue';
+import { onMounted, ref, reactive, onBeforeUnmount } from 'vue';
 // import WarningAlert from '@/components/modules/warningAlert_pdf.vue'
 import bus from '../srcipt/bus';
 import jsPDF from "jspdf";
 import SelectSign from '../components/ChoiceSign.vue';
 import AddText from '../components/AddText.vue';
-import {uploadFile} from '../srcipt/api';
+import {uploadFile,uploadSignInfo,uploadFileInfo} from '../srcipt/api';
 import { useRouter } from 'vue-router';
 var canvas = null
 export default {
@@ -107,23 +107,33 @@ export default {
       const blobPDF = new Blob([pdf.output('blob')],{type: 'application/pdf'})
       const fromData = new FormData();
       fromData.append('file',blobPDF,getFileName.value);
-      console.log('test',getsignTitle.value);
+      fromData.append('fileName',getFileName.value);
 
-      let isSigned = false
-      if(v == 'complete'){
-        isSigned = true;
-      }else{
-        isSigned = false;
-      }
+      // let isSigned = false
+      // if(v == 'complete'){
+      //   isSigned = true;
+      // }else{
+      //   isSigned = false;
+      // }
 
       // 上傳檔案
-      uploadFile(fromData,getsignTitle.value,isSigned)
+      uploadFile(fromData)
         .then((res) => {
           if (res.data.status == true) {
-            alert(res.data.data);
-          //  if(isSigned == false){ // 為儲存草稿直接回首頁
-              router.push(`/week2-F2E/`);
-            // }
+            // alert(res.data.data);
+            let fileId = res.data.data.id;
+            let signData = {
+              title: getsignTitle.value,
+              }
+            if(v == 'complete') {
+              signData.isSigned = true;
+            }
+            
+            uploadSignInfo(fileId,signData).then((res)=>{
+              if(res.data.status == true) {
+                router.push(`/week2-F2E/`);
+              }
+            })
           }
         })
         .catch((err) => {
@@ -131,11 +141,16 @@ export default {
         });
     })
 
+
     onMounted(() => {
       if (localStorage.getItem('vue-canvas')) {
         signUrl.value = localStorage.getItem('vue-canvas')
       }
       
+    })
+
+    onBeforeUnmount(()=>{
+      bus.off('saveDocument');
     })
     const pdfInit = (file) => {
       const Base64Prefix = 'data:application/pdf;base64,'

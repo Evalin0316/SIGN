@@ -3,7 +3,7 @@
         <div class="confirm_title">確定要送出嗎?</div>
         <div class="flex flex-col confirm_wrapper">
             <!-- <router-link class="confirmBtn" to='/week2-F2E/' @click.stop="allowSave()">確定</router-link> -->
-            <div class="confirmBtn" @click.stop="allowSave()">確定</div>
+            <div class="confirmBtn" @click.once="allowSave()">確定</div>
             <div class="confirmBtn" @click="notAllowSave()">再檢查一下~</div>
         </div>
 </div>
