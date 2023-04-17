@@ -20,8 +20,8 @@
             </div>
             </form>
             <div class="search_type bg-white flex w-9/12 ml-4 mt-7 rounded-lg text-[#BE8E55] h-12">
-                <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox"/>未完成</label>
-                <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox"/>已完成</label>
+                <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox" v-model="undoneCheck"/>未完成</label>
+                <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox" v-model="doneCheck"/>已完成</label>
                 <!-- <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox"/>已取消</label> -->
                 <label class="m-3">共{{flieLength}}筆</label>
             </div>
@@ -45,13 +45,22 @@
                 </div>
         </li>
     </ul>
+    <div class="flex justify-center item-center">
+        <div>
+            目前頁次第
+            <select v-model="selected" @change="changePage($event.target.value)">
+                <option v-for="(item, idx) in pages" :key="idx" :value="item">{{item}}</option>
+            </select>
+            頁
+        </div>
+    </div>
     </div>
 </div>
 </template>
 
 <script>
 import { getFile ,deleteFile ,getFileDetail } from '../srcipt/api';
-import { computed, inject, onMounted, onUnmounted, onUpdated, ref } from 'vue';
+import { computed, inject, onMounted, onUnmounted, onUpdated, ref, watchEffect } from 'vue';
 import Header from '../components/Header.vue';
 import bus from "../srcipt/bus";
 import { useRouter } from 'vue-router';
@@ -70,8 +79,9 @@ export default {
         const keyword = ref('')
         const getfileId = ref('');
         const getIndex = ref(-1);
-        const fileStatus = ref(null);
-        const fileStyle = ref('');
+        const undoneCheck = ref(false);
+        const doneCheck = ref(false);
+        const selected = ref(1);
         // const emitter = inject('emitter')
         bus.on('nowPage',(v)=> {
             nowPage.value = v
@@ -88,6 +98,17 @@ export default {
             alert(err.message)
         })
 
+        const getFiles = (from,count) => {
+            getFile(from,count).then((res)=>{
+            if(res.data.status == true){
+                files.value = res.data.data.data;
+                flieLength.value = res.data.data.size;
+            }
+        }).catch((err)=>{
+            alert(err.message)
+        })
+        }
+
         const goFileUpload = () => {
             bus.emit('status','fileUpload')
             router.push(`/week2-F2E/fileUpload`)
@@ -95,10 +116,34 @@ export default {
 
         const filterFile = computed(() => {
             const data = [...files.value];
-            return data.filter( x => {
+            if(undoneCheck.value && doneCheck.value == false){ // 未完成 checked
+                return filterFile.value.filter((x)=> x.isSigned == false);
+            }else if(doneCheck.value && undoneCheck.value == false){ // 已完成 checked
+                return filterFile.value.filter((x)=> x.isSigned == true);
+            }else if((undoneCheck.value == false && doneCheck.value == false)){
+                return data.filter( x => {
                 return x.signTitle.toLowerCase().includes(keyword.value.toLowerCase())
-            })
+                })
+            }else if(undoneCheck.value && doneCheck.value){ // 未完成 && 已完成 checked
+                return data.filter( x => {
+                return x.signTitle.toLowerCase().includes(keyword.value.toLowerCase())
+                })
+            }else{
+                return data.filter( x => {
+                return x.signTitle.toLowerCase().includes(keyword.value.toLowerCase())
+                })
+            }
         });
+
+        const pages = computed(()=>{
+            if(undoneCheck.value && doneCheck.value == false){
+                return 1;
+            }else if(doneCheck.value && undoneCheck.value == false){
+                return 1;
+            }else{
+                return Math.ceil(flieLength.value / 10);
+            }
+        })
 
         const searchClear = () => {
             keyword.value = ''
@@ -135,6 +180,13 @@ export default {
             
         }
 
+        const changePage = (e) =>{
+            let from = e > 1 ? (e-1)*10 : 0;
+            console.log(from);
+            let count = 10*e;
+            getFiles(from,count);
+        }
+
         onMounted(()=>{
             bus.emit('page-loading',false);
             bus.emit('headerStatus','homePage')
@@ -154,6 +206,12 @@ export default {
             hideOption,
             deleteFileBtn,
             getFileDetails,
+            doneCheck,
+            undoneCheck,
+            selected,
+            pages,
+            changePage,
+            getFiles
         }
     },
 }
