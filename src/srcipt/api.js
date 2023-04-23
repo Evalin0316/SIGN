@@ -66,6 +66,11 @@ export const updateFile = (id,title,isSigned) =>{
     return axios.patch(`${url}/file/${id}?${title}&isSigned=${isSigned}`);
 }
 
+// 取得檔案
+export const getdownloadFile = (durl) =>{
+    return axios.get(`${durl}`,{responseType:'blob'})
+}
+
 
 
 

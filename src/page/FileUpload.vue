@@ -72,7 +72,7 @@ import jsPDF from "jspdf";
 import Header from '../components/Header.vue';
 import SaveConfirm from '../components/SaveConfirm.vue'
 import { onMounted, ref, reactive, onUpdated, watchEffect ,inject, onBeforeMount,onUnmounted } from 'vue';
-import { getFileDetail } from '../srcipt/api';
+import { getFileDetail,getdownloadFile } from '../srcipt/api';
 import  pdf2base64 from 'pdf-to-base64'
 var canvas = null
 export default {
@@ -107,19 +107,21 @@ export default {
         if(res.data.status == true){
               filename.value = res.data.data.fileName;
               signfileName.value = res.data.data.signTitle;
-              console.log('test......',filename.value)
 
               if(filename.value !== ''){
                 status.value = 1;
                 step.value = 2;
                 fileExist.value = true;
+                nextPage.value = '';
               }
-              //檔案url轉base64
-              // pdf2base64(res.data.Location).then(async (file)=>{
-              //   usedFile.value = file;
-              //   bus.emit('usedFile',usedFile.value);
-              //   console.log(usedFile.value);
-              // })
+
+              //取得檔案
+              getdownloadFile(res.data.data.fileLocation).then((res)=>{
+              usedFile.value = new File([res.data], filename.value, { type: 'application/pdf' });
+              bus.emit('usedFile',usedFile.value);
+              bus.emit('fileName',filename.value);
+              })
+
             }
         }).catch((err)=>{
             alert(err.message);
@@ -185,15 +187,16 @@ export default {
         // 將檔案處理成base64
         
         let data = '';
-        // if(usedFile.value == ''){
+        if(usedFile.value == ''){
           pdfData = await readBlob(pdfData)
           localStorage.setItem("pdfData", JSON.stringify(pdfData))
           // 將base64中的前綴刪去，並進行解碼
           data = atob(pdfData.substring(Base64Prefix.length))
-        // }else{
-        //   pdfData = '';
-        //   data = usedFile.value;
-        // }
+        }else{
+          pdfData = '';
+          data = atob(usedFile.value);
+          console.log(data);
+        }
         // 利用解碼的檔案，載入 PDF檔及第一頁
         const pdfDoc = await pdfjsLib.getDocument({ data }).promise
         const pdfPage = await pdfDoc.getPage(index ?? 1)
@@ -276,7 +279,7 @@ export default {
     }
 
     const nextStep = () => {
-      if(window.localStorage.getItem('pdfData') && fileExist.value && nextPage.value == ''){
+      if(fileExist.value && nextPage.value == ''){
         nextPage.value = 1;
         arrStatus.value = [0,1,2]; //步驟二
         bus.emit('fileReview',true);
@@ -346,7 +349,6 @@ export default {
       // status.value = '';
       bus.emit('page-loading',false);
       bus.emit('headerStatus','fileUpload');
-
     })
 
     return{
@@ -370,6 +372,7 @@ export default {
       signfileName,
       getData,
       saveDraft,
+      usedFile
     }
   }
 }

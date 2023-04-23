@@ -55,10 +55,11 @@ export default {
     const getFileName = ref('');
     const getsignTitle = ref('');
     const router = useRouter();
-    // const getFile = ref('')
+    const getFile = ref('')
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js'
     canvas = new fabric.Canvas('canvas')
     bus.on('fileUpload', (v) => {
+      console.log('vv',v)
       pdfInit(v)
     })
     bus.on('reloadSign', (v) => {
@@ -87,10 +88,12 @@ export default {
       getsignTitle.value = v;
     })
 
-    // bus.on('usedFile',(v)=>{
-    //   getFile.value = v;
-    //   console.log(getFile.value)
-    // })
+    bus.on('usedFile',(v)=>{
+      getFile.value = v;
+      if(getFile.value !==''){
+        pdfInit(v);
+      }
+    })
     
 
     // 完成簽署
@@ -146,11 +149,11 @@ export default {
       if (localStorage.getItem('vue-canvas')) {
         signUrl.value = localStorage.getItem('vue-canvas')
       }
-      
     })
 
     onBeforeUnmount(()=>{
       bus.off('saveDocument');
+      bus.off('usedFile')
     })
     const pdfInit = (file) => {
       const Base64Prefix = 'data:application/pdf;base64,'
@@ -165,18 +168,13 @@ export default {
         })
       }
       const printPDF = async(pdfData, index) => {
+        
+        let data = '';
         // 將檔案處理成 base64
         pdfData = await readBlob(pdfData)
         localStorage.setItem("pdfData", JSON.stringify(pdfData))
-
-        let data = '';
-        // if(getFile.value == ''){
-          // 將base64 中的前綴刪除，並進行解碼
-          data = atob(pdfData.substring(Base64Prefix.length))
-        // }else{
-          // data = getFile.value;
-        // }
-
+        // 將base64 中的前綴刪除，並進行解碼
+        data = atob(pdfData.substring(Base64Prefix.length))
         // 利用解碼的檔案，載入PDF檔及第一頁
         const pdfDoc = await pdfjsLib.getDocument({ data }).promise
         const pdfPage = await pdfDoc.getPage(index ?? 1)
@@ -357,7 +355,8 @@ export default {
       showText,
       hideModal,
       getText,
-      getsignTitle
+      getsignTitle,
+      getFile
     }
   }
 }
