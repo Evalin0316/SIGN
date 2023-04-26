@@ -73,7 +73,6 @@ import Header from '../components/Header.vue';
 import SaveConfirm from '../components/SaveConfirm.vue'
 import { onMounted, ref, reactive, onUpdated, watchEffect ,inject, onBeforeMount,onUnmounted } from 'vue';
 import { getFileDetail,getdownloadFile } from '../srcipt/api';
-import  pdf2base64 from 'pdf-to-base64'
 var canvas = null
 export default {
   name:'fileUpload',
@@ -156,7 +155,6 @@ export default {
                 bus.emit('fileName', filename.value);
                 // bus.emit('signTitle',signfileName.value);
             }
-        pdfInit(filedata);
         fileExist.value = true;
         step.value = 2;
       } else {
@@ -168,115 +166,6 @@ export default {
     watchEffect(()=>{
         bus.emit('signTitle',signfileName.value);
     })
-
-    const pdfInit = (file) =>{
-      const Base64Prefix = 'data:application/pdf;base64,'
-      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js'
-
-      //使用原生 FileReader 轉檔
-      const readBlob = (blob) => {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader()
-          reader.addEventListener('load', () => resolve(reader.result))
-          reader.addEventListener('error', reject)
-          reader.readAsDataURL(blob)
-        })
-      }
-
-      const printPDF = async(pdfData, index) => {
-        // 將檔案處理成base64
-        
-        let data = '';
-        if(usedFile.value == ''){
-          pdfData = await readBlob(pdfData)
-          localStorage.setItem("pdfData", JSON.stringify(pdfData))
-          // 將base64中的前綴刪去，並進行解碼
-          data = atob(pdfData.substring(Base64Prefix.length))
-        }else{
-          pdfData = '';
-          data = atob(usedFile.value);
-          console.log(data);
-        }
-        // 利用解碼的檔案，載入 PDF檔及第一頁
-        const pdfDoc = await pdfjsLib.getDocument({ data }).promise
-        const pdfPage = await pdfDoc.getPage(index ?? 1)
-        pageCount.value = pdfDoc.numPages
-        // const viewport = pdfPage.getViewport({ scale: window.devicePixelRatio })
-        // 設定尺寸及產生 canvas
-        const viewport = pdfPage.getViewport({ scale: 1 })
-        const canvas = document.createElement('canvas')
-        const context = canvas.getContext('2d')
-        // 設定 PDF 所要顯示的寬高及渲染
-        canvas.height = viewport.height
-        canvas.width = viewport.width
-        const renderContext = {
-          canvasContext: context,
-          viewport
-        }
-        const renderTask = pdfPage.render(renderContext)
-        // 回傳做好的canvas
-        return renderTask.promise.then(() => canvas)
-      }
-
-      const pdfToImage = async(pdfData) => {
-        // 設定PDF轉為圖片時的比例
-        const scale = 1
-        // 回傳圖片
-        return new fabric.Image(pdfData, {
-          scaleX: scale,
-          scaleY: scale
-        })
-      }
-
-      // 此處canvas套用 fabric.js
-      canvas = new fabric.Canvas('canvas')
-      const Init = async (index) => {
-        canvas.requestRenderAll()
-        const pdfData = await printPDF(file, index)
-        const pdfImage = await pdfToImage(pdfData)
-        // 調整canvas大小
-        // canvas.setWidth(pdfImage.width / window.devicePixelRatio)
-        // canvas.setHeight(pdfImage.height / window.devicePixelRatio)
-        canvas.setWidth(pdfImage.width)
-        canvas.setHeight(pdfImage.height)
-        // 將PDF畫面設定為背景
-        canvas.setBackgroundImage(pdfImage, canvas.renderAll.bind(canvas))
-      }
-
-      Init(1)
-      const queueRenderPage = (num) => {
-        if (pageRendering.value) {
-          pageNumPending.value = num
-          console.log(num)
-        } else {
-          renderPage(num)
-        }
-      }
-
-      const renderPage = async(num) => {
-        pageRendering.value = true
-        const data = atob(JSON.parse(localStorage.getItem('pdfData')).substring(Base64Prefix.length))
-        const pdfDoc = await pdfjsLib.getDocument({ data }).promise
-        pdfDoc.getPage(num.value).then((page) => {
-          var viewport = page.getViewport({scale: scale})
-          canvas.height = viewport.height
-          canvas.width = viewport.width
-          var renderContext = {
-            canvasContext: ctx,
-            viewport: viewport
-          }
-          var renderTask = page.render(renderContext)
-          renderTask.promise.then(() =>{
-            pageRendering.value = false
-            if (pageNumPending.value !== null) {
-              reRender(pageNumPending.value)
-              pageNumPending.value = null
-            }
-          })
-        })
-      }
-
-    }
 
     const nextStep = () => {
       if(fileExist.value && nextPage.value == ''){
@@ -291,13 +180,12 @@ export default {
     }
 
     const prevPage = () =>{
-      console.log('上一頁')
       arrStatus.value = [1,2,2];
       nextPage.value = "";
       showConfirmModal.value = false;
       localStorage.setItem("pdfData", '')
-      status.value = 0;
-      filename.value = '';
+      // status.value = 0;
+      // filename.value = '';
       bus.emit('fileReview', false);
     }
 
@@ -353,7 +241,6 @@ export default {
 
     return{
       uploadFile,
-      pdfInit,
       nextStep,
       prevPage,
       dragleave,
