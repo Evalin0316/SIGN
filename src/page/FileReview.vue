@@ -88,7 +88,9 @@ export default {
 
     bus.on('usedFile',(v)=>{
       getFile.value = v;
-      pdfInit();
+      if(getFile.value !==''){
+        pdfInit(v);
+      }
     })
     
 
@@ -141,11 +143,11 @@ export default {
       if (localStorage.getItem('vue-canvas')) {
         signUrl.value = localStorage.getItem('vue-canvas')
       }
-      
     })
 
     onBeforeUnmount(()=>{
       bus.off('saveDocument');
+      bus.off('usedFile')
     })
     const pdfInit = (file) => {
       const Base64Prefix = 'data:application/pdf;base64,'
@@ -160,25 +162,13 @@ export default {
         })
       }
       const printPDF = async(pdfData, index) => {
+        
+        let data = '';
         // 將檔案處理成 base64
-        if(getFile.value == ''){
         pdfData = await readBlob(pdfData)
         localStorage.setItem("pdfData", JSON.stringify(pdfData))
-        }
-        console.log('----------',getFile.value);
-
-        let data = '';
-        if(getFile.value == ''){
-          // 將base64 中的前綴刪除，並進行解碼
-          data = atob(pdfData.substring(Base64Prefix.length));
-          console.log('data1.....',data);
-        }else{
-          data = atob(getFile.value);
-          console.log('hh....',data);
-        }
-
-        // console.log('data......',data)
-
+        // 將base64 中的前綴刪除，並進行解碼
+        data = atob(pdfData.substring(Base64Prefix.length))
         // 利用解碼的檔案，載入PDF檔及第一頁
         const pdfDoc = await pdfjsLib.getDocument({ data }).promise
         const pdfPage = await pdfDoc.getPage(index ?? 1)
@@ -226,7 +216,37 @@ export default {
         canvas.setBackgroundImage(pdfImage, canvas.renderAll.bind(canvas))
       }
       Init(1)
-
+      const queueRenderPage = (num) => {
+        if (pageRendering.value) {
+          pageNumPending.value = num
+          console.log(num)
+        } else {
+          renderPage(num)
+        }
+      }
+      const renderPage = async(num) => {
+        console.log(num)
+        pageRendering.value = true
+        const data = atob(JSON.parse(localStorage.getItem('pdfData')).substring(Base64Prefix.length))
+        const pdfDoc = await pdfjsLib.getDocument({ data }).promise
+        pdfDoc.getPage(num.value).then((page) => {
+          var viewport = page.getViewport({scale: scale})
+          canvas.height = viewport.height
+          canvas.width = viewport.width
+          var renderContext = {
+            canvasContext: ctx,
+            viewport: viewport
+          }
+          var renderTask = page.render(renderContext)
+          renderTask.promise.then(() =>{
+            pageRendering.value = false
+            if (pageNumPending.value !== null) {
+              reRender(pageNumPending.value)
+              pageNumPending.value = null
+            }
+          })
+        })
+      }
       // 加入簽名
       const sign = document.querySelector('.signBtn')
       // if (localStorage.getItem('vue-canvas')) {
