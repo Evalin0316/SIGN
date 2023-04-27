@@ -88,9 +88,7 @@ export default {
 
     bus.on('usedFile',(v)=>{
       getFile.value = v;
-      if(getFile.value !==''){
-        pdfInit(v);
-      }
+      pdfInit();
     })
     
 
@@ -143,11 +141,11 @@ export default {
       if (localStorage.getItem('vue-canvas')) {
         signUrl.value = localStorage.getItem('vue-canvas')
       }
+      
     })
 
     onBeforeUnmount(()=>{
       bus.off('saveDocument');
-      bus.off('usedFile')
     })
     const pdfInit = (file) => {
       const Base64Prefix = 'data:application/pdf;base64,'
@@ -162,13 +160,25 @@ export default {
         })
       }
       const printPDF = async(pdfData, index) => {
-        
-        let data = '';
         // 將檔案處理成 base64
+        if(getFile.value == ''){
         pdfData = await readBlob(pdfData)
         localStorage.setItem("pdfData", JSON.stringify(pdfData))
-        // 將base64 中的前綴刪除，並進行解碼
-        data = atob(pdfData.substring(Base64Prefix.length))
+        }
+        console.log('----------',getFile.value);
+
+        let data = '';
+        if(getFile.value == ''){
+          // 將base64 中的前綴刪除，並進行解碼
+          data = atob(pdfData.substring(Base64Prefix.length));
+          console.log('data1.....',data);
+        }else{
+          data = atob(getFile.value);
+          console.log('hh....',data);
+        }
+
+        // console.log('data......',data)
+
         // 利用解碼的檔案，載入PDF檔及第一頁
         const pdfDoc = await pdfjsLib.getDocument({ data }).promise
         const pdfPage = await pdfDoc.getPage(index ?? 1)
