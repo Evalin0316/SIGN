@@ -1,5 +1,5 @@
 import axios from "axios";
-const url = 'https://auto-signature-app-v7-3.fly.dev';
+const url = 'https://auto-signature-app-v7-2.fly.dev';
 
 /* 圖片 */
 

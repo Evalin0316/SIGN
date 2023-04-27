@@ -19,19 +19,11 @@
                 </div>
             </div>
             </form>
-            <div class="search_type bg-white flex w-9/12 ml-4 mt-7 rounded-lg text-[#BE8E55] h-12  max-[768px]:hidden">
+            <div class="search_type bg-white flex w-9/12 ml-4 mt-7 rounded-lg text-[#BE8E55] h-12">
                 <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox" v-model="undoneCheck"/>未完成</label>
                 <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox" v-model="doneCheck"/>已完成</label>
+                <!-- <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox"/>已取消</label> -->
                 <label class="m-3">共{{flieLength}}筆</label>
-            </div>
-            <div class="hidden max-[768px]:inline-block relative ml-4">
-                <div class="select_to_open flex justify-center items-center" @click.stop="check_select = !check_select">
-                    <img src="../assets/images/Vector_close.svg"/>
-                </div>
-                <div class="absolute top-10 left-10 w-24 bg-white rounded z-[60]" v-if="check_select == true">
-                    <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox" v-model="undoneCheck"/>未完成</label>
-                    <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox" v-model="doneCheck"/>已完成</label>
-                </div>
             </div>
         </div>
         <div class="upload_file m-4 z-0">
@@ -90,7 +82,6 @@ export default {
         const undoneCheck = ref(false);
         const doneCheck = ref(false);
         const selected = ref(1);
-        const check_select = ref(false);
         // const emitter = inject('emitter')
         bus.on('nowPage',(v)=> {
             nowPage.value = v
@@ -220,8 +211,7 @@ export default {
             selected,
             pages,
             changePage,
-            getFiles,
-            check_select,
+            getFiles
         }
     },
 }
@@ -257,16 +247,5 @@ input[type="checkbox"]::before {
 input[type="checkbox"]:checked::before {
     transform: scale(1);
     background-color: #BE8E55
-}
-
-.select_to_open{
-    max-width:48px;
-    max-height: 48px;
-    width:48px;
-    height: 48px;
-    // width:90%;
-    // height: 90%;
-    background-color:#FFFFFF;
-    border-radius: 8px;
 }
 </style>
