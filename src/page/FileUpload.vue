@@ -73,7 +73,6 @@ import Header from '../components/Header.vue';
 import SaveConfirm from '../components/SaveConfirm.vue'
 import { onMounted, ref, reactive, onUpdated, watchEffect ,inject, onBeforeMount,onUnmounted } from 'vue';
 import { getFileDetail,getdownloadFile } from '../srcipt/api';
-import  pdf2base64 from 'pdf-to-base64'
 var canvas = null
 export default {
   name:'fileUpload',
@@ -156,7 +155,6 @@ export default {
                 bus.emit('fileName', filename.value);
                 // bus.emit('signTitle',signfileName.value);
             }
-        pdfInit(filedata);
         fileExist.value = true;
         step.value = 2;
       } else {
@@ -291,13 +289,12 @@ export default {
     }
 
     const prevPage = () =>{
-      console.log('上一頁')
       arrStatus.value = [1,2,2];
       nextPage.value = "";
       showConfirmModal.value = false;
       localStorage.setItem("pdfData", '')
-      status.value = 0;
-      filename.value = '';
+      // status.value = 0;
+      // filename.value = '';
       bus.emit('fileReview', false);
     }
 
@@ -353,7 +350,6 @@ export default {
 
     return{
       uploadFile,
-      pdfInit,
       nextStep,
       prevPage,
       dragleave,
