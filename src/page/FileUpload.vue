@@ -142,15 +142,14 @@ export default {
                 bus.emit('fileName',filename.value);
                 // bus.emit('signTitle',signfileName.value);
             } else { // 手動上傳檔案
+                filedata = fileElement.value.files[0];
+                if (filedata.size >= 2*1024*1024) { // 超過2mb不可上傳
+                    alert("不可超過2mb");
+                    status.value = 0;
+                    return;
+                }
                 filename.value = fileElement.value.files[0].name;
                 signfileName.value = fileElement.value.files[0].name;
-                filedata = fileElement.value.files[0];
-                console.log(filedata.size);
-                  if (filedata.size >= 2000000) { // 超過2mb不可上傳
-                    alert("不可超過2mb");
-                    return;
-                  }
-                console.log(filename.value);
                 bus.emit("fileUpload", fileElement.value.files[0]);
                 bus.emit('fileName', filename.value);
                 // bus.emit('signTitle',signfileName.value);
@@ -234,7 +233,6 @@ export default {
     }
 
     onMounted(()=>{
-      // status.value = '';
       bus.emit('page-loading',false);
       bus.emit('headerStatus','fileUpload');
     })

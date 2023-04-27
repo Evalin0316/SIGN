@@ -6,8 +6,6 @@
     @saveText="inputText"
   ></add-text>
   <div class='container_pdf w-screen h-screen relative overflow-x-hidden'>
-    <!-- <div class="downloadBtn cursor-pointer">完成</div> -->
-    <!-- <SelectSign v-if="isSelectSign" @closeWarning="closeWarning" @selectedSign="selectedSign"  /> -->
     <div class="styledCreate__WrapperRight-sc-1i4fuzv-10 cKAFxH">
       <div id="viewer" tabindex="10" scale="1" class="styled__Wrapper-sc-cpx59f-1 gKmbon overflow-x-hidden">
         <div class="react-pdf__Document">
@@ -26,7 +24,6 @@
 <script>
 /* eslint-disable */
 import { onMounted, ref, reactive, onBeforeUnmount } from 'vue';
-// import WarningAlert from '@/components/modules/warningAlert_pdf.vue'
 import bus from '../srcipt/bus';
 import jsPDF from "jspdf";
 import SelectSign from '../components/ChoiceSign.vue';
@@ -37,7 +34,6 @@ var canvas = null
 export default {
   name: 'pdfShow',
   components: {
-    // WarningAlert,
     SelectSign,
     AddText
   },
@@ -172,11 +168,11 @@ export default {
         // 利用解碼的檔案，載入PDF檔及第一頁
         const pdfDoc = await pdfjsLib.getDocument({ data }).promise
         const pdfPage = await pdfDoc.getPage(index ?? 1)
-        pageCount.value = pdfDoc.numPages
-        // const viewport = pdfPage.getViewport({ scale: window.devicePixelRatio })
+        // pageCount.value = pdfDoc.numPages
+        const viewport = pdfPage.getViewport({ scale: window.devicePixelRatio })
 
         // 設定尺寸及產生canvas
-        const viewport = pdfPage.getViewport({ scale: 1 })
+        // const viewport = pdfPage.getViewport({ scale: 1 })
         const canvas = document.createElement('canvas')
         const context = canvas.getContext('2d')
         // 設定PDF 所要顯示的寬高及渲染
@@ -207,10 +203,10 @@ export default {
         const pdfData = await printPDF(file, index)
         const pdfImage = await pdfToImage(pdfData)
         // 透過比例設定canvas 尺寸
-        // canvas.setWidth(pdfImage.width / window.devicePixelRatio)
-        // canvas.setHeight(pdfImage.height / window.devicePixelRatio)
-        canvas.setWidth(pdfImage.width)
-        canvas.setHeight(pdfImage.height)
+        canvas.setWidth(pdfImage.width / window.devicePixelRatio)
+        canvas.setHeight(pdfImage.height / window.devicePixelRatio)
+        // canvas.setWidth(pdfImage.width)
+        // canvas.setHeight(pdfImage.height)
 
         // 將 PDF 畫面設定為背景
         canvas.setBackgroundImage(pdfImage, canvas.renderAll.bind(canvas))
@@ -249,12 +245,6 @@ export default {
       }
       // 加入簽名
       const sign = document.querySelector('.signBtn')
-      // if (localStorage.getItem('vue-canvas')) {
-      //   signUrl.value = localStorage.getItem('vue-canvas')
-      // }
-      //  bus.on('addImage',(v) =>{
-      //     signUrl.value = v;
-      // })
       sign.addEventListener('click', () => {
       bus.emit('addCanvas',canvas);
         // if (!signUrl.value) return
