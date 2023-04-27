@@ -59,7 +59,6 @@ export default {
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js'
     canvas = new fabric.Canvas('canvas')
     bus.on('fileUpload', (v) => {
-      console.log('vv',v)
       pdfInit(v)
     })
     bus.on('reloadSign', (v) => {
@@ -70,7 +69,6 @@ export default {
 
     // 新增文字
     bus.on('saveText', (v) => {
-        console.log('text',v);
           var addText = new fabric.Text(v, (image) => {
           image.top = 10
           image.left = 10
@@ -110,13 +108,7 @@ export default {
       fromData.append('file',blobPDF,getFileName.value);
       fromData.append('fileName',getFileName.value);
 
-      // let isSigned = false
-      // if(v == 'complete'){
-      //   isSigned = true;
-      // }else{
-      //   isSigned = false;
-      // }
-
+      bus.emit('page-loading',true);
       // 上傳檔案
       uploadFile(fromData)
         .then((res) => {
@@ -133,12 +125,14 @@ export default {
             uploadSignInfo(fileId,signData).then((res)=>{
               if(res.data.status == true) {
                 router.push(`/week2-F2E/`);
+                bus.emit('page-loading',false);
               }
             })
           }
         })
         .catch((err) => {
           alert(err.message)
+          bus.emit('page-loading',false);
         });
     })
 
@@ -232,37 +226,7 @@ export default {
         canvas.setBackgroundImage(pdfImage, canvas.renderAll.bind(canvas))
       }
       Init(1)
-      const queueRenderPage = (num) => {
-        if (pageRendering.value) {
-          pageNumPending.value = num
-          console.log(num)
-        } else {
-          renderPage(num)
-        }
-      }
-      const renderPage = async(num) => {
-        console.log(num)
-        pageRendering.value = true
-        const data = atob(JSON.parse(localStorage.getItem('pdfData')).substring(Base64Prefix.length))
-        const pdfDoc = await pdfjsLib.getDocument({ data }).promise
-        pdfDoc.getPage(num.value).then((page) => {
-          var viewport = page.getViewport({scale: scale})
-          canvas.height = viewport.height
-          canvas.width = viewport.width
-          var renderContext = {
-            canvasContext: ctx,
-            viewport: viewport
-          }
-          var renderTask = page.render(renderContext)
-          renderTask.promise.then(() =>{
-            pageRendering.value = false
-            if (pageNumPending.value !== null) {
-              reRender(pageNumPending.value)
-              pageNumPending.value = null
-            }
-          })
-        })
-      }
+
       // 加入簽名
       const sign = document.querySelector('.signBtn')
       // if (localStorage.getItem('vue-canvas')) {
@@ -301,28 +265,8 @@ export default {
       textBtn.addEventListener('click', () => {
           showText.value = true;
       })
-      
-      // 下載
-      const pdf = new jsPDF()
-      const download = () => {
-        // 將 canvas 存為圖片
-        const image = canvas.toDataURL("image/png");
-        // 設定背景在 PDF 中的位置及大小
-        const width = pdf.internal.pageSize.width;
-        const height = pdf.internal.pageSize.height;
-        pdf.addImage(image, "png", 0, 0, width, height)
-        // 將檔案取名並下載
-        pdf.save("download.pdf")
-      }
-      const finish = async() => {
-        await download()
-      }
-
-      // document.querySelector('.downloadBtn').addEventListener('click', () => {
-      //   console.log('1')
-      //   finish()
-      // })
     }
+
     const closeWarning = (closeWarning) => {
       isSelectSign.value = closeWarning
     }
