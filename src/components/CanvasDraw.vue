@@ -295,29 +295,12 @@ export default {
       this.y = coordinates.y;
     },
     getStrokes() { // 儲存簽名檔
-      localStorage.setItem(
-        "vue-drawing-canvas",
-        JSON.stringify(this.$refs.VueCanvasDrawing.getAllStrokes())
-      );
-      localStorage.setItem("vue-canvas", this.image);
       // dataURL轉成blob格式
       const getimage = this.dataURItoBlob(this.image);
       const fromData = new FormData();
       fromData.append('image',getimage,'image'+ Math.round(Math.random()*1000));
-      let signArr;
-      if (localStorage.getItem("vue-canvas-array")) {
-        signArr = JSON.parse(localStorage.getItem("vue-canvas-array"));
-        signArr.push(this.image);
-      } else {
-        signArr = [this.image];
-      }
-      localStorage.setItem("vue-canvas-array", JSON.stringify(signArr));
-
-      // this.$emit("setStep", 1);
       this.$emit("sign",true)
 
-      bus.emit("reloadSign");
-      
       // 上傳檔案
       uploadImage(fromData)
       .then((res)=>{
@@ -332,8 +315,6 @@ export default {
       bus.emit('firstStep','first');
     },
     removeSavedStrokes() {
-      window.localStorage.removeItem("vue-drawing-canvas");
-
       this.$refs.VueCanvasDrawing.reset();
     },
     getColor(color) {

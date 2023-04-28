@@ -105,18 +105,10 @@ export default {
     point_disabled.value = pageStatus == 'home' ? 'pointer-events-none' : '';
     
     onMounted(() => {
-     init()
-      // 取得簽名檔
-      signStatus.value = localStorage.getItem('vue-canvas')
-      // console.log('取得簽名',signStatus.value)
+    init()
     })
 
     const init = () => {
-
-      // 沒接api方法(舊)
-      // if (localStorage.getItem('vue-canvas-array')) {
-      //   signArr.value = JSON.parse(localStorage.getItem('vue-canvas-array'))
-      // }
       // 取得所有簽名檔
       getImage().then((res)=>{
         if(res.data.status == true){

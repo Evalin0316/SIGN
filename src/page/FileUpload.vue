@@ -16,7 +16,7 @@
             class="border rounded-md border-dashed flex justify-center items-center flex-col"
             :class="status == 0 ? 'upload_inneer1' : 'upload_inneer2'"
           >
-            {{ status == 1 ? filename : "" }}
+            <div>{{ status == 1 ? filename : "" }}</div>
             <label v-if="status == 0" class="mb-2 upload mt-1">
               <input
                 class="form-control hidden"
@@ -53,7 +53,7 @@
         </div>
       </div>
       <div :class="nextPage == '' ? 'hidden' : ''">
-        <FileReview :fileName="filename"/>
+        <FileReview :fileName="filename" :fileElement="fileElement"/>
       </div>
         <SaveConfirm 
         :showConfirmModal="showConfirmModal"
@@ -67,7 +67,6 @@
 import bus from "../srcipt/bus";
 import FileReview from "../page/FileReview.vue";
 import ProgressLine from "../components/progress.vue";
-import pdfview from '../components/pdfview.vue';
 import jsPDF from "jspdf";
 import Header from '../components/Header.vue';
 import SaveConfirm from '../components/SaveConfirm.vue'
@@ -79,7 +78,6 @@ export default {
   components: {
     FileReview,
     ProgressLine,
-    pdfview,
     Header,
     SaveConfirm
   },
@@ -98,7 +96,6 @@ export default {
     const getData = ref('')
     const usedFile = ref('')
     // const emitter = inject('emitter')
-
     bus.on('fileName_id',(id)=>{
       bus.emit('page-loading',true);
       getFileDetail(id)
@@ -129,16 +126,21 @@ export default {
         bus.emit('page-loading',false);
     })
 
-
     const uploadFile = (data) => {
-        status.value = fileElement.value.files.length || data.length; // 手動上傳 || 拖拉 
+        status.value = fileElement.value.files.length || data.length; // 手動上傳 || 拖拉
+        console.log(fileElement.value);
         var filedata;
         if (status.value == 1) {
             if(data){ // 拖拉檔案
                 filename.value = data[0].name;
                 signfileName.value = data[0].name;
                 filedata = data[0];
-                bus.emit('fileUplaod',data[0]);
+                if (filedata.size >= 2*1024*1024) { // 超過2mb不可上傳
+                    alert("不可超過2mb");
+                    status.value = 0;
+                    return;
+                }
+                bus.emit('fileUpload',filedata);
                 bus.emit('fileName',filename.value);
                 // bus.emit('signTitle',signfileName.value);
             } else { // 手動上傳檔案
@@ -182,7 +184,7 @@ export default {
       arrStatus.value = [1,2,2];
       nextPage.value = "";
       showConfirmModal.value = false;
-      localStorage.setItem("pdfData", '')
+      fileElement.value = '';
       // status.value = 0;
       // filename.value = '';
       bus.emit('fileReview', false);
@@ -208,20 +210,6 @@ export default {
         return;
       }
       uploadFile(data);
-    //   const formData = new FormData(); // 建立一個 newForm
-    //   for (var i = 0; e.dataTransfer.files.length - 1; i++) {
-    //     // console.log(e.dataTransfer.files.length);
-    //     if (e.dataTransfer.files[i].name.indexOf("pdf") === -1) {
-    //       // 檢查是否上傳的檔案不符合格式
-    //       alert("請上傳pdf檔案");
-    //       return;
-    //     }
-    //     formData.append(
-    //       "uploadFile",
-    //       e.dataTransfer.files[i],
-    //       e.dataTransfer.files[i].name
-    //     );
-    //   }
     }
 
     const hideConfirmModal = () => {
@@ -257,7 +245,7 @@ export default {
       signfileName,
       getData,
       saveDraft,
-      usedFile
+      usedFile,
     }
   }
 }

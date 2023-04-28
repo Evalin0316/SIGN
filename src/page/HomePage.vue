@@ -59,7 +59,7 @@
     <div class="flex justify-center item-center">
         <div>
             目前頁次第
-            <select v-model="selected" @change="changePage($event.target.value)">
+            <select class="rounded" v-model="selected" @change="changePage($event.target.value)">
                 <option v-for="(item, idx) in pages" :key="idx" :value="item">{{item}}</option>
             </select>
             頁

@@ -23,7 +23,7 @@
 
 <script>
 /* eslint-disable */
-import { onMounted, ref, reactive, onBeforeUnmount } from 'vue';
+import { onMounted, ref, reactive, onBeforeUnmount, onUnmounted } from 'vue';
 import bus from '../srcipt/bus';
 import jsPDF from "jspdf";
 import SelectSign from '../components/ChoiceSign.vue';
@@ -45,7 +45,6 @@ export default {
     const width = ref(100)
     const pageNumPending = ref(null)
     const pageRendering = ref(false)
-    const Base64Prefix = 'data:application/pdf;base64,'
     const showText = ref(false)
     const getText = ref('')
     const getFileName = ref('');
@@ -54,13 +53,9 @@ export default {
     const getFile = ref('')
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js'
     canvas = new fabric.Canvas('canvas')
+    
     bus.on('fileUpload', (v) => {
       pdfInit(v)
-    })
-    bus.on('reloadSign', (v) => {
-      if (localStorage.getItem('vue-canvas')) {
-        signUrl.value = localStorage.getItem('vue-canvas')
-      }
     })
 
     // 新增文字
@@ -111,7 +106,6 @@ export default {
       uploadFile(fromData)
         .then((res) => {
           if (res.data.status == true) {
-            // alert(res.data.data);
             let fileId = res.data.data.id;
             let signData = {
               title: getsignTitle.value,
@@ -120,7 +114,7 @@ export default {
               signData.isSigned = true;
             }
             
-            uploadSignInfo(fileId,signData).then((res)=>{
+            uploadSignInfo(fileId,signData).then((res)=>{ // 更新檔案
               if(res.data.status == true) {
                 router.push(`/week2-F2E/`);
                 bus.emit('page-loading',false);
@@ -134,16 +128,13 @@ export default {
         });
     })
 
-
-    onMounted(() => {
-      if (localStorage.getItem('vue-canvas')) {
-        signUrl.value = localStorage.getItem('vue-canvas')
-      }
-    })
-
-    onBeforeUnmount(()=>{
+    onUnmounted(()=>{
       bus.off('saveDocument');
-      bus.off('usedFile')
+      bus.off('usedFile');
+      // bus.off('fileUpload');
+      bus.off('fileName');
+      bus.off('signTitle');
+      bus.off('saveText');
     })
     const pdfInit = (file) => {
       const Base64Prefix = 'data:application/pdf;base64,'
@@ -158,11 +149,9 @@ export default {
         })
       }
       const printPDF = async(pdfData, index) => {
-        
         let data = '';
         // 將檔案處理成 base64
         pdfData = await readBlob(pdfData)
-        localStorage.setItem("pdfData", JSON.stringify(pdfData))
         // 將base64 中的前綴刪除，並進行解碼
         data = atob(pdfData.substring(Base64Prefix.length))
         // 利用解碼的檔案，載入PDF檔及第一頁
@@ -191,6 +180,7 @@ export default {
         // 設定 PDF 轉為圖片時的比例
         const scale = 1
         return new fabric.Image(pdfData, {
+          id: "renderPDF",
           scaleX: scale,
           scaleY: scale
         })
@@ -211,38 +201,7 @@ export default {
         // 將 PDF 畫面設定為背景
         canvas.setBackgroundImage(pdfImage, canvas.renderAll.bind(canvas))
       }
-      Init(1)
-      const queueRenderPage = (num) => {
-        if (pageRendering.value) {
-          pageNumPending.value = num
-          console.log(num)
-        } else {
-          renderPage(num)
-        }
-      }
-      const renderPage = async(num) => {
-        console.log(num)
-        pageRendering.value = true
-        const data = atob(JSON.parse(localStorage.getItem('pdfData')).substring(Base64Prefix.length))
-        const pdfDoc = await pdfjsLib.getDocument({ data }).promise
-        pdfDoc.getPage(num.value).then((page) => {
-          var viewport = page.getViewport({scale: scale})
-          canvas.height = viewport.height
-          canvas.width = viewport.width
-          var renderContext = {
-            canvasContext: ctx,
-            viewport: viewport
-          }
-          var renderTask = page.render(renderContext)
-          renderTask.promise.then(() =>{
-            pageRendering.value = false
-            if (pageNumPending.value !== null) {
-              reRender(pageNumPending.value)
-              pageNumPending.value = null
-            }
-          })
-        })
-      }
+      Init(1);
       // 加入簽名
       const sign = document.querySelector('.signBtn')
       sign.addEventListener('click', () => {
