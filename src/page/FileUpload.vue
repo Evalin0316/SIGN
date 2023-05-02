@@ -86,7 +86,7 @@ export default {
     const filename = ref(''); // 上傳檔案名稱
     const status = ref('');
     const nextPage = ref('');
-    const arrStatus = ref([1, 2, 2]);
+    const arrStatus = ref(['nowDo', 'willDo', 'willDo']);
     const step = ref(1)
     const pageCount = ref(1)
     const fileExist = ref(false)
@@ -171,7 +171,7 @@ export default {
     const nextStep = () => {
       if(fileExist.value && nextPage.value == ''){
         nextPage.value = 1;
-        arrStatus.value = [0,1,2]; //步驟二
+        arrStatus.value = ['alreadyDo','nowDo','willDo']; //步驟二
         bus.emit('fileReview',true);
       } else if(fileExist.value && nextPage.value == 1){
         showConfirmModal.value = true;
@@ -181,7 +181,7 @@ export default {
     }
 
     const prevPage = () =>{
-      arrStatus.value = [1,2,2];
+      arrStatus.value = ['nowDo','willDo','willDo'];
       nextPage.value = "";
       showConfirmModal.value = false;
       fileElement.value = '';

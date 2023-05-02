@@ -1,15 +1,14 @@
 <template>
   <div class="Upload_progress">
     <ul class="progress_content">
-      <!-- 控制步驟，動態控制 progressData item.status , 0 已經做， 1正在做 ，2還沒做 -->
       <li
         v-for="(item, i) in progressData"
         :key="i"
         class="progress_content__item"
         :class="{
-          'progress_content__item--alreadyDo': item.status == 0,
-          'progress_content__item--nowDo': item.status == 1,
-          'progress_content__item--willDo': item.status == 2,
+          'progress_content__item--alreadyDo': item.upload_status == 'alreadyDo',
+          'progress_content__item--nowDo': item.upload_status == 'nowDo',
+          'progress_content__item--willDo': item.upload_status == 'willDo',
         }"
       >
         <img :src="item.img" alt="progress" />
@@ -28,7 +27,7 @@ export default {
   props: {
     arrStatus: {
       type: Array,
-      default: [1,2,2],
+      default: [true,false,false],
     },
   },
   setup(props) {
@@ -37,17 +36,17 @@ export default {
         {
           img: upload,
           text: "上傳簽署檔案",
-          status: props.arrStatus[0], // 0 已經做 1 正在做 2 還沒做
+          upload_status: props.arrStatus[0],
         },
         {
           img: sign,
           text: "進行簽署",
-          status: props.arrStatus[1],
+          upload_status: props.arrStatus[1],
         },
         {
           img: finish,
           text: "簽署完成（下載）",
-          status: props.arrStatus[2],
+          upload_status: props.arrStatus[2],
         },
       ];
     });
