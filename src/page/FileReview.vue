@@ -193,10 +193,10 @@ export default {
         const pdfData = await printPDF(file, index)
         const pdfImage = await pdfToImage(pdfData)
         // 透過比例設定canvas 尺寸
-        canvas.setWidth(pdfImage.width / window.devicePixelRatio)
-        canvas.setHeight(pdfImage.height / window.devicePixelRatio)
-        // canvas.setWidth(pdfImage.width)
-        // canvas.setHeight(pdfImage.height)
+        // canvas.setWidth(pdfImage.width / window.devicePixelRatio)
+        // canvas.setHeight(pdfImage.height / window.devicePixelRatio)
+        canvas.setWidth(pdfImage.width)
+        canvas.setHeight(pdfImage.height)
 
         // 將 PDF 畫面設定為背景
         canvas.setBackgroundImage(pdfImage, canvas.renderAll.bind(canvas))
