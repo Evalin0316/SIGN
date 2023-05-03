@@ -71,7 +71,7 @@ import jsPDF from "jspdf";
 import Header from '../components/Header.vue';
 import SaveConfirm from '../components/SaveConfirm.vue'
 import { onMounted, ref, reactive, onUpdated, watchEffect ,inject, onBeforeMount,onUnmounted } from 'vue';
-import { getFileDetail,getdownloadFile } from '../srcipt/api';
+import { getFileDetail,getSingleFile } from '../srcipt/api';
 var canvas = null
 export default {
   name:'fileUpload',
@@ -112,7 +112,7 @@ export default {
               }
 
               //取得檔案
-              getdownloadFile(res.data.data.fileLocation).then((res)=>{
+              getSingleFile(res.data.data.fileLocation).then((res)=>{
               usedFile.value = new File([res.data], filename.value, { type: 'application/pdf' });
               bus.emit('usedFile',usedFile.value);
               bus.emit('fileName',filename.value);
@@ -128,9 +128,9 @@ export default {
 
     const uploadFile = (data) => {
         status.value = fileElement.value.files.length || data.length; // 手動上傳 || 拖拉
-        console.log(fileElement.value);
+        status.value = !!fileElement.value.files.length
         var filedata;
-        if (status.value == 1) {
+        if (status.value) { //有存在檔案
             if(data){ // 拖拉檔案
                 filename.value = data[0].name;
                 signfileName.value = data[0].name;

@@ -67,7 +67,7 @@ export const updateFile = (id,title,isSigned) =>{
 }
 
 // 取得檔案
-export const getdownloadFile = (durl) =>{
+export const getSingleFile = (durl) =>{
     return axios.get(`${durl}`,{responseType:'blob'})
 }
 
