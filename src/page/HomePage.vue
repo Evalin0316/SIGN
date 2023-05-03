@@ -202,6 +202,12 @@ export default {
         onMounted(()=>{
             bus.emit('page-loading',false);
             bus.emit('headerStatus','homePage')
+            if (localStorage.getItem('reloaded')) {
+                localStorage.removeItem('reloaded');
+            } else {
+                localStorage.setItem('reloaded', '1');
+                location.reload();
+            }
         })
 
         return{
