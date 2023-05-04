@@ -51,6 +51,8 @@ export default {
     const getsignTitle = ref('');
     const router = useRouter();
     const getFile = ref('')
+    const isFileNameChange = ref(false);
+    const getFileId = ref('');
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js'
     canvas = new fabric.Canvas('canvas')
     
@@ -83,9 +85,17 @@ export default {
         pdfInit(v);
       }
     })
+
+    bus.on('isFileNameChange', (v)=>{
+        isFileNameChange.value = v;
+    });
+
+    bus.on('fileId',(v)=>{
+      getFileId.value = v;
+    });
     
 
-    // 完成簽署
+    // 完成簽署 or 儲存草稿
     bus.on('saveDocument',(v)=>{
       const pdf = new jsPDF();
       const image = canvas.toDataURL("image/png")
@@ -103,6 +113,7 @@ export default {
 
       bus.emit('page-loading',true);
       // 上傳檔案
+      if(!isFileNameChange.value && getFileId == ''){ // 初次上傳檔案
       uploadFile(fromData)
         .then((res) => {
           if (res.data.status == true) {
@@ -114,7 +125,7 @@ export default {
               signData.isSigned = true;
             }
             
-            uploadSignInfo(fileId,signData).then((res)=>{ // 更新檔案
+            uploadSignInfo(fileId,signData).then((res)=>{ // 更新檔名
               if(res.data.status == true) {
                 router.push(`/week2-F2E/`);
                 bus.emit('page-loading',false);
@@ -126,6 +137,19 @@ export default {
           alert(err.message)
           bus.emit('page-loading',false);
         });
+      }else{ //編輯檔案資訊
+        let signData = {
+          title: getsignTitle.value,
+        }
+        // 檔名有更新時
+        uploadSignInfo(getFileId.value,signData).then((res)=>{ // 草稿-更新檔案
+              if(res.data.status == true) {
+                router.push(`/week2-F2E/`);
+                bus.emit('page-loading',false);
+              }
+            })
+      }
+
     })
 
     onUnmounted(()=>{
@@ -279,7 +303,9 @@ export default {
       hideModal,
       getText,
       getsignTitle,
-      getFile
+      getFile,
+      isFileNameChange,
+      getFileId
     }
   }
 }

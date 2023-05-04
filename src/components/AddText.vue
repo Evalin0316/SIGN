@@ -4,7 +4,7 @@
         <img class="absolute right-0 top-0 mr-4 mt-4" src="../assets/images/icon_Close_Square_n.png" />
     </div>
     <div>
-       <textarea v-model="text" class="textInput" />
+        <textarea v-model="text" class="textInput" />
     </div>
     <div class="confirmBtn" @click="addText(val)">新增文字</div>
 </div>
@@ -31,7 +31,7 @@ export default{
             this.$emit('hideTextModal');
         },
         closeWarning(){
-             this.$emit('hideTextModal');
+            this.$emit('hideTextModal');
         }
     }
 }

@@ -70,7 +70,7 @@ import ProgressLine from "../components/progress.vue";
 import jsPDF from "jspdf";
 import Header from '../components/Header.vue';
 import SaveConfirm from '../components/SaveConfirm.vue'
-import { onMounted, ref, reactive, onUpdated, watchEffect ,inject, onBeforeMount,onUnmounted } from 'vue';
+import { onMounted, ref, reactive, onUpdated, watchEffect ,inject, onBeforeMount,onUnmounted,watch } from 'vue';
 import { getFileDetail,getSingleFile } from '../srcipt/api';
 var canvas = null
 export default {
@@ -95,6 +95,7 @@ export default {
     const signfileName = ref(''); //文件名稱
     const getData = ref('')
     const usedFile = ref('')
+    const getFileId = ref('');
     // const emitter = inject('emitter')
     bus.on('fileName_id',(id)=>{
       bus.emit('page-loading',true);
@@ -103,6 +104,8 @@ export default {
         if(res.data.status == true){
               filename.value = res.data.data.fileName;
               signfileName.value = res.data.data.signTitle;
+              getFileId.value = res.data.data._id;
+              bus.emit('fileId',getFileId.value);
 
               if(filename.value !== ''){
                 status.value = 1;
@@ -164,8 +167,14 @@ export default {
       }
     }
 
-    watchEffect(()=>{
-        bus.emit('signTitle',signfileName.value);
+    // 監聽檔名是否有改變
+    watch(signfileName,(newValue,oldValue)=>{
+        if(oldValue !==''){
+          let isFileNameChange = newValue == oldValue ? false : true;
+          bus.emit('isFileNameChange',isFileNameChange);
+        }
+        bus.emit('isFileNameChange', false);
+        bus.emit('signTitle', newValue);
     })
 
     const nextStep = () => {
