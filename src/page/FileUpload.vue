@@ -97,6 +97,11 @@ export default {
     const usedFile = ref('')
     const getFileId = ref('');
     // const emitter = inject('emitter')
+
+    /*****************************************
+     * 檢視/編輯檔案-取得檔案資訊
+     *
+    */
     bus.on('fileName_id',(id)=>{
       bus.emit('page-loading',true);
       getFileDetail(id)
@@ -128,6 +133,11 @@ export default {
         })
         bus.emit('page-loading',false);
     })
+
+    /*****************************************
+     *  上傳檔案
+     *
+    */
 
     const uploadFile = (data) => {
         status.value = fileElement.value.files.length || data.length; // 手動上傳 || 拖拉
@@ -177,6 +187,11 @@ export default {
         bus.emit('signTitle', newValue);
     })
 
+
+    /****************************************
+     *  button
+     *
+     */
     const nextStep = () => {
       if(fileExist.value && nextPage.value == ''){
         nextPage.value = 1;
@@ -198,6 +213,19 @@ export default {
       // filename.value = '';
       bus.emit('fileReview', false);
     }
+
+    const saveDraft = () => { //儲存草稿
+      bus.emit("saveDocument",'draft');
+    }
+
+    const hideConfirmModal = () => { // 關閉確認送出檔案dialog
+      showConfirmModal.value = false;
+    }
+
+    /*****************************************
+     * darg file
+     *
+    */
 
     const dragleave = (e) => {  // 拖出
       e.preventDefault(); //阻止離開時的瀏覽器預設行為
@@ -221,18 +249,12 @@ export default {
       uploadFile(data);
     }
 
-    const hideConfirmModal = () => {
-      showConfirmModal.value = false;
-    }
-    
-    const saveDraft = () => {
-      bus.emit("saveDocument",'draft');
-    }
 
     onMounted(()=>{
       bus.emit('page-loading',false);
       bus.emit('headerStatus','fileUpload');
     })
+
 
     return{
       uploadFile,
