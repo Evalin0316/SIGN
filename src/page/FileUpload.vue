@@ -16,7 +16,7 @@
             class="border rounded-md border-dashed flex justify-center items-center flex-col"
             :class="status == 0 ? 'upload_inneer1' : 'upload_inneer2'"
           >
-            <div>{{ status == 1 ? filename : "" }}</div>
+            <div class="break-all">{{ status == 1 ? filename : "" }}</div>
             <label v-if="status == 0" class="mb-2 upload mt-1">
               <input
                 class="form-control hidden"
