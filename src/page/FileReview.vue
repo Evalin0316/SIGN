@@ -1,10 +1,4 @@
 <template>
-<!-- 新增文字modal -->
-  <add-text 
-    :showModal="showText"
-    @hideTextModal="hideModal"
-    @saveText="inputText"
-  ></add-text>
   <div class='container_pdf w-screen h-screen relative overflow-x-hidden'>
     <div class="styledCreate__WrapperRight-sc-1i4fuzv-10 cKAFxH">
       <div id="viewer" tabindex="10" scale="1" class="styled__Wrapper-sc-cpx59f-1 gKmbon overflow-x-hidden">
@@ -19,6 +13,17 @@
     </div>
     <input type="file" class="form-control hidden pdf_upload" ref="upload-file"/>
   </div>
+  <!-- 新增文字modal -->
+  <add-text 
+    :showModal="showText"
+    @hideTextModal="hideModal"
+    @saveText="inputText"
+  ></add-text>
+  <!-- 新增簽名modal -->
+  <SelectSign
+  :showSignModal="showSignModal"
+  @closeWarning="closeWarning" 
+  @selectedSign="selectedSign" />
 </template>
 
 <script>
@@ -53,6 +58,7 @@ export default {
     const getFile = ref('')
     const isFileNameChange = ref(false);
     const getFileId = ref('');
+    const showSignModal = ref(false);
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js'
     canvas = new fabric.Canvas('canvas')
     
@@ -226,20 +232,15 @@ export default {
         canvas.setBackgroundImage(pdfImage, canvas.renderAll.bind(canvas))
       }
       Init(1);
-      // 加入簽名
+
+      /*------------加入簽名-------------*/
       const sign = document.querySelector('.signBtn')
       sign.addEventListener('click', () => {
       bus.emit('addCanvas',canvas);
-        // if (!signUrl.value) return
-        // fabric.Image.fromURL(signUrl.value, (image) => {
-        //   image.top = 100
-        //   image.left = 100
-        //   image.scaleX = 0.5
-        //   image.scaleY = 0.5
-        //   canvas.add(image)
-        // })
+      showSignModal.value = true;
       })
-      // 加入日期
+
+      /*------------加入日期-------------*/
       const dateBtn = document.querySelector('.dateBtn')
       let day = new Date();
       const today = day.getFullYear() + '/' + (day.getMonth() +1) + '/' + day.getDate();
@@ -253,15 +254,18 @@ export default {
         })
         canvas.add(text)
       })
-      // 加入文字
+
+      /*------------加入文字-------------*/
       const textBtn = document.querySelector('.textBtn')
       textBtn.addEventListener('click', () => {
           showText.value = true;
       })
+
     }
 
     const closeWarning = (closeWarning) => {
       isSelectSign.value = closeWarning
+      showSignModal.value = false;
     }
     const selectedSign = (selectedSign) => {
       fabric.Image.fromURL(selectedSign, (image) => {
@@ -305,7 +309,8 @@ export default {
       getsignTitle,
       getFile,
       isFileNameChange,
-      getFileId
+      getFileId,
+      showSignModal
     }
   }
 }

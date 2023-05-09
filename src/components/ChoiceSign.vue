@@ -1,5 +1,5 @@
 <template>
-  <div class="draw_modal w-full left-0 top-0 fixed">
+  <div class="draw_modal w-full left-0 top-0 fixed" v-if="showSignModal == true">
     <!-- 已有上傳簽名 -->
     <div class="card-inner absolute text-xl pop-container-choose w-full z-50" v-if="getSignData.length > 0">
       <div class="relative mt-3" @click="closeWarning">
@@ -43,7 +43,7 @@
             <div class="px-4 py-6 flex flex-col justify-center w-full">
               <div class="font-bold text-lg mb-8 whitespace-nowrap text-center">目前還沒有簽名喔~</div>
               <div class="text-sm">請創建新的簽名檔，可上傳圖片或線上簽名</div>
-             <label class="flex justify-center proj-text-primary block mt-4 whitespace-nowrap bg-white rounded" @click="isSelectMode = false">
+              <label class="flex justify-center proj-text-primary block mt-4 whitespace-nowrap bg-white rounded" @click="isSelectMode = false">
                 <img src="../assets/images/icon_add_new_sign_n.svg"/>
                 <a class="text-[#8C5D19] font-[700] text-[14px] ml-1">建立簽名</a>
             </label>
@@ -87,7 +87,7 @@ export default {
   components: {
     CanvasDraw
   },
-  props:['passStatus'],
+  props:['showSignModal'],
   setup (props, ctx) {
     const signArr = ref([])
     const isSelectMode = ref(true)
@@ -102,7 +102,7 @@ export default {
     const getSignData = ref([]);
     
     //判斷頁面決定簽名檔是否可以點選
-    point_disabled.value = pageStatus == 'home' ? 'pointer-events-none' : '';
+    // point_disabled.value = pageStatus == 'home' ? 'pointer-events-none' : '';
     
     onMounted(() => {
     init()
@@ -228,7 +228,7 @@ export default {
       fileElement,
       pageStatus,
       point_disabled,
-      getSignData
+      getSignData,
     }
   }
 }

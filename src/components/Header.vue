@@ -1,7 +1,7 @@
 <template>
     <div>
       <!-- 首頁狀態 -->
-      <SelectSign v-if="isSelectSign" @closeWarning="closeWarning" @selectedSign="selectedSign"  :passStatus="passStatus"/>
+      <!-- <SelectSign v-if="isSelectSign" @closeWarning="closeWarning" @selectedSign="selectedSign"  :passStatus="passStatus"/> -->
       <div class="flex items-center justify-center relative h-[66px]" v-if="headerStatus == 'homePage'">
           <div class="absolute left-0 ml-5 py-3"><img src="../assets/images/sign_logo.svg" /></div>
           <!-- <div class="flex justify-between w-56">
@@ -19,7 +19,7 @@
 
       <!-- 上傳檔案 -->
       <!-- <div class="flex justify-between" v-if="headerStatus == 'fileUpload'">
-       <div class="btn prevBtn flex items-center w-20 py-4 ml-4 cursor-pointer my-4">
+      <div class="btn prevBtn flex items-center w-20 py-4 ml-4 cursor-pointer my-4">
         <img src="../assets/images/icon_arrows_left_n.svg" alt="previcon">
         <router-link to="/week2-F2E/">
         Cancel</router-link></div>
@@ -39,17 +39,16 @@
       <img src="../assets/images/icon_arrows_left_n.svg" alt="previcon">
         Cancel
       </router-link>
-        <SelectSign v-if="isSelectSign" @closeWarning="closeWarning" @selectedSign="selectedSign" />
         <div class="flex justify-between" :class="fileReview ? '' : 'hidden'">
-            <a class="signBtn flex flex-col items-center w-20 py-4 cursor-pointer" @click="isSelectSign = true">
+            <a class="signBtn flex flex-col items-center w-20 py-4 cursor-pointer">
             <img src="../assets/images/Tab_sign.png" />
             </a>
             <a class="dateBtn flex flex-col items-center w-20 py-4 cursor-pointer">
               <img src="../assets/images/Tab_date.png"/>
             </a>
-           <a class="textBtn flex flex-col items-center w-20 py-4 cursor-pointer">
-            <img src="../assets/images/Tab_text.png"/>
-           </a>
+            <a class="textBtn flex flex-col items-center w-20 py-4 cursor-pointer">
+              <img src="../assets/images/Tab_text.png"/>
+            </a>
         </div>
       <div class="flex">
         <div @click.stop="saveDraft" class="btn nextBtn flex  items-center py-4 px-3 cursor-not-allowed mr-3" :class="fileReview ? '' : 'hidden'">
@@ -64,26 +63,20 @@
 </template>
 
 <script>
-import SelectSign from '../components/ChoiceSign.vue';
+// import SelectSign from '../components/ChoiceSign.vue';
 import { onMounted, ref, reactive,inject, onUpdated,onBeforeMount } from 'vue';
 import bus from "../srcipt/bus";
 var canvas = null;
 export default {
-    components: {
-    // WarningAlert,
-    SelectSign
-  },
+    components: {},
   // emits:['status'],
   setup (props, ctx ) {
-    const isSelectSign = ref(false)
     const signUrl = ref('')
     const headerStatus = ref('')
     const fileReview = ref('')
     const passStatus = ref('home')
     // const emitter = inject('emitter')
-    const closeWarning = (closeWarning) => {
-      isSelectSign.value = closeWarning
-    }
+
     const nextStep = () => {
       ctx.emit('nextStep') // = this.$emits
     }
@@ -94,10 +87,6 @@ export default {
     const saveDraft = () => {
       ctx.emit('saveDraft');
     }
-
-    // const cancelBtn = function(){
-    //   ctx.emit('cancelBtn')
-    // }
 
     bus.on('headerStatus', (v) => {
       headerStatus.value = v
@@ -119,23 +108,13 @@ export default {
       })
     }
 
-    //管理簽名
-    const manageSign = () =>{
-        isSelectSign.value = true;
-        
-    }
-
     return {
-        isSelectSign,
-        closeWarning,
         selectedSign,
         signUrl,
         nextStep,
         prevPage,
         headerStatus,
-        // cancelBtn,
         fileReview,
-        manageSign,
         passStatus,
         saveDraft
     }
