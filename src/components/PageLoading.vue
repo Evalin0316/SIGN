@@ -1,16 +1,15 @@
 <template>
-    <div class="loading signature" ref="loading">
-       <a class="sign">
+    <div class="loading__main" ref="loading">
+        <a class="loading__main__sign">
             <font-awesome-icon icon="fa-solid fa-signature" />
-       </a>
-       <span>Loading</span>
+        </a>
+        <span>Loading</span>
     </div>
 </template>
 
 <script>
 import { onMounted, ref } from 'vue';
 import bus from "../srcipt/bus";
-import { inject } from 'vue'
 
 export default{
     emits:['page-loading'],
@@ -18,7 +17,7 @@ export default{
         const isLoading = ref(true);
         const loading = ref(null);
         // const emitter = inject('emitter'); // Inject `emitter`
-               bus.on('page-loading',(val)=>{
+            bus.on('page-loading',(val)=>{
                 const body = document.querySelector('body');
                 isLoading.value = val;
                 if(val){

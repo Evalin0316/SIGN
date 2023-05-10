@@ -1,13 +1,7 @@
-.loading{
+.loading__main{
     color:lightgrey;
     text-transform: uppercase;
     letter-spacing: .5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.signature{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -22,7 +16,7 @@
     span{
         margin-top: .25rem;
     }
-    .sign{
+    &__sign{
         animation: Sign .45s cubic-bezier(0, 0, 0.5, 1) alternate infinite; // cubic-bezier x1 y1 x2 y2
         svg{
             font-size: 35px;

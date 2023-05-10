@@ -4,7 +4,7 @@
 	}
 }
 
-.confirm_container{
+.confirm__container{
     background:#FFFFFF;
     width:45%;
     height: 200px;
@@ -20,11 +20,11 @@
     @include media-min-lg {
         width: 25%;
     }
-    .confirm_title{
+    &__title{
         color: #8C5D19;
     }
-    .confirm_wrapper{ 
-            .confirmBtn{
+    &__group{ 
+            &__button{
                 height:30px;
                 color: #FFFFFF;
                 margin-top:8px;

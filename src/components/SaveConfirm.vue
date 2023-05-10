@@ -1,9 +1,9 @@
 <template>
-<div class="confirm_container" v-if="showConfirmModal">
-        <div class="confirm_title">確定要送出嗎?</div>
-        <div class="flex flex-col confirm_wrapper">
-            <div class="confirmBtn" @click.once="allowSave()">確定</div>
-            <div class="confirmBtn" @click="notAllowSave()">再檢查一下~</div>
+<div class="confirm__container" v-if="showConfirmModal">
+        <div class="confirm__container__title">確定要送出嗎?</div>
+        <div class="flex flex-col confirm__container__group">
+            <div class="confirm__container__group__button" @click.once="allowSave()">確定</div>
+            <div class="confirm__container__group__button" @click="notAllowSave()">再檢查一下~</div>
         </div>
 </div>
 </template>

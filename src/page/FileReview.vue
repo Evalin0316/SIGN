@@ -267,6 +267,7 @@ export default {
       isSelectSign.value = closeWarning
       showSignModal.value = false;
     }
+    
     const selectedSign = (selectedSign) => {
       fabric.Image.fromURL(selectedSign, (image) => {
         image.top = 100
@@ -276,26 +277,15 @@ export default {
         canvas.add(image)
       })
     }
-    const percentPlus = () => {
-      if (width.value < 150) {
-        width.value += 10
-      }
-    }
-    const percentMinus = () => {
-      if (width.value > 50) {
-        width.value -= 10
-      }
-    }
 
-    const hideModal = () =>{
+    const hideModal = () => {
         showText.value = false;
     }
+
     return {
       pdfInit,
       closeWarning,
       selectedSign,
-      percentPlus,
-      percentMinus,
       signUrl,
       isSelectSign,
       pageNum,

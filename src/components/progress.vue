@@ -1,18 +1,18 @@
 <template>
-  <div class="Upload_progress">
-    <ul class="progress_content">
+  <div class="progress">
+    <ul class="progress__content">
       <li
         v-for="(item, i) in progressData"
         :key="i"
-        class="progress_content__item"
+        class="progress__content__item"
         :class="{
-          'progress_content__item--alreadyDo': item.upload_status == 'alreadyDo',
-          'progress_content__item--nowDo': item.upload_status == 'nowDo',
-          'progress_content__item--willDo': item.upload_status == 'willDo',
+          'progress__content__item--alreadyDo': item.upload_status == 'alreadyDo',
+          'progress__content__item--nowDo': item.upload_status == 'nowDo',
+          'progress__content__item--willDo': item.upload_status == 'willDo',
         }"
       >
         <img :src="item.img" alt="progress" />
-        <div class="progress_content__item__text">{{ item.text }}</div>
+        <div class="progress__content__item__text">{{ item.text }}</div>
       </li>
     </ul>
   </div>
@@ -55,11 +55,3 @@ export default {
 
 };
 </script>
-
-<style>
-.progress_content__item{
-    width:60%
-}
-
-
-</style>

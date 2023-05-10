@@ -98,18 +98,18 @@ export default {
   
 
   // 圖片放在PDF上
-    const selectedSign = (selectedSign) => {
-      fabric.Image.fromURL(selectedSign, (image) => {
-        image.top = 100
-        image.left = 500
-        image.scaleX = 0.5
-        image.scaleY = 0.5
-        canvas.add(image);
-      })
-    }
+    // const selectedSign = (selectedSign) => {
+    //   fabric.Image.fromURL(selectedSign, (image) => {
+    //     image.top = 100
+    //     image.left = 500
+    //     image.scaleX = 0.5
+    //     image.scaleY = 0.5
+    //     canvas.add(image);
+    //   })
+    // }
 
     return {
-        selectedSign,
+        // selectedSign,
         signUrl,
         nextStep,
         prevPage,
