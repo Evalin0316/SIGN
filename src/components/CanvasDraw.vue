@@ -27,19 +27,6 @@
           :additional-images="additionalImages"
         />
       </div>
-      <!-- <div class="button-container w-full mt-6 xl:mt-10 flex text-lg">
-        <div class="w-1/2 p-2">
-          <button type="button" @click.prevent="removeSavedStrokes()" class="py-3 px-3 bg-white proj-text-primary w-full rounded-lg proj-border-primary border-2">
-            clear
-          </button>
-        </div>
-        <div class="w-1/2 p-2">
-          <button type="button" @click.prevent="getStrokes()" class="py-3 px-3 proj-bg-Gradient text-white w-full rounded-lg proj-border-primary border-2">
-            save
-          </button>
-        </div>
-
-      </div> -->
     </div>
 
     <div class="flex items-center justify-between mb-6" :class="{ invisible: !isSignSelf }" style="width:600px">
@@ -158,45 +145,6 @@
           id="file-upload"
         />
       </div>
-
-      <div class="button-container w-full mt-10 flex text-lg">
-        <div class="w-1/2 p-2">
-          <button
-            type="button"
-            @click.prevent="removeSavedStrokes()"
-            class="
-              py-3
-              px-3
-              bg-white
-              proj-text-primary
-              w-full
-              rounded-lg
-              proj-border-primary
-              border-2
-            "
-          >
-            清除
-          </button>
-        </div>
-        <div class="w-1/2 p-2">
-          <button
-            type="button"
-            @click.prevent="getStrokes()"
-            class="
-              py-3
-              px-3
-              proj-bg-Gradient
-              text-white
-              w-full
-              rounded-lg
-              proj-border-primary
-              border-2
-            "
-          >
-            建立簽名
-          </button>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -299,20 +247,18 @@ export default {
       const getimage = this.dataURItoBlob(this.image);
       const fromData = new FormData();
       fromData.append('image',getimage,'image'+ Math.round(Math.random()*1000));
-      this.$emit("sign",true)
 
       // 上傳檔案
       uploadImage(fromData)
       .then((res)=>{
         if(res.data.status == true){
-          alert(res.data.data)
+          // alert(res.data.data)
+          this.$emit("sign")
         }
       })
       .catch((err)=>{
         alert(err.message);
       })
-
-      bus.emit('firstStep','first');
     },
     removeSavedStrokes() {
       this.$refs.VueCanvasDrawing.reset();

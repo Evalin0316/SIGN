@@ -69,7 +69,7 @@
           </div>
           <div class="index_Sign flex flex-col items-center w-full py-4 px-2">
             <CanvasDraw :isSignSelf="isSignSelf" v-on:closeWarning="closeWarning" v-on:getStroke="getStroke" v-on:backToChoose="backToChoose" 
-            @sign="getSign"
+            @sign="getSign()"
             />
           </div>
         </div>
@@ -168,10 +168,11 @@ export default {
       // isSelectMode.value = backToChoose
     }
 
-    const getSign = () => {
-      closeWarning();
-      signStatus.value !=null;
+    const getSign = () => { // 取得新增的圖檔
+      // closeWarning();
+      signStatus.value != null;
       isSelectMode.value = true;
+      init();
     }
 
     const getBase64FromUrl = (imgUrl,id,hash) => {
@@ -201,6 +202,7 @@ export default {
         uploadImage(fromData).then((res) => {
             if(res.data.status == true){
               alert(res.data.data)
+              init()
             }
         }).catch((err)=>{
           alert(err.message)
