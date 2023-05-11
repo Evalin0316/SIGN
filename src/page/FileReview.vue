@@ -59,6 +59,7 @@ export default {
     const isFileNameChange = ref(false);
     const getFileId = ref('');
     const showSignModal = ref(false);
+    const isFileChange = ref(false);
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js'
     canvas = new fabric.Canvas('canvas')
     
@@ -93,7 +94,13 @@ export default {
     })
 
     bus.on('isFileNameChange', (v)=>{
+        console.log('uploadFile....',v);
         isFileNameChange.value = v;
+    });
+
+    bus.on('isFileChange', (v)=>{
+        console.log('isFileChange.....',v)
+        isFileChange.value = v;
     });
 
     bus.on('fileId',(v)=>{
@@ -102,15 +109,13 @@ export default {
     
 
     // 完成簽署 or 儲存草稿
-    bus.on('saveDocument',(v)=>{
+    bus.on('saveDocument',(sign_status)=>{
       const pdf = new jsPDF();
       const image = canvas.toDataURL("image/png")
         // 設定背景在 PDF 中的位置及大小
         const width = pdf.internal.pageSize.width;
         const height = pdf.internal.pageSize.height
         pdf.addImage(image, "png", 0, 0, width, height)
-        // 將檔案取名並下載
-        // pdf.save("download.pdf");
 
       const blobPDF = new Blob([pdf.output('blob')],{type: 'application/pdf'})
       const fromData = new FormData();
@@ -118,8 +123,48 @@ export default {
       fromData.append('fileName',getFileName.value);
 
       bus.emit('page-loading',true);
-      // 上傳檔案
-      if(!isFileNameChange.value && getFileId == ''){ // 初次上傳檔案
+
+
+
+    // 草搞-更新檔案
+    const updateFileInfo = () => {
+      uploadFileInfo(getFileId.value,fromData).then((res)=>{
+              if(res.data.status){
+                alert(res.data.data);
+                bus.emit('page-loading',false);
+                router.push(`/week2-F2E/`);
+              }
+          }).catch((err)=>{
+            alert(err.message)
+          })
+    }
+
+    // 草稿-更新檔名
+    const updateSignInfo = (updateStatus) => { 
+        let signData = {
+          title: getsignTitle.value,
+        }
+
+        if(sign_status == 'complete') {
+          signData.isSigned = true;
+        }
+
+      // 檔名有更新時
+      uploadSignInfo(getFileId.value,signData).then((res)=>{ 
+              if(res.data.status == true) {
+                if(updateStatus){
+                  bus.emit('page-loading',false);
+                  router.push(`/week2-F2E/`);
+                  alert(res.data.data);
+                }
+              }
+            }).catch((err)=>{
+            alert(err.message)
+          })
+    }
+
+    // 判斷檔案更新狀態
+    if(getFileId.value == ''){ // 初次上傳檔案
       uploadFile(fromData)
         .then((res) => {
           if (res.data.status == true) {
@@ -127,7 +172,7 @@ export default {
             let signData = {
               title: getsignTitle.value,
               }
-            if(v == 'complete') {
+            if(sign_status == 'complete') {
               signData.isSigned = true;
             }
             
@@ -143,17 +188,16 @@ export default {
           alert(err.message)
           bus.emit('page-loading',false);
         });
-      }else{ //編輯檔案資訊
-        let signData = {
-          title: getsignTitle.value,
-        }
-        // 檔名有更新時
-        uploadSignInfo(getFileId.value,signData).then((res)=>{ // 草稿-更新檔案
-              if(res.data.status == true) {
-                router.push(`/week2-F2E/`);
-                bus.emit('page-loading',false);
-              }
-            })
+      }else if(isFileNameChange.value && sign_status !== 'complete' && !isFileChange.value){ // 更新檔名
+          updateSignInfo(true);
+      }else if(isFileChange.value && sign_status !== 'complete' && !isFileNameChange.value){ // 更新檔案
+          updateFileInfo();
+      }else if(isFileChange.value && isFileNameChange.value && sign_status !== 'complete'){ // 更新檔案&檔名
+          updateSignInfo(false);
+          updateFileInfo();
+      }else if(sign_status == 'complete'){
+          updateSignInfo(false);
+          updateFileInfo();
       }
 
     })
@@ -300,7 +344,8 @@ export default {
       getFile,
       isFileNameChange,
       getFileId,
-      showSignModal
+      showSignModal,
+      isFileChange,
     }
   }
 }

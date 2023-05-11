@@ -179,13 +179,22 @@ export default {
 
     // 監聽檔名是否有改變
     watch(signfileName,(newValue,oldValue)=>{
-        if(oldValue !==''){
           let isFileNameChange = newValue == oldValue ? false : true;
           bus.emit('isFileNameChange',isFileNameChange);
-        }
-        bus.emit('isFileNameChange', false);
-        bus.emit('signTitle', newValue);
+          bus.emit('signTitle', newValue);
     })
+
+
+    // 監聽檔案是否有改變
+    watch(filename,(newValue,oldValue)=>{
+        if(oldValue !==''){
+          let isFileChange = newValue == oldValue ? false : true;
+          bus.emit('isFileChange',isFileChange);
+        }else{
+          bus.emit('isFileChange', false);
+        }
+    })
+
 
 
     /****************************************

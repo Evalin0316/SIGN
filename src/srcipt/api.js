@@ -37,8 +37,8 @@ export const uploadSignInfo = (id,data) => {
 }
 
 // 上傳檔案狀態
-export const uploadFileInfo = () => {
-    return axios.patch(`${url}/file/${id}/fileInfo`);
+export const uploadFileInfo = (id,data) => {
+    return axios.patch(`${url}/file/${id}/fileInfo`,data);
 }
 
 // 取得檔案
