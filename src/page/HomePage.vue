@@ -123,7 +123,7 @@ export default {
 
         const goFileUpload = () => {
             bus.emit('status','fileUpload')
-            router.push(`/week2-F2E/fileUpload`)
+            router.push(`/fileUpload`)
         }
 
         const filterFile = computed(() => {
@@ -185,7 +185,7 @@ export default {
 
         // 檢視/編輯檔案
         const getFileDetails = (id) =>{
-            router.push(`/week2-F2E/fileUpload`);
+            router.push(`/fileUpload`);
             setTimeout(()=>{
                 bus.emit('fileName_id',id);
             },100)

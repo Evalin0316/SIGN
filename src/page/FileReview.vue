@@ -132,7 +132,7 @@ export default {
               if(res.data.status){
                 alert(res.data.data);
                 bus.emit('page-loading',false);
-                router.push(`/week2-F2E/`);
+                router.push(`/`);
               }
           }).catch((err)=>{
             alert(err.message)
@@ -154,7 +154,7 @@ export default {
               if(res.data.status == true) {
                 if(updateStatus){
                   bus.emit('page-loading',false);
-                  router.push(`/week2-F2E/`);
+                  router.push(`/`);
                   alert(res.data.data);
                 }
               }
@@ -178,7 +178,7 @@ export default {
             
             uploadSignInfo(fileId,signData).then((res)=>{ // 更新檔名
               if(res.data.status == true) {
-                router.push(`/week2-F2E/`);
+                router.push(`/`);
                 bus.emit('page-loading',false);
               }
             })

@@ -35,7 +35,7 @@
         <img src="../assets/images/icon_arrows_left_n.svg" alt="previcon">
         Previous
       </a>
-      <router-link to="/week2-F2E/" class="btn prevBtn flex items-center w-20 py-4 ml-4 cursor-pointer my-4" :class="fileReview ? 'hidden' : ''">
+      <router-link to="/" class="btn prevBtn flex items-center w-20 py-4 ml-4 cursor-pointer my-4" :class="fileReview ? 'hidden' : ''">
       <img src="../assets/images/icon_arrows_left_n.svg" alt="previcon">
         Cancel
       </router-link>
