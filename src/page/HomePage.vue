@@ -19,7 +19,7 @@
                 </div>
             </div>
             </form>
-            <div class="search_type bg-white flex w-9/12 ml-4 mt-7 rounded-lg text-[#BE8E55] h-12  max-[768px]:hidden">
+            <div class="search_type bg-white flex w-9/12 ml-4 rounded-lg text-[#BE8E55] h-12  max-[768px]:hidden">
                 <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox" v-model="undoneCheck"/>未完成</label>
                 <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox" v-model="doneCheck"/>已完成</label>
                 <label class="m-3">共{{flieLength}}筆</label>
