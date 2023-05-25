@@ -33,7 +33,7 @@ import bus from '../srcipt/bus';
 import jsPDF from "jspdf";
 import SelectSign from '../components/ChoiceSign.vue';
 import AddText from '../components/AddText.vue';
-import {uploadFile,uploadSignInfo,uploadFileInfo} from '../srcipt/api';
+import {uploadFile,uploadSignInfo,uploadFileInfo} from '../srcipt/api/uploadFile';
 import { useRouter } from 'vue-router';
 var canvas = null
 export default {

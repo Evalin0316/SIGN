@@ -71,7 +71,7 @@ import jsPDF from "jspdf";
 import Header from '../components/Header.vue';
 import SaveConfirm from '../components/SaveConfirm.vue'
 import { onMounted, ref, reactive, onUpdated, watchEffect ,inject, onBeforeMount,onUnmounted,watch } from 'vue';
-import { getFileDetail,getSingleFile } from '../srcipt/api';
+import { getFileDetail,getSingleFile } from '../srcipt/api/uploadFile';
 var canvas = null
 export default {
   name:'fileUpload',

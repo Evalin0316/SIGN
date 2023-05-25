@@ -81,7 +81,7 @@
 import { computed, onMounted, onUnmounted, onUpdated, ref } from 'vue'
 import CanvasDraw from './CanvasDraw.vue'
 import bus from '../srcipt/bus';
-import { getImage , deleteImage , uploadImage } from '../srcipt/api';
+import { getImage , deleteImage , uploadImage } from '../srcipt/api/uploadImage';
 export default {
   name: 'selectSign',
   components: {

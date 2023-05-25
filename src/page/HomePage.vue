@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { getFile ,deleteFile ,getFileDetail } from '../srcipt/api';
+import { getFile ,deleteFile ,getFileDetail } from '../srcipt/api/uploadFile';
 import { computed, inject, onMounted, onUnmounted, onUpdated, ref, watchEffect } from 'vue';
 import Header from '../components/Header.vue';
 import bus from "../srcipt/bus";

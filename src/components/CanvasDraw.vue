@@ -152,7 +152,7 @@
 <script>
 import VueDrawingCanvas from "vue-drawing-canvas";
 import bus from "../srcipt/bus";
-import {uploadImage} from "../srcipt/api"
+import {uploadImage} from "../srcipt/api/uploadImage"
 export default {
   name: "CanvasModule",
   components: {
