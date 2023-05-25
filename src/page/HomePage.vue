@@ -2,8 +2,8 @@
 <div class="container_outter" @click="hideOption">
     <Header></Header>
     <div class="container_home p-3">
-    <div class="flex justify-between search_line">
-        <div class="search_file flex flex-row">
+    <div class="flex justify-between search_line items-center">
+        <div class="search_file flex flex-row items-center">
             <form class="flex item-center">
             <div class="search_input m-4 relative w-full">
                 <input type="text" class="bg-white m-3 rounded-lg block w-full
@@ -25,19 +25,19 @@
                 <label class="m-3">共{{flieLength}}筆</label>
             </div>
             <div class="hidden max-[768px]:inline-block relative ml-4">
-                <div class="select_to_open flex justify-center items-center mt-3" 
+                <div class="select_to_open flex justify-center items-center" 
                 :class="check_select == true ? 'active' : '' " 
                 @click.stop="check_select = !check_select">
                     <img src="../assets/images/Vector_close.svg"/>
                 </div>
-                <div class="check_select_item absolute top-10 left-10 w-24 bg-white rounded z-[60] hidden" 
+                <div class="check_select_item absolute w-24 bg-white rounded z-[60] hidden" 
                 :class="check_select == true ? 'active' : '' ">
                     <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox" v-model="undoneCheck"/>未完成</label>
                     <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox" v-model="doneCheck"/>已完成</label>
                 </div>
             </div>
         </div>
-        <div class="upload_file m-4 z-0">
+        <div class="upload_file z-0">
             <img class="upload_img" src="../assets/images/to_upload.svg" @click="goFileUpload()"/>
         </div>
     </div>

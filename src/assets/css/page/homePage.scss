@@ -13,8 +13,8 @@
             .search_file{
                 @media (max-width: 768px) {
                     display: flex;
-                    //flex-wrap: wrap;
-                    width: 1000px;
+                    // flex-wrap: wrap;
+                    max-width: 1000px;
                 }
                 .search_type{
                     @media (max-width: 768px) {
@@ -26,6 +26,7 @@
                     width:300px;
                     @media (max-width:768px) {
                         margin: 0 0 0 -5px;
+                        width: 100%;
                     }
                 }
                 .select_to_open{
@@ -42,6 +43,11 @@
                     }
                 }
                 .check_select_item{
+                    top:2.5rem;
+                    left:2.5rem;
+                    @media (max-width:768px) {
+                        left: -5.5rem;
+                    }
                     &.active{
                         display: block;
                         animation: slide-down .3s ease-in-out;
@@ -52,8 +58,10 @@
             .upload_file{
                 img{
                     width:100%;
+                    max-width: 50px;
                     @media (max-width:768px) {
-                        width:70px
+                        width:70px;
+                        margin-left:10px;
                     }
                 }
             }

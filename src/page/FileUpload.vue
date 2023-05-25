@@ -7,7 +7,7 @@
       </div>
       <div :class="nextPage == '' ? '' : 'hidden'" class="flex justify-center">
         <div
-          class="upload_content rounded-md flex items-center justify-center my-4 flex flex-col"
+          class="upload_content rounded-md flex items-center justify-center my-4 flex-col"
           @drop="ondrop"
           @dragleave="dragleave"
           @dragover="ondragover"
