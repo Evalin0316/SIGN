@@ -392,9 +392,9 @@ export default {
   }
   .cFGXRm {
       position: relative;
-      width: 90vw;
-      @media (max-width: 1024px) {
-        width: 95vw;
+      width: 50vw;
+      @media (max-width: 540px) {
+        width: 90vw;
       }
       min-height: 80vh;
       margin: 0px auto 20px;
