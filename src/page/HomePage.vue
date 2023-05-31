@@ -11,7 +11,7 @@
                     focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 
                     dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 z-[50]" 
                     placeholder="Search here..." v-model="keyword"/>
-                <div class="absolute right-3.5 bottom-3.5 mr-5 cursor-pointer  mb-2 mr-3" @click="searchClear()">
+                <div class="absolute right-3.5 bottom-3.5 cursor-pointer  mb-2 mr-3" @click="searchClear()">
                     <img class="mr-4" src="../assets/images/icon_Close_n.png"/>
                 </div>
                 <div class="absolute right-3.5 bottom-3.5 cursor-pointer mb-2 border-l-4">
@@ -100,15 +100,22 @@ export default {
         })
         bus.emit('status','homePage')
 
-        getFile(0,10).then((res)=>{
+
+        if (localStorage.getItem('reloaded')) {
+            localStorage.removeItem('reloaded');
+            getFile(0,10).then((res)=>{
             if(res.data.status == true){
-                console.log(res.data)
                 files.value = res.data.data.data;
                 flieLength.value = res.data.data.size;
             }
         }).catch((err)=>{
             alert(err.message)
         })
+        } else {
+            localStorage.setItem('reloaded', '1');
+            location.reload();
+        }
+
 
         const getFiles = (from,count) => {
             getFile(from,count).then((res)=>{
@@ -202,12 +209,6 @@ export default {
         onMounted(()=>{
             bus.emit('page-loading',false);
             bus.emit('headerStatus','homePage')
-            if (localStorage.getItem('reloaded')) {
-                localStorage.removeItem('reloaded');
-            } else {
-                localStorage.setItem('reloaded', '1');
-                location.reload();
-            }
         })
 
         return{

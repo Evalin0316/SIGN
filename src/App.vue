@@ -1,11 +1,6 @@
 <template>
-  <div>
-    <!-- <Header/> -->
-   <router-view></router-view>
-    <!-- <HomePage/>
-    <FileUpload/> -->
+  <router-view/>
       <PageLoading/>
-    </div>
 </template>
 
 <script>
@@ -16,16 +11,12 @@ import HomePage from './page/HomePage.vue'
 
 export default {
   components:{
-    // homePage,
-    // UploadPage,
-    // SignPage,
-    // FileReview,
-    // Header,
     FileUpload,
     PageLoading,
     HomePage
   },
-  setup(){}
+  setup(){
+  }
 }
 </script>
 

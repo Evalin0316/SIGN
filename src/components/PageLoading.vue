@@ -27,7 +27,7 @@ export default{
                     setTimeout(()=>{
                         loading.value.classList.add('d-none');
                         body.setAttribute('class','');
-                    },3000);
+                    },500);
                 }
             });
 

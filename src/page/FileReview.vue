@@ -12,7 +12,6 @@
       </div>
     </div>
     <input type="file" class="form-control hidden pdf_upload" ref="upload-file"/>
-  </div>
   <!-- 新增文字modal -->
   <add-text 
     :showModal="showText"
@@ -24,6 +23,13 @@
   :showSignModal="showSignModal"
   @closeWarning="closeWarning" 
   @selectedSign="selectedSign" />
+<!-- 新增簽名modal -->
+  <AlertMessage 
+  :show-alert="isshowAlert"
+  :text-content="alertText"
+  :uploadStatus="uploadStatus"
+  />
+  </div>
 </template>
 
 <script>
@@ -33,6 +39,7 @@ import bus from '../srcipt/bus';
 import jsPDF from "jspdf";
 import SelectSign from '../components/ChoiceSign.vue';
 import AddText from '../components/AddText.vue';
+import AlertMessage from '../components/AlertMessage.vue';
 import {uploadFile,uploadSignInfo,uploadFileInfo} from '../srcipt/api/uploadFile';
 import { useRouter } from 'vue-router';
 var canvas = null
@@ -40,7 +47,8 @@ export default {
   name: 'pdfShow',
   components: {
     SelectSign,
-    AddText
+    AddText,
+    AlertMessage
   },
   setup (props, ctx) {
     const signUrl = ref('')
@@ -60,7 +68,13 @@ export default {
     const getFileId = ref('');
     const showSignModal = ref(false);
     const isFileChange = ref(false);
+    const isshowAlert = ref(false);
+    const alertText = ref('');
+    const uploadStatus = ref(false);
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js'
+    // const element = document.getElementsByClassName('container_pdf')[0]
+    // console.log(element);
+    // element[0].remove();
     canvas = new fabric.Canvas('canvas')
     
     bus.on('fileUpload', (v) => {
@@ -94,12 +108,10 @@ export default {
     })
 
     bus.on('isFileNameChange', (v)=>{
-        console.log('uploadFile....',v);
         isFileNameChange.value = v;
     });
 
     bus.on('isFileChange', (v)=>{
-        console.log('isFileChange.....',v)
         isFileChange.value = v;
     });
 
@@ -124,18 +136,32 @@ export default {
 
       bus.emit('page-loading',true);
 
+    /*
+     * 檔案更新項目 function
+    */
 
+
+    const goHomePage = function(){
+      return new Promise(function(resolve,reject){
+      setTimeout(()=>{
+      resolve(router.push(`/`))
+      },2000)
+      })
+    }
 
     // 草搞-更新檔案
     const updateFileInfo = () => {
       uploadFileInfo(getFileId.value,fromData).then((res)=>{
               if(res.data.status){
-                alert(res.data.data);
                 bus.emit('page-loading',false);
-                router.push(`/`);
+                isshowAlert.value = true;
+                alertText.value = res.data.data;
+                uploadStatus.value = true;
+                goHomePage()
               }
           }).catch((err)=>{
-            alert(err.message)
+            alertText.value = err.message
+            uploadStatus.value = false;
           })
     }
 
@@ -154,14 +180,23 @@ export default {
               if(res.data.status == true) {
                 if(updateStatus){
                   bus.emit('page-loading',false);
-                  router.push(`/`);
-                  alert(res.data.data);
+                  // alert(res.data.data);
+                  isshowAlert.value = true;
+                  alertText.value = res.data.data;
+                  uploadStatus.value = true;
+                  goHomePage()
                 }
               }
             }).catch((err)=>{
-            alert(err.message)
+            alertText.value = err.message
+            uploadStatus.value = false;
           })
     }
+
+
+    /*
+     * 判斷更新內容
+    */
 
     // 判斷檔案更新狀態
     if(getFileId.value == ''){ // 初次上傳檔案
@@ -346,6 +381,9 @@ export default {
       getFileId,
       showSignModal,
       isFileChange,
+      isshowAlert,
+      alertText,
+      uploadStatus
     }
   }
 }

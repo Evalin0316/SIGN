@@ -12,10 +12,7 @@
           @dragleave="dragleave"
           @dragover="ondragover"
         >
-          <div
-            class="border rounded-md border-dashed flex justify-center items-center flex-col"
-            :class="status == 0 ? 'upload_inneer1' : 'upload_inneer2'"
-          >
+          <div class="border rounded-md border-dashed flex justify-center items-center flex-col upload_inner">
             <div class="break-all">{{ status == 1 ? filename : "" }}</div>
             <label v-if="status == 0" class="mb-2 upload mt-1">
               <input
@@ -45,7 +42,7 @@
           <div
             v-if="step == 2 && status == 1"
             :class="nextPage == '' ? '' : 'hidden'"
-            class="mt-8 upload_inneer2 border rounded-md border-dashed flex justify-center items-center flex-col"
+            class="mt-8 upload_inner border rounded-md border-dashed flex justify-center items-center flex-col"
           >
             <p class="text-left file_title">文件命名</p>
             <input type="text" class="file_name bg-white file_name_input" v-model="signfileName"/>
@@ -91,16 +88,15 @@ export default {
     const pageCount = ref(1)
     const fileExist = ref(false)
     const showConfirmModal = ref(false)
-    const fileElement = ref(null)
+    const fileElement = ref('')
     const signfileName = ref(''); //文件名稱
     const getData = ref('')
     const usedFile = ref('')
     const getFileId = ref('');
     // const emitter = inject('emitter')
 
-    /*****************************************
+    /*
      * 檢視/編輯檔案-取得檔案資訊
-     *
     */
     bus.on('fileName_id',(id)=>{
       bus.emit('page-loading',true);
@@ -134,11 +130,9 @@ export default {
         bus.emit('page-loading',false);
     })
 
-    /*****************************************
-     *  上傳檔案
-     *
+    /*
+     * 上傳檔案
     */
-
     const uploadFile = (data) => {
         status.value = fileElement.value.files.length || data.length; // 手動上傳 || 拖拉
         status.value = !!fileElement.value.files.length
