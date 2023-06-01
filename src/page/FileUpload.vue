@@ -142,8 +142,8 @@ export default {
                 filename.value = data[0].name;
                 signfileName.value = data[0].name;
                 filedata = data[0];
-                if (filedata.size >= 2*1024*1024) { // 超過2mb不可上傳
-                    alert("不可超過2mb");
+                if (filedata.size >= 200*1024*1024) { // 超過200mb不可上傳 1KB= 1024Bytes / 1MB = 1024KB
+                    alert("不可超過200mb");
                     status.value = 0;
                     return;
                 }
@@ -152,8 +152,8 @@ export default {
                 // bus.emit('signTitle',signfileName.value);
             } else { // 手動上傳檔案
                 filedata = fileElement.value.files[0];
-                if (filedata.size >= 2*1024*1024) { // 超過2mb不可上傳
-                    alert("不可超過2mb");
+                if (filedata.size >= 200*1024*1024) { // 超過200mb不可上傳
+                    alert("不可超過200mb");
                     status.value = 0;
                     return;
                 }

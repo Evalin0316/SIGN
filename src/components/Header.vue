@@ -29,7 +29,7 @@
       </div> -->
 
       <!-- 簽署狀態 -->
-     
+
       <div class="container_tab flex justify-between items-center px-1" v-if="headerStatus == 'fileUpload'">
       <a @click="prevPage" class="btn prevBtn flex items-center w-20 py-4 ml-4 cursor-pointer" :class="fileReview ? '' : 'hidden'">
         <img src="../assets/images/icon_arrows_left_n.svg" alt="previcon">
