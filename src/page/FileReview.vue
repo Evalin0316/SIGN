@@ -212,16 +212,26 @@ export default {
             }
             
             uploadSignInfo(fileId,signData).then((res)=>{ // 更新檔名
+              isshowAlert.value = true;
               if(res.data.status == true) {
-                router.push(`/`);
                 bus.emit('page-loading',false);
+                alertText.value = res.data.data;
+                uploadStatus.value = true;
+                goHomePage()
               }
-            })
+            }).catch((err) => {
+              bus.emit('page-loading',false);
+              isshowAlert.value = true;
+              alertText.value = err.message;
+              uploadStatus.value = false;
+              });
           }
         })
         .catch((err) => {
-          alert(err.message)
           bus.emit('page-loading',false);
+          isshowAlert.value = true;
+          alertText.value = err.message
+          uploadStatus.value = false;
         });
       }else if(isFileNameChange.value && sign_status !== 'complete' && !isFileChange.value){ // 更新檔名
           updateSignInfo(true);
