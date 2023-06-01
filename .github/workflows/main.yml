@@ -25,8 +25,8 @@ jobs:
       - uses: actions/setup-node@v1
 
       # Runs a single command using the runners shell
-      - name: install dependencies
-        run: npm install
+      # - name: install dependencies
+      #   run: npm install
 
       # Runs a single command using the runners shell
       - name: try to build the project
