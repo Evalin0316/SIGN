@@ -16,7 +16,6 @@ export default{
     setup(){
         const isLoading = ref(true);
         const loading = ref(null);
-        // const emitter = inject('emitter'); // Inject `emitter`
             bus.on('page-loading',(val)=>{
                 const body = document.querySelector('body');
                 isLoading.value = val;
