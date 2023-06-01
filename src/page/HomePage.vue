@@ -71,7 +71,7 @@
 
 <script>
 import { getFile ,deleteFile } from '../srcipt/api/uploadFile';
-import { computed, onMounted, onUnmounted, onUpdated, ref, watchEffect } from 'vue';
+import { computed , onMounted, ref } from 'vue';
 import Header from '../components/Header.vue';
 import bus from "../srcipt/bus";
 import { useRouter } from 'vue-router';
