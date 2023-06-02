@@ -5,7 +5,7 @@
       <div class="flex justify-center pt-10 pb-10">
         <ProgressLine :arrStatus="arrStatus" />
       </div>
-      <div :class="nextPage == '' ? '' : 'hidden'" class="flex justify-center">
+      <div :class="isFileReview == '' ? '' : 'hidden'" class="flex justify-center">
         <div
           class="upload_content rounded-md flex items-center justify-center my-4 flex-col"
           @drop="ondrop"
@@ -41,7 +41,7 @@
           </div>
           <div
             v-if="step == 2 && status == 1"
-            :class="nextPage == '' ? '' : 'hidden'"
+            :class="isFileReview == '' ? '' : 'hidden'"
             class="mt-8 upload_inner border rounded-md border-dashed flex justify-center items-center flex-col"
           >
             <p class="text-left file_title">文件命名</p>
@@ -49,7 +49,7 @@
           </div>
         </div>
       </div>
-      <div :class="nextPage == '' ? 'hidden' : ''">
+      <div :class="isFileReview == '' ? 'hidden' : ''">
         <FileReview :fileName="filename" :fileElement="fileElement"/>
       </div>
         <SaveConfirm 
@@ -64,12 +64,11 @@
 import bus from "../srcipt/bus";
 import FileReview from "../page/FileReview.vue";
 import ProgressLine from "../components/progress.vue";
-import jsPDF from "jspdf";
 import Header from '../components/Header.vue';
 import SaveConfirm from '../components/SaveConfirm.vue'
-import { onMounted, ref, reactive, onUpdated, watchEffect ,inject, onBeforeMount,onUnmounted,watch } from 'vue';
+import { onMounted, ref ,watch } from 'vue';
 import { getFileDetail,getSingleFile } from '../srcipt/api/uploadFile';
-var canvas = null
+
 export default {
   name:'fileUpload',
   components: {
@@ -82,7 +81,7 @@ export default {
   setup(props, ctx){
     const filename = ref(''); // 上傳檔案名稱
     const status = ref('');
-    const nextPage = ref('');
+    const isFileReview = ref('');
     const arrStatus = ref(['nowDo', 'willDo', 'willDo']);
     const step = ref(1)
     const pageCount = ref(1)
@@ -112,7 +111,7 @@ export default {
                 status.value = 1;
                 step.value = 2;
                 fileExist.value = true;
-                nextPage.value = '';
+                FileReview.value = '';
               }
 
               //取得檔案
@@ -135,9 +134,8 @@ export default {
     */
     const uploadFile = (data) => {
         status.value = fileElement.value.files.length || data.length; // 手動上傳 || 拖拉
-        status.value = !!fileElement.value.files.length
         var filedata;
-        if (status.value) { //有存在檔案
+        if (!!status.value) { //有存在檔案
             if(data){ // 拖拉檔案
                 filename.value = data[0].name;
                 signfileName.value = data[0].name;
@@ -191,16 +189,15 @@ export default {
 
 
 
-    /****************************************
-     *  button
-     *
-     */
+  /*
+    * BUTTON
+  */
     const nextStep = () => {
-      if(fileExist.value && nextPage.value == ''){
-        nextPage.value = 1;
+      if(fileExist.value && isFileReview.value == ''){
+        isFileReview.value = 1;
         arrStatus.value = ['alreadyDo','nowDo','willDo']; //步驟二
         bus.emit('fileReview',true);
-      } else if(fileExist.value && nextPage.value == 1){
+      } else if(fileExist.value && isFileReview.value == 1){
         showConfirmModal.value = true;
       } else{
         alert('請先上傳檔案')
@@ -209,7 +206,7 @@ export default {
 
     const prevPage = () =>{
       arrStatus.value = ['nowDo','willDo','willDo'];
-      nextPage.value = "";
+      isFileReview.value = "";
       showConfirmModal.value = false;
       fileElement.value = '';
       // status.value = 0;
@@ -225,10 +222,9 @@ export default {
       showConfirmModal.value = false;
     }
 
-    /*****************************************
-     * darg file
-     *
-    */
+  /*
+    * DRAG FILE
+  */
 
     const dragleave = (e) => {  // 拖出
       e.preventDefault(); //阻止離開時的瀏覽器預設行為
@@ -239,6 +235,7 @@ export default {
     }
 
     const ondrop = (e) =>{ // 拖曳結束
+      console.log('.....',e)
       e.preventDefault(); //阻止拖放後的瀏覽器預設行為
       const data = e.dataTransfer.files; // 取得檔案
       if (data.length < 1) {
@@ -268,7 +265,7 @@ export default {
       ondrop,
       filename,
       status,
-      nextPage,
+      isFileReview,
       arrStatus,
       step,
       pageCount,

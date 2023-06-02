@@ -1,5 +1,5 @@
 name: deploy gh-pages
-on:
+on: #觸發條件
   push:
     branches:
       - main
