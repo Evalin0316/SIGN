@@ -12,25 +12,24 @@
 import bus from '../srcipt/bus';
 
 export default{
-    data(){
-        return{
-            text:''
-        }
-    },
     props:{
         showConfirmModal:{
         type: Boolean,
         default: false
         }
     },
-    methods:{
-        allowSave(){
+    setup(props,{emit}){
+        const allowSave = () =>{
             bus.emit("saveDocument",'complete');
-            this.$emit('hideConfirmModal');
+            emit('hideConfirmModal');
             bus.emit('nowPage','fileUpload');
-        },
-        notAllowSave(){
-            this.$emit('hideConfirmModal');
+        }
+        const notAllowSave = () =>{
+            emit('hideConfirmModal')
+        }
+        return{
+            allowSave,
+            notAllowSave
         }
     }
 }
