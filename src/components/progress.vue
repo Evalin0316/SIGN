@@ -45,7 +45,7 @@ export default {
         },
         {
           img: finish,
-          text: "簽署完成（下載）",
+          text: "簽署完成",
           upload_status: props.arrStatus[2],
         },
       ];

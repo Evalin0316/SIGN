@@ -188,6 +188,7 @@ export default {
             }).catch((err)=>{
                 alert(err.message);
             })
+            hideOption();
         }
 
         // 檢視/編輯檔案
@@ -201,7 +202,6 @@ export default {
 
         const changePage = (e) =>{
             let from = e > 1 ? (e-1)*10 : 0;
-            console.log(from);
             let count = 10*e;
             getFiles(from,count);
         }

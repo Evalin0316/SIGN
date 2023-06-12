@@ -26,6 +26,9 @@ $main_color: #be8e55;
         height: 2px;
         width: 96px;
         background-color: $main_color;
+        @media (max-width:540px){
+            width:40px;
+        }
       }
       &--alreadyDo {
         @apply border;
@@ -55,6 +58,9 @@ $main_color: #be8e55;
         @apply absolute bottom-0;
         top: 70px;
       }
+      @media (max-width:540px){
+        margin: 0 20px;
+    }
     }
   }
 }
