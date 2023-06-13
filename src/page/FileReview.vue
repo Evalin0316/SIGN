@@ -1,5 +1,5 @@
 <template>
-  <div class='container_pdf w-screen h-screen relative overflow-x-hidden'>
+  <div class='container_pdf  h-screen relative overflow-x-hidden'>
     <div class="styledCreate__WrapperRight-sc-1i4fuzv-10 cKAFxH">
       <div id="viewer" tabindex="10" scale="1" class="styled__Wrapper-sc-cpx59f-1 gKmbon overflow-x-hidden">
         <div class="react-pdf__Document">

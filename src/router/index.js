@@ -10,7 +10,7 @@ const routes = [
     }
   },
   {  
-    path: '/fileUpload',
+    path: '/fileUpload/:id',
     name: 'fileUpload',
     component: () => import('../page/FileUpload.vue'),
     meta:{

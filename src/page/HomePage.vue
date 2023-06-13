@@ -130,7 +130,7 @@ export default {
 
         const goFileUpload = () => {
             bus.emit('status','fileUpload')
-            router.push(`/fileUpload`)
+            router.push(`/fileUpload/uploadNewFile`)
         }
 
         const filterFile = computed(() => {
@@ -193,11 +193,7 @@ export default {
 
         // 檢視/編輯檔案
         const getFileDetails = (id) =>{
-            router.push(`/fileUpload`);
-            setTimeout(()=>{
-                bus.emit('fileName_id',id);
-            },100)
-            
+            router.push(`/fileUpload/${id}`);
         }
 
         const changePage = (e) =>{

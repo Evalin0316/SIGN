@@ -68,6 +68,7 @@ import Header from '../components/Header.vue';
 import SaveConfirm from '../components/SaveConfirm.vue'
 import { onMounted, ref ,watch } from 'vue';
 import { getFileDetail,getSingleFile } from '../srcipt/api/uploadFile';
+import { useRoute } from 'vue-router';
 
 export default {
   name:'fileUpload',
@@ -92,20 +93,23 @@ export default {
     const getData = ref('')
     const usedFile = ref('')
     const getFileId = ref('');
+    const route = useRoute();
+    const fileId = ref('');
     // const emitter = inject('emitter')
 
     /*
      * 檢視/編輯檔案-取得檔案資訊
     */
-    bus.on('fileName_id',(id)=>{
+    if(!(window.location.href.indexOf('uploadNewFile') > -1)){
+      fileId.value = route.params.id;
       bus.emit('page-loading',true);
-      getFileDetail(id)
+      getFileDetail(fileId.value)
       .then((res)=>{
         if(res.data.status == true){
               filename.value = res.data.data.fileName;
               signfileName.value = res.data.data.signTitle;
               getFileId.value = res.data.data._id;
-              bus.emit('fileId',getFileId.value);
+              bus.emit('fileId', getFileId.value);
 
               if(filename.value !== ''){
                 status.value = 1;
@@ -127,7 +131,7 @@ export default {
 
         })
         bus.emit('page-loading',false);
-    })
+      }
 
     /*
      * 上傳檔案
@@ -186,8 +190,6 @@ export default {
           bus.emit('isFileChange', false);
         }
     })
-
-
 
   /*
     * BUTTON
@@ -277,6 +279,7 @@ export default {
       getData,
       saveDraft,
       usedFile,
+      fileId
     }
   }
 }
