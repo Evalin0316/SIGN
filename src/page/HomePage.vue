@@ -100,10 +100,8 @@ export default {
         })
         bus.emit('status','homePage')
 
-
-        if (localStorage.getItem('reloaded')) {
-            localStorage.removeItem('reloaded');
-            getFile(0,10).then((res)=>{
+        // 取得資料
+        getFile(0,10).then((res)=>{
             if(res.data.status == true){
                 files.value = res.data.data.data;
                 flieLength.value = res.data.data.size;
@@ -111,11 +109,6 @@ export default {
         }).catch((err)=>{
             alert(err.message)
         })
-        } else {
-            localStorage.setItem('reloaded', '1');
-            location.reload();
-        }
-
 
         const getFiles = (from,count) => {
             getFile(from,count).then((res)=>{

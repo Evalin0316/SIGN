@@ -306,7 +306,7 @@ export default {
       }
       // 此處 canvas 套用 fabric.js
       canvas = new fabric.Canvas('canvas')
-      console.log(canvas);
+      // console.log(canvas);
       const Init = async (index) => {
         canvas.requestRenderAll()
         const pdfData = await printPDF(file, index)
