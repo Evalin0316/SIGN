@@ -178,7 +178,7 @@ export default {
       // 檔名有更新時
       uploadSignInfo(getFileId.value,signData).then((res)=>{ 
               if(res.data.status == true) {
-                if(updateStatus){
+                if(updateStatus){ // 判斷是否回到首頁
                   bus.emit('page-loading',false);
                   // alert(res.data.data);
                   isshowAlert.value = true;

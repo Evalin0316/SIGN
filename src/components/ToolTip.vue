@@ -1,0 +1,51 @@
+<template>
+    <a class="jastips"><slot></slot><div v-html="tipText"></div></a>
+</template>
+
+<script>
+export default {
+    name: 'sty-button.vue',
+    props: {
+        tipText: {
+            type: String,
+            default () {
+                return '';
+            }
+        }
+    }
+};
+</script>
+
+<style scoped lang="scss">
+a.jastips {
+    z-index: 9;
+    text-decoration: none;
+    &:hover{
+    position: relative;
+    z-index: 99;
+    cursor: help;
+    }
+}
+
+a.jastips div {
+    display: none;
+}
+
+a.jastips:hover div {
+    display: block;
+    position: absolute;
+    float: left;
+    top: 50px;
+    right: 20px;
+    background: #202121e3;
+    border: 1px solid #000;
+    color: #fff;
+    padding: 5px;
+    margin: 0px;
+    z-index: 9;
+    word-break: break-word;
+    min-width: 300px;
+    line-height: 29px;
+    border-radius: 4px;
+}
+</style>

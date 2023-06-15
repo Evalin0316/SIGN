@@ -1,7 +1,7 @@
 <template>
   <div class="draw_modal w-full left-0 top-0 fixed" v-if="showSignModal == true">
     <!-- 已有上傳簽名 -->
-    <div class="card-inner absolute text-xl pop-container-choose w-full z-50" v-if="getSignData.length > 0">
+    <div class="card-inner absolute text-xl pop-container-choose w-full z-50" v-if="signArr.length > 0">
       <div class="relative mt-3" @click="closeWarning">
         <img class="absolute right-0 top-0 mr-4 mt-3 close_square" src="../assets/images/icon_Close_Square_n.png" />
       </div>
@@ -35,7 +35,7 @@
       </div>
     </div>
     <!-- 無簽名檔 -->
-    <div class="card-inner absolute text-xl pop-container-choose w-full z-50" v-if="getSignData.length <= 0">
+    <div class="card-inner absolute text-xl pop-container-choose w-full z-50" v-if="signArr.length == 0">
             <div class="relative mt-3" @click="closeWarning">
               <img class="absolute right-0 top-0 mr-4 mt-3 close_square" src="../assets/images/icon_Close_Square_n.png" />
             </div>

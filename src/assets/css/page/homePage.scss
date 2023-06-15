@@ -85,6 +85,9 @@
                 height: 180px;
                 width:100%;
                 max-width: 200px;
+                &:hover{
+                background-image:url('/src/assets/images/fileEnvelop_isSigned_hover.svg');
+                }
                 @media (max-width:1600px) {
                     height: 200px;
                     max-width: 220px;
@@ -115,6 +118,9 @@
                 height: 180px;
                 width:100%;
                 max-width: 200px;
+                &:hover{
+                    background-image:url('/src/assets/images/fileEnvelop_hover.svg');
+                }
                 @media (max-width:1600px) {
                     height: 200px;
                     max-width: 220px;

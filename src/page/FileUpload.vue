@@ -237,7 +237,6 @@ export default {
     }
 
     const ondrop = (e) =>{ // 拖曳結束
-      console.log('.....',e)
       e.preventDefault(); //阻止拖放後的瀏覽器預設行為
       const data = e.dataTransfer.files; // 取得檔案
       if (data.length < 1) {

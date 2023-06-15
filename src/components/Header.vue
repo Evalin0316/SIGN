@@ -28,8 +28,12 @@
             </a>
         </div>
       <div class="flex">
-        <div @click.stop="saveDraft" class="btn nextBtn flex  items-center py-4 px-3 cursor-not-allowed mr-3" :class="fileReview ? '' : 'hidden'">
-          Draft<img src="../assets/images/icon_arrows_right_n.svg" alt="nexticon">
+        <div class="flex">
+          <tooltip-link :tip-text="tooltipText">
+            <div @click.stop="saveDraft" class="btn nextBtn flex  items-center py-4 px-3 cursor-not-allowed mr-3" :class="fileReview ? '' : 'hidden'">
+            Draft<img src="../assets/images/icon_arrows_right_n.svg" alt="nexticon">
+          </div>
+          </tooltip-link>
         </div>
         <div @click="nextStep" class="btn nextBtn flex items-center w-20 py-4 cursor-not-allowed">
             <a class="block max-[540px]:hidden" :class="fileReview ? 'hidden' : ''">Next</a>
@@ -44,15 +48,19 @@
 <script>
 import { ref } from 'vue';
 import bus from "../srcipt/bus";
+import tooltipLink from '../components/ToolTip.vue'
 var canvas = null;
 export default {
-    components: {},
+    components: {
+      tooltipLink
+    },
   // emits:['status'],
   setup (props, ctx ) {
     const signUrl = ref('')
     const headerStatus = ref('')
     const fileReview = ref('')
     const passStatus = ref('home')
+    const tooltipText = ref('<ol class="text-left"><li>1.檔案儲存草稿後可再更換檔案及檔名</li><li>2.需更換檔案才可以更改「簽名擋」</li></ol>')
     // const emitter = inject('emitter')
 
     const nextStep = () => {
@@ -81,7 +89,8 @@ export default {
         headerStatus,
         fileReview,
         passStatus,
-        saveDraft
+        saveDraft,
+        tooltipText
     }
   } 
 }

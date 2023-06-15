@@ -1,12 +1,14 @@
 <template>
-<div class="text__container" v-if="showModal">
-    <div class="text__container__header mt-3" @click="closeWarning">
-        <img src="../assets/images/icon_Close_Square_n.png" />
+<div class="w-full left-0 top-0 fixed h-screen" v-if="showModal">
+    <div class="text__container">
+        <div class="text__container__header mt-3" @click="closeWarning">
+            <img src="../assets/images/icon_Close_Square_n.png" />
+        </div>
+        <div class="text__container__content">
+            <textarea v-model="text" class="textInput" />
+        </div>
+        <div class="text__container__button" @click="addText(val)">新增文字</div>
     </div>
-    <div class="text__container__content">
-        <textarea v-model="text" class="textInput" />
-    </div>
-    <div class="text__container__button" @click="addText(val)">新增文字</div>
 </div>
 </template>
 

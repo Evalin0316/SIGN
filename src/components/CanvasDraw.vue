@@ -164,6 +164,7 @@ export default {
       default: false,
     },
   },
+  emits:['page-loading'],
   data() {
     return {
       initialImage: [
@@ -251,13 +252,16 @@ export default {
       // 上傳檔案
       uploadImage(fromData)
       .then((res)=>{
+        bus.emit('page-loading',true);
         if(res.data.status == true){
           // alert(res.data.data)
           this.$emit("sign")
+          bus.emit('page-loading',false);
         }
       })
       .catch((err)=>{
         alert(err.message);
+        bus.emit('page-loading',false);
       })
     },
     removeSavedStrokes() {
