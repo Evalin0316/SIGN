@@ -1,5 +1,5 @@
 <template>
-<div class="w-full left-0 top-0 fixed h-screen" v-if="showModal">
+<div class="w-full left-0 top-0 fixed h-screen" v-if="showModal" style="background:rgba(140, 93, 25, 0.3);">
     <div class="text__container">
         <div class="text__container__header mt-3" @click="closeWarning">
             <img src="../assets/images/icon_Close_Square_n.png" />

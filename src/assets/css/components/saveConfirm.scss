@@ -5,16 +5,13 @@
 }
 
 .confirm__container{
+    @apply shadow-md flex justify-center items-center flex-col absolute;
     background:#FFFFFF;
     width:45%;
     height: 200px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    position: absolute;
-    left: 33%;
-    top: 30%;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%,-50%);
     z-index: 999;
     border-radius: 20px;
     @include media-min-lg {
