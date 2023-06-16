@@ -28,7 +28,7 @@
             </a>
         </div>
       <div class="flex flex-wrap">
-        <div class="flex max-[600px]:mb-3">
+        <div class="flex max-[560px]:mb-3">
           <tooltip-link :tip-text="tooltipText">
             <div @click.stop="saveDraft" class="btn nextBtn flex  items-center py-4 px-3 cursor-not-allowed  mr-3 max-[549px]:m-0" :class="fileReview ? '' : 'hidden'">
             <a>Draft</a><img src="../assets/images/icon_arrows_right_n.svg" alt="nexticon">

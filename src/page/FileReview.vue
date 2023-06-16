@@ -5,7 +5,7 @@
         <div class="react-pdf__Document">
           <div id="pageContainer1" class="styled__WrapperPage-sc-cpx59f-2 cFGXRm page" width="1101.6000000000001" height="1425.6000000000001" style="">
             <div class="react-pdf__Page" data-page-number="1" style="position: relative;">
-              <canvas id="canvas" class="react-pdf__Page__canvas block select-none" :style="`width: ${width}% !important`"></canvas>
+              <canvas id="canvas" class="react-pdf__Page__canvas block select-none"></canvas>
             </div>
           </div>
         </div>
@@ -397,20 +397,46 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .container_pdf {
   .react-pdf__Document {
     transform-origin: center top;
     transform: translate3d(0px, 0px, 0px) scale3d(0.883261, 0.883261, 1);
     height: calc(88.3261%);
+    
+    // max-height: calc(88.3261%);
+    overflow:scroll;
+    &::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    // &::-webkit-scrollbar-button {
+    //   background: transparent;
+    //   border-radius: 1px;
+    // }
+
+    &::-webkit-scrollbar-track-piece {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 2px;
+      background-color: #DEC7AA;
+      border: 1px solid #DEC7AA;
+    }
+
+    &::-webkit-scrollbar-track {
+      box-shadow: transparent;
+      background:#EFE3D4;
+    }
   }
   .cKAFxH {
     position: relative;
     display: inline-flex;
     flex-direction: column;
-    width: 100%;
+    // width: 100%;
     height: calc(100% - 70px);
-    overflow-y: hidden;
+    // overflow-y: hidden;
     padding: 48px 100px;
     @media (max-width: 1440px) {
       // padding: 100px 1rem;
@@ -439,7 +465,10 @@ export default {
   }
   .cFGXRm {
       position: relative;
-      width: 50vw;
+      // width: 50vw;
+      @media (max-width: 768px) {
+        width: 70vw;
+      }
       @media (max-width: 540px) {
         width: 90vw;
       }
@@ -457,42 +486,5 @@ export default {
 }
 .canvas-container {
   width: 100% !important;
-}
-// canvas {
-//   width: 100% !important;
-// }
-  .prePage-btn {
-    width: 30px;
-    height: 30px;
-  }
-  .nextPage-btn {
-    width: 30px;
-    height: 30px;
-  }
-.footer {
-  box-shadow: 1px -1px 6px rgba(0, 0, 0, 0.11);
-  @media (max-width: 1023px) {
-    box-shadow: none;
-    // padding-top: 90px;
-  }
-  .item {
-    background: #FFFFFF;
-    box-shadow: 1px 4px 6px rgba(0, 0, 0, 0.11);
-    border-radius: 16px;
-    width: 200px;
-  }
-  .icon {
-    width: 40px;
-    height: 40px;
-    background: #F0F0F0;
-    border-radius: 9px;
-    img {
-      width: 19px;
-      height: 19px;
-    }
-    p {
-      color: #B7B7B7;
-    }
-  }
 }
 </style>

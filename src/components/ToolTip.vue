@@ -18,7 +18,6 @@ export default {
 
 <style scoped lang="scss">
 a.jastips {
-    z-index: 9;
     text-decoration: none;
     &:hover{
     position: relative;
