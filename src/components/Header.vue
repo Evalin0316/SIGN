@@ -13,7 +13,7 @@
       <router-link to="/" class="" :class="fileReview ? 'hidden' : ''">
         <div class="btn flex items-center w-24 py-4 ml-4 cursor-pointer">
           <img src="../assets/images/icon_arrows_left_n.svg" alt="previcon">
-          <a class="block max-[540px]:hidden">Cancel</a>
+          <a class="block">Cancel</a>
         </div>
       </router-link>
         <div class="flex justify-between" :class="fileReview ? '' : 'hidden'">
@@ -27,16 +27,16 @@
               <img src="../assets/images/Tab_text.png"/>
             </a>
         </div>
-      <div class="flex">
-        <div class="flex">
+      <div class="flex flex-wrap">
+        <div class="flex max-[600px]:mb-3">
           <tooltip-link :tip-text="tooltipText">
-            <div @click.stop="saveDraft" class="btn nextBtn flex  items-center py-4 px-3 cursor-not-allowed mr-3" :class="fileReview ? '' : 'hidden'">
-            Draft<img src="../assets/images/icon_arrows_right_n.svg" alt="nexticon">
+            <div @click.stop="saveDraft" class="btn nextBtn flex  items-center py-4 px-3 cursor-not-allowed  mr-3 max-[549px]:m-0" :class="fileReview ? '' : 'hidden'">
+            <a>Draft</a><img src="../assets/images/icon_arrows_right_n.svg" alt="nexticon">
           </div>
           </tooltip-link>
         </div>
-        <div @click="nextStep" class="btn nextBtn flex items-center w-20 py-4 cursor-not-allowed">
-            <a class="block max-[540px]:hidden" :class="fileReview ? 'hidden' : ''">Next</a>
+        <div @click="nextStep" class="btn nextBtn flex items-center py-4 px-3 cursor-not-allowed">
+            <a class="block" :class="fileReview ? 'hidden' : ''">Next</a>
             <a :class="fileReview ? '' : 'hidden'">Save</a>
             <img src="../assets/images/icon_arrows_right_n.svg" alt="nexticon">
         </div>
@@ -106,7 +106,7 @@ $main_color: #be8e55;
   color: $main_color;
   font-weight: 500;
   background-color: #EFE3D4;
-  // width: 70px;
+  max-width: 100px;
   height: 34px;
   max-height: 50px;
 
