@@ -180,12 +180,11 @@ export default {
               if(res.data.status == true) {
                 if(updateStatus){ // 判斷是否回到首頁
                   bus.emit('page-loading',false);
-                  // alert(res.data.data);
                   isshowAlert.value = true;
                   alertText.value = res.data.data;
-                  uploadStatus.value = true;
                   goHomePage()
                 }
+                uploadStatus.value = true;
               }
             }).catch((err)=>{
             alertText.value = err.message
@@ -208,7 +207,7 @@ export default {
               title: getsignTitle.value,
               }
             if(sign_status == 'complete') {
-              signData.isSigned = true;
+              signData.isSigned = true; // 預設為 fasle
             }
             
             uploadSignInfo(fileId,signData).then((res)=>{ // 更新檔名
