@@ -3,7 +3,7 @@
     <div class="styledCreate__WrapperRight-sc-1i4fuzv-10 cKAFxH">
       <div id="viewer" tabindex="10" scale="1" class="styled__Wrapper-sc-cpx59f-1 gKmbon overflow-x-hidden">
         <div class="react-pdf__Document">
-          <div id="pageContainer1" class="styled__WrapperPage-sc-cpx59f-2 cFGXRm page" width="1101.6000000000001" height="1425.6000000000001" style="">
+          <div id="pageContainer1" class="styled__WrapperPage-sc-cpx59f-2 cFGXRm page">
             <div class="react-pdf__Page" data-page-number="1" style="position: relative;">
               <canvas id="canvas" class="react-pdf__Page__canvas block select-none"></canvas>
             </div>
@@ -405,7 +405,8 @@ export default {
     height: calc(88.3261%);
     
     // max-height: calc(88.3261%);
-    overflow:scroll;
+    overflow:auto;
+    -webkit-overflow-scrolling: touch;
     &::-webkit-scrollbar {
       width: 7px;
     }
@@ -429,6 +430,7 @@ export default {
       box-shadow: transparent;
       background:#EFE3D4;
     }
+    
   }
   .cKAFxH {
     position: relative;
@@ -465,9 +467,9 @@ export default {
   }
   .cFGXRm {
       position: relative;
-      // width: 50vw;
-      @media (max-width: 768px) {
-        width: 70vw;
+      width: 30vw;
+      @media (max-width: 1200px) {
+        width: 50vw;
       }
       @media (max-width: 540px) {
         width: 90vw;
