@@ -16,7 +16,7 @@
     >
       <Button
         :buttonText="'Previous'"
-        :imgUrl="'../assets/images/icon_arrows_left_n.svg'"
+        :imgUrl="'../../src/assets/images/icon_arrows_left_n.svg'"
         :class="fileReview ? '' : 'hidden'"
         :iconPosition="'left-2'"
         :textPosition="'ml-5'"
@@ -51,7 +51,7 @@
           <tooltip-link :tip-text="tooltipText">
             <Button
               :buttonText="'Draft'"
-              :imgUrl="'../src/assets/images/icon_arrows_right_n.svg'"
+              :imgUrl="'../../src/assets/images/icon_arrows_right_n.svg'"
               :iconPosition="'right-4 top-2'"
               :textPosition="'mr-6'"
               class="max-[560px]:m-0 mr-3"
@@ -61,7 +61,7 @@
         </div>
         <Button
           :buttonText="fileReview ? 'Save' : 'Next'"
-          :imgUrl="'../src/assets/images/icon_arrows_right_n.svg'"
+          :imgUrl="'../../src/assets/images/icon_arrows_right_n.svg'"
           :iconPosition="'right-4 top-2'"
           :textPosition="'mr-6'"
           @click="nextStep"
