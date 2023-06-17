@@ -16,7 +16,7 @@
     >
       <Button
         :buttonText="'Previous'"
-        :imgUrl="'../src/assets/images/icon_arrows_left_n.svg'"
+        :imgUrl="'../assets/images/icon_arrows_left_n.svg'"
         :class="fileReview ? '' : 'hidden'"
         :iconPosition="'left-2'"
         :textPosition="'ml-5'"
@@ -25,11 +25,15 @@
       <router-link to="/" class="" :class="fileReview ? 'hidden' : ''">
         <Button
           :buttonText="'Cancel'"
-          :imgUrl="'../src/assets/images/icon_arrows_left_n.svg'"
+          
           :class="fileReview ? 'hidden' : ''"
           :iconPosition="'left-2'"
-          :textPosition="'ml-5'"
-        ></Button>
+          :textPosition="'ml-1'"
+        >
+        <template v-slot:image>
+          <img class="left-2" src="../../src/assets/images/icon_arrows_left_n.svg" />
+        </template>
+        </Button>
       </router-link>
       <div class="flex justify-between" :class="fileReview ? '' : 'hidden'">
         <a class="signBtn flex flex-col items-center w-20 cursor-pointer">
