@@ -2,7 +2,6 @@
 <div>
     <div class="btn flex items-center cursor-pointer relative rounded">
         <div class="flex justify-center items-center px-4 py-3">
-            <img :src=imgUrl class="absolute" :class=iconPosition />
             <slot name="image"></slot>
             <a class="block" :class="textPosition">{{buttonText}}</a>
         </div>
@@ -14,14 +13,6 @@
 export default{
     props:{
         buttonText:{
-            type:String,
-            default:''
-        },
-        imgUrl:{
-            type:String,
-            default:''
-        },
-        iconPosition:{
             type:String,
             default:''
         },

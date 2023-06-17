@@ -16,22 +16,22 @@
     >
       <Button
         :buttonText="'Previous'"
-        :imgUrl="'../../src/assets/images/icon_arrows_left_n.svg'"
         :class="fileReview ? '' : 'hidden'"
-        :iconPosition="'left-2'"
         :textPosition="'ml-5'"
         @click="prevPage"
-      ></Button>
+      >
+      <template v-slot:image>
+        <img class="left-2 absolute" src="../../src/assets/images/icon_arrows_left_n.svg" />
+      </template>
+      </Button>
       <router-link to="/" class="" :class="fileReview ? 'hidden' : ''">
         <Button
           :buttonText="'Cancel'"
-          
           :class="fileReview ? 'hidden' : ''"
-          :iconPosition="'left-2'"
-          :textPosition="'ml-1'"
+          :textPosition="'ml-5'"
         >
         <template v-slot:image>
-          <img class="left-2" src="../../src/assets/images/icon_arrows_left_n.svg" />
+          <img class="left-2 absolute" src="../../src/assets/images/icon_arrows_left_n.svg" />
         </template>
         </Button>
       </router-link>
@@ -51,21 +51,25 @@
           <tooltip-link :tip-text="tooltipText">
             <Button
               :buttonText="'Draft'"
-              :imgUrl="'../../src/assets/images/icon_arrows_right_n.svg'"
-              :iconPosition="'right-4 top-2'"
               :textPosition="'mr-6'"
               class="max-[560px]:m-0 mr-3"
               :class="fileReview ? '' : 'hidden'"
-            ></Button>
+            >
+            <template v-slot:image>
+              <img class="right-1 top-2 absolute" src="../../src/assets/images/icon_arrows_right_n.svg" />
+            </template>
+            </Button>
           </tooltip-link>
         </div>
         <Button
           :buttonText="fileReview ? 'Save' : 'Next'"
-          :imgUrl="'../../src/assets/images/icon_arrows_right_n.svg'"
-          :iconPosition="'right-4 top-2'"
           :textPosition="'mr-6'"
           @click="nextStep"
-        ></Button>
+        >
+          <template v-slot:image>
+            <img class="right-4 top-2 absolute" src="../../src/assets/images/icon_arrows_right_n.svg" />
+          </template>
+        </Button>
       </div>
     </div>
   </div>
