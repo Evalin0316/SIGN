@@ -18,10 +18,11 @@
         :buttonText="'Previous'"
         :class="fileReview ? '' : 'hidden'"
         :textPosition="'ml-5'"
+        :otherClass="'max-[594px]:hidden'"
         @click="prevPage"
       >
       <template v-slot:image>
-        <img class="left-2 absolute" src="../../src/assets/images/icon_arrows_left_n.svg" />
+        <img class="left-2 absolute max-[594px]:left-1"  src="../../src/assets/images/icon_arrows_left_n.svg" />
       </template>
       </Button>
       <router-link to="/" class="" :class="fileReview ? 'hidden' : ''">
@@ -56,7 +57,7 @@
               :class="fileReview ? '' : 'hidden'"
             >
             <template v-slot:image>
-              <img class="right-1 top-2 absolute" src="../../src/assets/images/icon_arrows_right_n.svg" />
+              <img class="right-4 top-2 absolute" src="../../src/assets/images/icon_arrows_right_n.svg" />
             </template>
             </Button>
           </tooltip-link>

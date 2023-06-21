@@ -3,7 +3,7 @@
     <div class="btn flex items-center cursor-pointer relative rounded">
         <div class="flex justify-center items-center px-4 py-3">
             <slot name="image"></slot>
-            <a class="block" :class="textPosition">{{buttonText}}</a>
+            <a class="block" :class="[textPosition,otherClass]">{{buttonText}}</a>
         </div>
     </div>
 </div>
@@ -17,6 +17,10 @@ export default{
             default:''
         },
         textPosition:{
+            type:String,
+            default:''
+        },
+        otherClass:{
             type:String,
             default:''
         }

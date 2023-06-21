@@ -71,8 +71,9 @@ button:focus-visible {
 
 #app {
   text-align: center;
-  width:100%
+  width:100%;
 }
+
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -84,6 +85,13 @@ button:focus-visible {
   }
   button {
     background-color: #f9f9f9;
+  }
+}
+
+
+@media screen and (max-width:400px){
+  #app{
+    width: 400px;
   }
 }
 
