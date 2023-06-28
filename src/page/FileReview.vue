@@ -15,13 +15,13 @@
   <!-- 新增文字modal -->
   <add-text 
     :showModal="showText"
-    @hideTextModal="hideModal"
+    @hideTextModal="showText = false"
     @saveText="inputText"
   ></add-text>
   <!-- 新增簽名modal -->
   <SelectSign
   :showSignModal="showSignModal"
-  @closeWarning="closeWarning" 
+  @closeWarning="showSignModal = false" 
   @selectedSign="selectedSign" />
 <!-- 新增簽名modal -->
   <AlertMessage 
@@ -51,55 +51,16 @@ export default {
     AlertMessage
   },
   setup (props, ctx) {
-    const signUrl = ref('')
-    const isSelectSign = ref(false)
-    const pageNum = ref(1)
-    const pageCount = ref(1)
-    const width = ref(100)
-    const pageNumPending = ref(null)
-    const pageRendering = ref(false)
-    const showText = ref(false)
-    const getText = ref('')
-    const getFileName = ref('');
-    const getsignTitle = ref('');
-    const router = useRouter();
-    const getFile = ref('')
-    const isFileNameChange = ref(false);
-    const getFileId = ref('');
-    const showSignModal = ref(false);
-    const isFileChange = ref(false);
-    const isshowAlert = ref(false);
-    const alertText = ref('');
-    const uploadStatus = ref(false);
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js'
-    // const element = document.getElementsByClassName('container_pdf')[0]
-    // console.log(element);
-    // element[0].remove();
-    canvas = new fabric.Canvas('canvas')
-    
+    // const pageNum = ref(1)
+    // const pageCount = ref(1)
+  
+    // 上傳新的檔案
     bus.on('fileUpload', (v) => {
       pdfInit(v)
     })
 
-    // 新增文字
-    bus.on('saveText', (v) => {
-          var addText = new fabric.Text(v, (image) => {
-          image.top = 10
-          image.left = 10
-          image.scaleX = 0.5
-          image.scaleY = 0.5
-        })
-        canvas.add(addText);
-    })
-
-    bus.on('fileName',(v)=>{
-      getFileName.value = v;
-    })
-
-    bus.on('signTitle',(v)=>{
-      getsignTitle.value = v;
-    })
-
+    // 編輯檔案(取得既有檔案)
+    const getFile = ref('');
     bus.on('usedFile',(v)=>{
       getFile.value = v;
       if(getFile.value !==''){
@@ -107,20 +68,43 @@ export default {
       }
     })
 
-    bus.on('isFileNameChange', (v)=>{
-        isFileNameChange.value = v;
-    });
+    // 完成簽署 or 儲存草稿
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js';
+    canvas = new fabric.Canvas('canvas');
+    const isFileChange = ref(false);
+    const getFileName = ref('');
+    const getsignTitle = ref('');
+    const isFileNameChange = ref(false);
+    const getFileId = ref('');
+    const isshowAlert = ref(false);
+    const uploadStatus = ref(false);
+    const router = useRouter();
+    const alertText = ref('');
 
-    bus.on('isFileChange', (v)=>{
+    bus.on('fileName',(v)=>{ // 取得檔名
+      getFileName.value = v;
+    })
+
+
+    bus.on('signTitle',(v)=>{ // 取得文件命名
+      getsignTitle.value = v;
+    })
+
+    bus.on('isFileChange', (v)=>{ //取得檔案更新狀態
         isFileChange.value = v;
     });
 
-    bus.on('fileId',(v)=>{
+
+    bus.on('isFileNameChange', (v)=>{ //取得檔名更新狀態
+        isFileNameChange.value = v;
+    });
+
+
+    bus.on('fileId',(v)=>{ //取得檔案ID
       getFileId.value = v;
     });
-    
 
-    // 完成簽署 or 儲存草稿
+    /*--------save start----------*/
     bus.on('saveDocument',(sign_status)=>{
       const pdf = new jsPDF();
       const image = canvas.toDataURL("image/png")
@@ -246,14 +230,11 @@ export default {
 
     })
 
-    onUnmounted(()=>{
-      bus.off('saveDocument');
-      bus.off('usedFile');
-      // bus.off('fileUpload');
-      bus.off('fileName');
-      bus.off('signTitle');
-      bus.off('saveText');
-    })
+    /*--------save end----------*/
+
+    const showSignModal = ref(false);
+    const showText = ref(false)
+
     const pdfInit = (file) => {
       const Base64Prefix = 'data:application/pdf;base64,'
       pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js'
@@ -343,7 +324,7 @@ export default {
         canvas.add(text)
       })
 
-      /*------------加入文字-------------*/
+      /*------------開啟新增文字dialog-------------*/
       const textBtn = document.querySelector('.textBtn')
       textBtn.addEventListener('click', () => {
           showText.value = true;
@@ -351,12 +332,18 @@ export default {
 
     }
 
-    const closeWarning = (closeWarning) => {
-      isSelectSign.value = closeWarning
-      showSignModal.value = false;
-    }
-    
-    const selectedSign = (selectedSign) => {
+    // 新增文字
+    bus.on('saveText', (v) => {
+          var addText = new fabric.Text(v, (image) => {
+          image.top = 10
+          image.left = 10
+          image.scaleX = 0.5
+          image.scaleY = 0.5
+        })
+        canvas.add(addText);
+    })
+
+    const selectedSign = (selectedSign) => { // 選擇簽名
       fabric.Image.fromURL(selectedSign, (image) => {
         image.top = 100
         image.left = 100
@@ -366,24 +353,21 @@ export default {
       })
     }
 
-    const hideModal = () => {
-        showText.value = false;
-    }
+    onUnmounted(()=>{
+      bus.off('saveDocument');
+      bus.off('usedFile');
+      // bus.off('fileUpload');
+      bus.off('fileName');
+      bus.off('signTitle');
+      bus.off('saveText');
+    })
 
     return {
       pdfInit,
-      closeWarning,
       selectedSign,
-      signUrl,
-      isSelectSign,
-      pageNum,
-      pageCount,
-      width,
-      pageRendering,
-      pageNumPending,
+      // pageNum,
+      // pageCount,
       showText,
-      hideModal,
-      getText,
       getsignTitle,
       getFile,
       isFileNameChange,

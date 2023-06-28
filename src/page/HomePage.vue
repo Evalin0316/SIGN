@@ -71,7 +71,7 @@
 
 <script>
 import { getFile ,deleteFile } from '../srcipt/api/uploadFile';
-import { computed , onMounted, ref } from 'vue';
+import { computed , onMounted, ref, watch } from 'vue';
 import Header from '../components/Header.vue';
 import bus from "../srcipt/bus";
 import { useRouter } from 'vue-router';
@@ -84,16 +84,11 @@ export default {
     },
     setup() {
         const files = ref('');
-        const nowPage = ref('homePage');
-        const router = useRouter();
         const flieLength = ref('');
         const keyword = ref('')
-        const getfileId = ref('');
-        const getIndex = ref(-1);
-        const undoneCheck = ref(false);
-        const doneCheck = ref(false);
-        const selected = ref(1);
         const check_select = ref(false);
+        const getAllFiles = ref([]);
+        const nowPage = ref('homePage');
 
         bus.on('nowPage',(v)=> {
             nowPage.value = v
@@ -105,61 +100,103 @@ export default {
             if(res.data.status == true){
                 files.value = res.data.data.data;
                 flieLength.value = res.data.data.size;
+
+                // 取得所有資料
+                let pages = Math.ceil(flieLength.value / 10)
+                let from = '';
+                let count = '';
+                let allFileArray =[];
+
+                for(let i=1;i<=pages;i++){
+                        from = i > 1 ? (i-1)*10 : 0;
+                        count = 10*i;
+                        allFileArray.push(getFiles(from,count))
+                    }
+                    Promise.all(allFileArray).then(res =>{
+                        getAllFiles.value = [].concat.apply([], res);
+                        filterFile.value = getAllFiles.value.slice(0,10);
+                    })
             }
         }).catch((err)=>{
             alert(err.message)
         })
 
+        // 取得資料API
         const getFiles = (from,count) => {
-            getFile(from,count).then((res)=>{
-            if(res.data.status == true){
-                files.value = res.data.data.data;
-                flieLength.value = res.data.data.size;
-            }
-        }).catch((err)=>{
-            alert(err.message)
-        })
+            return new Promise((resolve,reject)=>{
+                setTimeout(()=>{
+                    getFile(from,count).then((res)=>{
+                        if(res.data.status == true){
+                            resolve(res.data.data.data);
+                            files.value = res.data.data.data;
+                            flieLength.value = res.data.data.size;
+                        }
+                    }).catch((err)=>{
+                        alert(err.message)
+                    })
+                },1000)
+            })
         }
 
-        const goFileUpload = () => {
-            bus.emit('status','fileUpload')
-            router.push(`/fileUpload/uploadNewFile`)
-        }
+        /*
+        *  資料狀態
+        */
 
-        const filterFile = computed(() => {
-            const data = [...files.value];
-            if(undoneCheck.value && doneCheck.value == false){ // 未完成 checked
-                return filterFile.value.filter((x)=> x.isSigned == false);
-            }else if(doneCheck.value && undoneCheck.value == false){ // 已完成 checked
-                return filterFile.value.filter((x)=> x.isSigned == true);
-            }else if((undoneCheck.value == false && doneCheck.value == false)){
-                return data.filter( x => {
-                return x.signTitle.toLowerCase().includes(keyword.value.toLowerCase())
-                })
-            }else if(undoneCheck.value && doneCheck.value){ // 未完成 && 已完成 checked
-                return data.filter( x => {
-                return x.signTitle.toLowerCase().includes(keyword.value.toLowerCase())
-                })
+        const undoneCheck = ref(false);
+        const doneCheck = ref(false);
+        const selected = ref(1);
+        const filterFile = ref('');
+
+        // 篩選簽署狀態
+        watch([undoneCheck,doneCheck],(val)=>{
+            let undoneCheck = val[0];
+            let doneCheck = val[1];
+            if(undoneCheck && !doneCheck){ // 未完成 checked
+                filterFile.value = getAllFiles.value.filter((x)=> x.isSigned == false);
+            }else if(doneCheck && !undoneCheck){ // 已完成 checked
+                filterFile.value = getAllFiles.value.filter((x)=> x.isSigned == true);
             }else{
-                return data.filter( x => {
-                return x.signTitle.toLowerCase().includes(keyword.value.toLowerCase())
-                })
+                filterFile.value = getAllFiles.value
             }
-        });
+            selected.value = 1; //頁數回到第一頁
+        })
 
+        // 刪除檔案
+        const deleteFileBtn = (id,filename) => {
+            deleteFile(id,filename)
+            .then((res)=>{
+                if(res.data.status == true){
+                    alert(res.data.data);
+                    const findIndex = getAllFiles.value.findIndex((x)=>x._id == id ); // 檔案index
+                    getAllFiles.value.splice(findIndex,1);
+
+                    // 更新當前頁面資料
+                    let from = selected.value > 1 ? (selected.value-1)*10 : 0;
+                    let count = 10*selected.value;
+                    filterFile.value = getAllFiles.value.slice(from,count);
+                    flieLength.value --;
+                    if(filterFile.value.length == 0){ // 回到前一頁
+                        filterFile.value = getAllFiles.value.slice(from-10,count-10);
+                        selected.value--;
+                    }
+                }
+            }).catch((err)=>{
+                alert(err.message);
+            })
+            hideOption();
+        }
+
+
+        // 計算頁數
         const pages = computed(()=>{
-            if(undoneCheck.value && doneCheck.value == false){
-                return 1;
-            }else if(doneCheck.value && undoneCheck.value == false){
-                return 1;
-            }else{
-                return Math.ceil(flieLength.value / 10);
-            }
+            return Math.ceil(flieLength.value / 10);
         })
 
-        const searchClear = () => {
-            keyword.value = ''
-        }
+        /*
+        *  控制檔案選單
+        */
+        
+        const getIndex = ref(-1);
 
         const openFileOption = (index) => {
             getIndex.value = index;
@@ -169,35 +206,50 @@ export default {
             getIndex.value = -1
         }
 
-        // 刪除檔案
-        const deleteFileBtn = (id,filename) => {
-            deleteFile(id,filename)
-            .then((res)=>{
-                if(res.data.status == true){
-                    alert(res.data.data);
-                    const findIndex = files.value.findIndex((x)=>x._id == id ); // 檔案index
-                    files.value.splice(findIndex,1);
-                }
-            }).catch((err)=>{
-                alert(err.message);
-            })
-            hideOption();
+        //  查詢頁面換頁
+        const changePage = (e) =>{
+            let from = e > 1 ? (e-1)*10 : 0;
+            let count = 10*e;
+            filterFile.value = getAllFiles.value.slice(from,count);
         }
 
-        // 檢視/編輯檔案
+
+        /*
+        *  新增/編輯檔案 頁面切換
+        */
+        
+        const router = useRouter();
+         // 前往檢視/編輯檔案
         const getFileDetails = (id) =>{
             router.push(`/fileUpload/${id}`);
         }
 
-        const changePage = (e) =>{
-            let from = e > 1 ? (e-1)*10 : 0;
-            let count = 10*e;
-            getFiles(from,count);
+        // 前往上傳檔案頁面
+        const goFileUpload = () => {
+            bus.emit('status','fileUpload')
+            router.push(`/fileUpload/uploadNewFile`)
         }
+
+        /*
+        *  搜尋框
+        */
+
+        // 查詢
+        watch(keyword,(val)=>{
+            filterFile.value = getAllFiles.value.filter( x => {
+                return x.signTitle.toLowerCase().includes(val.toLowerCase())
+            })
+        })
+
+        // 清除搜尋框
+        const searchClear = () => {
+            keyword.value = ''
+        }
+
 
         onMounted(()=>{
             bus.emit('page-loading',false);
-            bus.emit('headerStatus','homePage')
+            bus.emit('headerStatus','homePage');
         })
 
         return{
@@ -209,7 +261,6 @@ export default {
             filterFile,
             searchClear,
             openFileOption,
-            getfileId,
             getIndex,
             hideOption,
             deleteFileBtn,

@@ -16,7 +16,7 @@ app.config.globalProperties.$emitter = emitter;
 
 app.config.errorHandler = (err, vm, info) => {
    console.log('有錯誤');
-   // console.error(err,info);
+   console.error(err,info);
 }
 
 app.component('font-awesome-icon', FontAwesomeIcon)

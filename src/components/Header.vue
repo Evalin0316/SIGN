@@ -55,6 +55,7 @@
               :textPosition="'mr-6'"
               class="max-[560px]:m-0 mr-3"
               :class="fileReview ? '' : 'hidden'"
+              @click="saveDraft"
             >
             <template v-slot:image>
               <img class="right-4 top-2 absolute" src="../../src/assets/images/icon_arrows_right_n.svg" />

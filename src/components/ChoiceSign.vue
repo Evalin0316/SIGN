@@ -10,7 +10,7 @@
           <div class="font-bold text-lg mb-8 whitespace-nowrap text-center proj-text-primary">選擇簽名</div>
           <div class="selected-modal overflow-auto flex items-center justify-center flex-wrap">
             <div class="mb-2 flex justify-center" v-for="(item, idx) in signArr" :key="idx">
-              <div class="h-auto bg-white w-4/5 rounded-3xl py-2" @click="selectedSign(item.url)" :class="point_disabled">
+              <div class="h-auto bg-white w-4/5 rounded-3xl py-2" @click="selectedSign(item.url)">
                 <img :src="item.url" class='sign mx-auto object-contain w-36 h-20' alt="" referrerpolicy="no-referrer"/>
               </div>
               <span @click="deleteImageBtn(item.id,item.hash,item.imageUrl)"><img class="mr-4 mt-2" src="../assets/images/icon_Close_Square_n.png" /></span>
@@ -68,9 +68,8 @@
               <img class="absolute right-0 top-0 mr-4" src="../assets/images/icon_Close_Square_n.png" />
           </div>
           <div class="index_Sign flex flex-col items-center w-full py-4 px-2">
-            <CanvasDraw :isSignSelf="isSignSelf" v-on:closeWarning="closeWarning" v-on:getStroke="getStroke" v-on:backToChoose="backToChoose" 
-            @sign="getSign()"
-            />
+            <CanvasDraw :isSignSelf="isSignSelf" v-on:closeWarning="closeWarning" v-on:getStroke="getStroke" 
+            @sign="getSign()"/>
           </div>
         </div>
     </div>
@@ -90,22 +89,12 @@ export default {
   props:['showSignModal'],
   setup (props, ctx) {
     const signArr = ref([])
-    const isSelectMode = ref(true)
     const isSignSelf = ref(true)
-    const signStatus = ref(null)
-    const getStroke = ref('')
-    const getCanvas = ref('')
     const getUrl = ref('')
-    const fileElement = ref('')
-    const pageStatus = props.passStatus
-    const point_disabled = ref('');
     const getSignData = ref([]);
     
-    //判斷頁面決定簽名檔是否可以點選
-    // point_disabled.value = pageStatus == 'home' ? 'pointer-events-none' : '';
-    
     onMounted(() => {
-    init()
+      init()
     })
 
     const init = () => {
@@ -128,6 +117,8 @@ export default {
       })
     }
 
+
+    // 刪除圖片
     const deleteImageBtn = (id,hash,url) =>{
         // let sendData = {'hash':data,'imageUrl':url};
         let getUrl = url.split('/');
@@ -142,14 +133,17 @@ export default {
         })
     }
 
+    // 關閉dialog
     const closeWarning = () => {
       ctx.emit('closeWarning')
     }
 
+    const getCanvas = ref('')
     bus.on('addCanvas',(v)=>{
       getCanvas.value = v;
     })
 
+    const getStroke = ref('')
     const selectedSign = (url) => {
       getStroke.value = url;
       // bus.emit('addImage',getStroke.value);
@@ -163,11 +157,8 @@ export default {
       closeWarning()
     }
     
-    const backToChoose = (backToChoose) => {
-      closeWarning()
-      // isSelectMode.value = backToChoose
-    }
-
+    const signStatus = ref(null);
+    const isSelectMode = ref(true);
     const getSign = () => { // 取得新增的圖檔
       // closeWarning();
       signStatus.value != null;
@@ -195,6 +186,7 @@ export default {
     image.src = imgUrl;
     }
 
+    const fileElement = ref('');
     const uploadImageBtn = () => {
       let fromData = new FormData();
       fromData.append('image',fileElement.value.files[0]);
@@ -219,7 +211,6 @@ export default {
       isSelectMode,
       isSignSelf,
       getStroke,
-      backToChoose,
       signStatus,
       getSign,
       getCanvas,
@@ -228,100 +219,8 @@ export default {
       deleteImageBtn,
       uploadImageBtn,
       fileElement,
-      pageStatus,
-      point_disabled,
       getSignData,
     }
   }
 }
 </script>
-
-<style scoped lang="scss">
-// .draw_modal {
-//   z-index: 99;
-//   height: 120vh;
-// }
-// .card-inner {
-//   left: 50%;
-//   top: 40%;
-//   transform: translate(-50%, -50%);
-//   color: #8C5D19;
-// }
-// .bg {
-//   background: #EFE3D4;
-// }
-
-// .container-pop {
-// 	width: 240px;
-// 	height: 40px;
-// 	// margin: auto;
-// 	position: relative;
-// 	border-radius: 6px;
-// 	overflow: hidden;
-// 	user-select: none;
-// 	cursor: pointer;
-// }
-
-// .inner-container {
-// 	position: absolute;
-// 	left: 0;
-// 	top: 0;
-// 	width: inherit;
-// 	height: inherit;
-// 	text-transform: uppercase;
-// 	// font-size: .6em;
-// 	// letter-spacing: .2em;
-// }
-
-// .inner-container:first-child {
-// 	background: #ffffff;
-// 	color: #a9a9a9;
-// }
-
-// .inner-container:nth-child(2) {
-//   background: linear-gradient(180deg, #35A483 0%, #077854 100%);
-// 	color: white;
-// 	clip-path: inset(0 50% 0 0);
-// 	transition: .3s cubic-bezier(0,0,0,1);
-// }
-
-// .toggle {
-// 	width: 50%;
-// 	position: absolute;
-// 	height: inherit;
-// 	display: flex;
-// 	box-sizing: border-box;
-// }
-
-// .toggle p {
-// 	margin: auto;
-// }
-
-// .toggle:nth-child(1) {
-// 	right: 0;
-// }
-// .toggle-active {
-//   clip-path: inset(0 0% 0% 50%) !important;
-// }
-
-// .selected-modal {
-//   height: 18rem;
-// }
-// .pop-container-choose {
-//   max-width: 343px;
-// }
-// .pop-container {
-//   max-width: 600px;
-//   @media (max-width: 768px) {
-//     max-width: 343px;
-//   }
-// }
-
-// .uploadImage{
-//   background-image: url("../assets/images/uploadSign.png");
-//   height: 40px;
-//   width: 100%;
-//   background-repeat: no-repeat;
-//   cursor: pointer;
-// }
-</style>

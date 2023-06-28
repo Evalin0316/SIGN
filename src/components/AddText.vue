@@ -20,7 +20,7 @@ export default{
     props:{
         showModal:{
         type: Boolean,
-        default: true
+        default: false
         }
     },
     setup(props,{emit}){
@@ -32,6 +32,7 @@ export default{
         }
 
         const closeWarning = () =>{
+            text.value = '';
             emit('hideTextModal')
         }
         return{
