@@ -62,7 +62,7 @@
           </div>
     </div>
     <!-- 簽名組件 -->
-    <div class="card-inner absolute text-xl w-full z-50 pop-container" v-if="!isSelectMode">
+    <div class="card-inner absolute text-xl w-[500px] z-50 pop-container max-[768px]:w-[343px]" v-if="!isSelectMode">
         <div class="bg rounded-3xl overflow-hidden shadow-lg w-full">
           <div class="relative mt-3" @click="isSelectMode = true">
               <img class="absolute right-0 top-0 mr-4" src="../assets/images/icon_Close_Square_n.png" />

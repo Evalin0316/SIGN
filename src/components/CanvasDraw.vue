@@ -6,7 +6,7 @@
         <vue-drawing-canvas
           ref="VueCanvasDrawing"
           v-model:image="image"
-          :width="500"
+          :width="400"
           :height="400"
           :stroke-type="strokeType"
           :line-cap="lineCap"
@@ -29,15 +29,15 @@
       </div>
     </div>
 
-    <div class="flex items-center justify-between mb-6" :class="{ invisible: !isSignSelf }" style="width:600px">
-      <div class="w-1/6 p-2">
+    <div class="flex items-center justify-between mb-6 w-full" :class="{ invisible: !isSignSelf }">
+      <div class="p-2">
         <button
           type="button"
           @click.prevent="removeSavedStrokes()"
           class="
             py-3
             px-3
-            w-full
+            w-[80px]
             rounded-lg
             border-2
           "
@@ -104,14 +104,14 @@
           ></div>
         </a>
       </div>
-      <div class="w-1/6 p-2">
+      <div class="p-2">
         <button
           type="button"
           @click.prevent="getStrokes()"
           class="
             py-3
             px-3
-            w-full
+            w-[80px]
             rounded-lg
             border-2
           "
