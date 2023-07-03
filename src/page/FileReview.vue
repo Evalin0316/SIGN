@@ -54,12 +54,12 @@ export default {
     // const pageNum = ref(1)
     // const pageCount = ref(1)
   
-    // 上傳新的檔案
+    // 取得新的檔案轉畫布
     bus.on('fileUpload', (v) => {
       pdfInit(v)
     })
 
-    // 編輯檔案(取得既有檔案)
+    // 編輯檔案(取得既有檔案)轉畫布
     const getFile = ref('');
     bus.on('usedFile',(v)=>{
       getFile.value = v;
@@ -68,7 +68,10 @@ export default {
       }
     })
 
-    // 完成簽署 or 儲存草稿
+    
+    /*
+     * 完成簽署 or 儲存草稿
+    */
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js';
     canvas = new fabric.Canvas('canvas');
     const isFileChange = ref(false);
@@ -104,6 +107,15 @@ export default {
       getFileId.value = v;
     });
 
+    
+    const goHomePage = function(){
+      return new Promise(function(resolve,reject){
+      setTimeout(()=>{
+      resolve(router.push(`/`))
+      },2000)
+      })
+    }
+
     /*--------save start----------*/
     bus.on('saveDocument',(sign_status)=>{
       const pdf = new jsPDF();
@@ -124,14 +136,6 @@ export default {
      * 檔案更新項目 function
     */
 
-
-    const goHomePage = function(){
-      return new Promise(function(resolve,reject){
-      setTimeout(()=>{
-      resolve(router.push(`/`))
-      },2000)
-      })
-    }
 
     // 草搞-更新檔案
     const updateFileInfo = () => {
