@@ -107,7 +107,7 @@ export default {
       getFileId.value = v;
     });
 
-    
+    // 回首頁
     const goHomePage = function(){
       return new Promise(function(resolve,reject){
       setTimeout(()=>{

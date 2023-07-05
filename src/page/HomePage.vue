@@ -57,13 +57,7 @@
         </li>
     </ul>
     <div class="flex justify-center item-center">
-        <div>
-            目前頁次第
-            <select class="rounded" v-model="selected" @change="changePage($event.target.value)">
-                <option v-for="(item, idx) in pages" :key="idx" :value="item">{{item}}</option>
-            </select>
-            頁
-        </div>
+        <Pagination :pages="pages" :selected="selected" @get-data="filterProduct"></Pagination>
     </div>
     </div>
 </div>
@@ -73,6 +67,7 @@
 import { getFile ,deleteFile } from '../srcipt/api/uploadFile';
 import { computed , onMounted, ref, watch } from 'vue';
 import Header from '../components/Header.vue';
+import Pagination from '../components/Pagination.vue';
 import bus from "../srcipt/bus";
 import { useRouter } from 'vue-router';
 
@@ -80,7 +75,8 @@ export default {
     name:'homePage',
     emits:['page-loading'],
     components:{
-        Header
+        Header,
+        Pagination
     },
     setup() {
         const files = ref('');
@@ -153,10 +149,13 @@ export default {
             let doneCheck = val[1];
             if(undoneCheck && !doneCheck){ // 未完成 checked
                 filterFile.value = getAllFiles.value.filter((x)=> x.isSigned == false);
+                flieLength.value = filterFile.value.length;
             }else if(doneCheck && !undoneCheck){ // 已完成 checked
                 filterFile.value = getAllFiles.value.filter((x)=> x.isSigned == true);
+                flieLength.value = filterFile.value.length;
             }else{
-                filterFile.value = getAllFiles.value
+                filterFile.value = getAllFiles.value;
+                flieLength.value = filterFile.value.length;
             }
             selected.value = 1; //頁數回到第一頁
         })
@@ -207,10 +206,11 @@ export default {
         }
 
         //  查詢頁面換頁
-        const changePage = (e) =>{
+        const filterProduct = (e) =>{
             let from = e > 1 ? (e-1)*10 : 0;
             let count = 10*e;
             filterFile.value = getAllFiles.value.slice(from,count);
+            selected.value = e;
         }
 
 
@@ -269,9 +269,10 @@ export default {
             undoneCheck,
             selected,
             pages,
-            changePage,
+            // changePage,
             getFiles,
             check_select,
+            filterProduct
         }
     },
 }
