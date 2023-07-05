@@ -269,7 +269,6 @@ export default {
             undoneCheck,
             selected,
             pages,
-            // changePage,
             getFiles,
             check_select,
             filterProduct
