@@ -56,7 +56,7 @@
                 </div>
         </li>
     </ul>
-    <div class="flex justify-center item-center">
+    <div class="flex justify-center item-center" v-if="pages > 1">
         <Pagination :pages="pages" :selected="selected" @get-data="filterProduct"></Pagination>
     </div>
     </div>
@@ -157,7 +157,7 @@ export default {
                 filterFile.value = getAllFiles.value;
                 flieLength.value = filterFile.value.length;
             }
-            selected.value = 1; //頁數回到第一頁
+            selected.value = Number(1); //頁數回到第一頁
         })
 
         // 刪除檔案
@@ -210,7 +210,7 @@ export default {
             let from = e > 1 ? (e-1)*10 : 0;
             let count = 10*e;
             filterFile.value = getAllFiles.value.slice(from,count);
-            selected.value = e;
+            selected.value = Number(e);
         }
 
 
