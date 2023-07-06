@@ -95,7 +95,6 @@ export default {
     const getFileId = ref('');
     const route = useRoute();
     const fileId = ref('');
-    // const emitter = inject('emitter')
 
     /*
      * 檢視/編輯檔案-取得檔案資訊
