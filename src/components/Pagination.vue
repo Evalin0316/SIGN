@@ -23,7 +23,8 @@ export default{
         }
 
         const pageBtn = (type) =>{
-            selectPage.value = type == 'pre' ?  selectPage.value - 1 : selectPage.value + 1;
+            selectPage.value = type == 'pre' ?  --selectPage.value : ++selectPage.value;
+            console.log(selectPage.value)
             emit('getData',selectPage.value);
         }
 
