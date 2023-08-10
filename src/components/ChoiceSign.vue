@@ -203,7 +203,6 @@ export default {
   }
 
     return {
-      // url,
       signArr,
       closeWarning,
       selectedSign,

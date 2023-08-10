@@ -95,6 +95,7 @@ export default {
 
     bus.on('isFileChange', (v)=>{ //取得檔案更新狀態
         isFileChange.value = v;
+        console.log('1111')
     });
 
 
