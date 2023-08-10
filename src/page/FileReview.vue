@@ -95,7 +95,6 @@ export default {
 
     bus.on('isFileChange', (v)=>{ //取得檔案更新狀態
         isFileChange.value = v;
-        console.log('1111')
     });
 
 
@@ -399,11 +398,6 @@ export default {
     &::-webkit-scrollbar {
       width: 7px;
     }
-
-    // &::-webkit-scrollbar-button {
-    //   background: transparent;
-    //   border-radius: 1px;
-    // }
 
     &::-webkit-scrollbar-track-piece {
       background: transparent;
