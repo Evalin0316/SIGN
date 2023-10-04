@@ -13,7 +13,7 @@
           @dragover="ondragover"
         >
           <div class="border rounded-md border-dashed flex justify-center items-center flex-col upload_inner">
-            <div class="break-all">{{ status == 1 ? filename : "" }}</div>
+            <div class="break-all text-black">{{ status == 1 ? filename : "" }}</div>
             <label v-if="status == 0" class="mb-2 upload mt-1">
               <input
                 class="form-control hidden"
@@ -33,10 +33,10 @@
               />
             </label>
             <div v-if="status == 0">
-                  <div class="mb-2 font-bold">
+                  <div class="mb-2 font-bold text-black">
                   或直接拖放檔案進來
                 </div>
-                <div class="font-bold">檔案限制格式：pdf，大小200mb以下</div>
+                <div class="font-bold text-black">檔案限制格式：pdf，大小200mb以下</div>
             </div>
           </div>
           <div
@@ -44,8 +44,8 @@
             :class="isFileReview == '' ? '' : 'hidden'"
             class="mt-8 upload_inner border rounded-md border-dashed flex justify-center items-center flex-col"
           >
-            <p class="text-left file_title">文件命名</p>
-            <input type="text" class="file_name bg-white file_name_input" v-model="signfileName"/>
+            <p class="text-left file_title text-black">文件命名</p>
+            <input type="text" class="file_name bg-white file_name_input text-black" v-model="signfileName"/>
           </div>
         </div>
       </div>
