@@ -2,7 +2,7 @@
 <div class="flex justify-center item-center">
     <div class="mr-2 text-[#be8e55] cursor-pointer" v-if="selectPage > 1"  @click.prevent="pageBtn('pre')">前一頁</div>
     <p class="text-[#be8e55] mr-1">目前頁次第</p>
-    <select class="rounded" v-model="selectPage" @change="changePage($event.target.value)">
+    <select class="rounded bg-white text-black" v-model="selectPage" @change="changePage($event.target.value)">
         <option v-for="(item, idx) in pages" :key="idx" :value="item">{{item}}</option>
     </select>
     <div class="ml-2 text-[#be8e55] cursor-pointer" v-if="selectPage < pages" @click.prevent="pageBtn('next')">下一頁</div>
@@ -24,7 +24,6 @@ export default{
 
         const pageBtn = (type) =>{
             selectPage.value = type == 'pre' ?  --selectPage.value : ++selectPage.value;
-            console.log(selectPage.value)
             emit('getData',selectPage.value);
         }
 

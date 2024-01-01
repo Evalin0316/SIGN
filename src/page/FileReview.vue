@@ -391,18 +391,12 @@ export default {
     transform-origin: center top;
     transform: translate3d(0px, 0px, 0px) scale3d(0.883261, 0.883261, 1);
     height: calc(88.3261%);
-    
-    // max-height: calc(88.3261%);
+
     overflow:auto;
     -webkit-overflow-scrolling: touch;
     &::-webkit-scrollbar {
       width: 7px;
     }
-
-    // &::-webkit-scrollbar-button {
-    //   background: transparent;
-    //   border-radius: 1px;
-    // }
 
     &::-webkit-scrollbar-track-piece {
       background: transparent;

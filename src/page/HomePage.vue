@@ -8,8 +8,8 @@
             <div class="search_input m-4 relative w-full">
                 <input type="text" class="bg-white m-3 rounded-lg block w-full
                     text-sm text-gray-900 border border-gray-300 h-12 pl-3
-                    focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 
-                    dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 z-[50]" 
+                    focus:ring-blue-500 focus:border-blue-500 dark:bg-white 
+                    dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500 z-[50]" 
                     placeholder="Search here..." v-model="keyword"/>
                 <div class="absolute right-3.5 bottom-3.5 cursor-pointer  mb-2 mr-3" @click="searchClear()">
                     <img class="mr-4" src="../assets/images/icon_Close_n.png"/>
@@ -22,7 +22,7 @@
             <div class="search_type bg-white flex w-9/12 ml-4 rounded-lg text-[#BE8E55] h-12  max-[768px]:hidden">
                 <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox" v-model="undoneCheck"/>未完成</label>
                 <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox" v-model="doneCheck"/>已完成</label>
-                <label class="m-3">共{{flieLength}}筆</label>
+                <label class="m-3">共{{fileLength}}筆</label>
             </div>
             <div class="hidden max-[768px]:inline-block relative ml-4">
                 <div class="select_to_open flex justify-center items-center" 
@@ -30,7 +30,7 @@
                 @click.stop="check_select = !check_select">
                     <img src="../assets/images/Vector_close.svg"/>
                 </div>
-                <div class="check_select_item absolute w-24 bg-white rounded z-[60] hidden" 
+                <div class="check_select_item absolute w-24 bg-white text-black rounded z-[60] hidden" 
                 :class="check_select == true ? 'active' : '' ">
                     <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox" v-model="undoneCheck"/>未完成</label>
                     <label class="m-3 flex justify-center items-center"><input class="selector" type="checkbox" v-model="doneCheck"/>已完成</label>
@@ -80,7 +80,7 @@ export default {
     },
     setup() {
         const files = ref('');
-        const flieLength = ref('');
+        const fileLength = ref('');
         const keyword = ref('')
         const check_select = ref(false);
         const getAllFiles = ref([]);
@@ -95,10 +95,10 @@ export default {
         getFile(0,10).then((res)=>{
             if(res.data.status == true){
                 files.value = res.data.data.data;
-                flieLength.value = res.data.data.size;
+                fileLength.value = res.data.data.size;
 
                 // 取得所有資料
-                let pages = Math.ceil(flieLength.value / 10)
+                let pages = Math.ceil(fileLength.value / 10)
                 let from = '';
                 let count = '';
                 let allFileArray =[];
@@ -125,7 +125,7 @@ export default {
                         if(res.data.status == true){
                             resolve(res.data.data.data);
                             files.value = res.data.data.data;
-                            flieLength.value = res.data.data.size;
+                            fileLength.value = res.data.data.size;
                         }
                     }).catch((err)=>{
                         alert(err.message)
@@ -149,13 +149,13 @@ export default {
             let doneCheck = val[1];
             if(undoneCheck && !doneCheck){ // 未完成 checked
                 filterFile.value = getAllFiles.value.filter((x)=> x.isSigned == false);
-                flieLength.value = filterFile.value.length;
+                fileLength.value = filterFile.value.length;
             }else if(doneCheck && !undoneCheck){ // 已完成 checked
                 filterFile.value = getAllFiles.value.filter((x)=> x.isSigned == true);
-                flieLength.value = filterFile.value.length;
+                fileLength.value = filterFile.value.length;
             }else{
                 filterFile.value = getAllFiles.value;
-                flieLength.value = filterFile.value.length;
+                fileLength.value = filterFile.value.length;
             }
             selected.value = Number(1); //頁數回到第一頁
         })
@@ -173,7 +173,7 @@ export default {
                     let from = selected.value > 1 ? (selected.value-1)*10 : 0;
                     let count = 10*selected.value;
                     filterFile.value = getAllFiles.value.slice(from,count);
-                    flieLength.value --;
+                    fileLength.value --;
                     if(filterFile.value.length == 0){ // 回到前一頁
                         filterFile.value = getAllFiles.value.slice(from-10,count-10);
                         selected.value--;
@@ -188,7 +188,7 @@ export default {
 
         // 計算頁數
         const pages = computed(()=>{
-            return Math.ceil(flieLength.value / 10);
+            return Math.ceil(fileLength.value / 10);
         })
 
         /*
@@ -256,7 +256,7 @@ export default {
             files,
             goFileUpload,
             nowPage,
-            flieLength,
+            fileLength,
             keyword,
             filterFile,
             searchClear,

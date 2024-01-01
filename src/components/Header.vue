@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bg-white text-black">
     <!-- 首頁狀態 -->
     <div
       class="flex items-center justify-center relative h-[66px]"
