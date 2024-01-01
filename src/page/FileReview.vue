@@ -72,7 +72,7 @@ export default {
     /*
      * 完成簽署 or 儲存草稿
     */
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js';
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.mjs';
     canvas = new fabric.Canvas('canvas');
     const isFileChange = ref(false);
     const getFileName = ref('');
@@ -241,7 +241,7 @@ export default {
 
     const pdfInit = (file) => {
       const Base64Prefix = 'data:application/pdf;base64,'
-      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js'
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.mjs'
       // 使用原生 FileReader 轉檔
       const readBlob = (blob) => {
         return new Promise((resolve, reject) => {

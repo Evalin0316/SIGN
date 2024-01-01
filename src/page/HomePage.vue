@@ -47,7 +47,7 @@
                 <div class="fileEnvelop_option absolute right-0 bottom-0 z-[55] h-12" @click.stop="openFileOption(index)">
                     <img src="../assets/images/icon_more_n.svg"/>
                 </div>
-                <div class="absolute top-10 z-[50] text-[5px] w-32 flex justify-center pr-5 flex-wrap">{{item.signTitle}}</div>
+                <div class="absolute top-10 z-[50] text-[10px] w-32 flex justify-center pr-5 flex-wrap">{{item.signTitle}}</div>
                 <div v-if="getIndex == index" class="absolute bottom-0 left-2 bg-white w-3/5 rounded">
                     <ul>
                         <li class="text-[#BE8E55] flex cursor-pointer hover:bg-[#EFE3D4] p-1"><a class="flex" :href="item.fileLocation" target="blank"><img class="mx-2" src="../assets/images/icon_download_n.svg"/><a class="hover:text-[#BE8E55]">下載檔案</a></a></li>
