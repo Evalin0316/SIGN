@@ -35,6 +35,7 @@
 <script>
 /* eslint-disable */
 import { onMounted, ref, reactive, onBeforeUnmount, onUnmounted } from 'vue';
+import { fabric } from 'fabric';
 import bus from '../srcipt/bus';
 import jsPDF from "jspdf";
 import SelectSign from '../components/ChoiceSign.vue';
@@ -290,7 +291,6 @@ export default {
       }
       // 此處 canvas 套用 fabric.js
       canvas = new fabric.Canvas('canvas')
-      console.log(canvas);
       const Init = async (index) => {
         canvas.requestRenderAll()
         const pdfData = await printPDF(file, index)
